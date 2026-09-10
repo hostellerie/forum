@@ -26,6 +26,12 @@ jobs:
           ref: v2.9.1-discussion-forum-posting
           fetch-depth: 0
 
+      - name: Check language parity
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/check-language-parity.py
+
       - name: Build installable archive
         shell: bash
         run: |
