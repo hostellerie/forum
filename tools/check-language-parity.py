@@ -32,7 +32,8 @@ ARRAY_START = re.compile(
 ASSIGNMENT = re.compile(
     r"^\s*\$(?P<container>[A-Za-z0-9_]+)"
     r"(?:\[['\"](?P<section>[^'\"]+)['\"]\])?"
-    r"\[['\"](?P<key>[^'\"]+)['\"]\]\s*=\s*(?P<value>.*?);\s*$"
+    r"\[['\"](?P<key>[^'\"]+)['\"]\]\s*=\s*(?P<value>.*?);"
+    r"\s*(?://.*)?$"
 )
 STRING_ENTRY = re.compile(
     r"^\s*['\"](?P<key>[^'\"]+)['\"]\s*=>\s*(?P<value>.*?)(?:,\s*)?(?://.*)?$"
@@ -45,7 +46,7 @@ QUOTED_TOPIC_CONSTANT = re.compile(
     r"['\"](?:TOPIC_ALL_OPTION|TOPIC_HOMEONLY_OPTION|TOPIC_SELECTED_OPTION)['\"]"
 )
 PLUGIN_MESSAGE = re.compile(
-    r"^\s*\$(?P<key>PLG_forum_MESSAGE\d+)\s*=\s*(?P<value>.*?);\s*$"
+    r"^\s*\$(?P<key>PLG_forum_MESSAGE\d+)\s*=\s*(?P<value>.*?);\s*(?://.*)?$"
 )
 
 
@@ -103,7 +104,7 @@ def main() -> int:
             print(f"Language file not found: {path}", file=sys.stderr)
             return 2
 
-    reference_text, reference, reference_messages = parse(REFERENCE)
+    _, reference, reference_messages = parse(REFERENCE)
     french_text, french, french_messages = parse(TRANSLATION)
     errors: list[str] = []
 
