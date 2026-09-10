@@ -1,0 +1,34 @@
+name: Restore French translation header
+
+on:
+  push:
+    branches:
+      - v2.9.1-discussion-forum-posting
+    paths:
+      - '.github/workflows/restore-french-header.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  restore-header:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v5
+        with:
+          ref: v2.9.1-discussion-forum-posting
+          fetch-depth: 0
+
+      - name: Restore header and clean helper files
+        shell: bash
+        run: |
+          set -euo pipefail
+          php tools/restore-french-header.php
+          rm tools/restore-french-header.php
+          rm .github/workflows/restore-french-header.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add language/french_france_utf-8.php tools/restore-french-header.php .github/workflows/restore-french-header.yml
+          git commit -m "Restore historical French translation credits"
+          git push origin HEAD:v2.9.1-discussion-forum-posting
