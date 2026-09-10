@@ -32,3 +32,5 @@ jobs:
           git add language/french_france_utf-8.php tools/restore-french-header.php .github/workflows/restore-french-header.yml
           git commit -m "Restore historical French translation credits"
           git push origin HEAD:v2.9.1-discussion-forum-posting
+
+# One-time trigger after restoring the clean synchronized French language blob.
