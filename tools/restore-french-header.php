@@ -5,7 +5,7 @@ if ($contents === false) {
     fwrite(STDERR, "Unable to read French language file\n");
     exit(1);
 }
-$marker = "global $LANG32;";
+$marker = 'global $LANG32;';
 $pos = strpos($contents, $marker);
 if ($pos === false) {
     fwrite(STDERR, "Unable to locate language body marker\n");
