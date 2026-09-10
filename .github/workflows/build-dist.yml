@@ -1,0 +1,89 @@
+name: Build installable Forum archive
+
+on:
+  push:
+    branches:
+      - v2.9.1-discussion-forum-posting
+    paths-ignore:
+      - 'dist/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: forum-build-dist-v2.9.1-discussion-forum-posting
+  cancel-in-progress: true
+
+jobs:
+  build-dist:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v5
+        with:
+          ref: v2.9.1-discussion-forum-posting
+          fetch-depth: 0
+
+      - name: Build installable archive
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          version=$(php -r '$s=file_get_contents("autoinstall.php"); if (preg_match("/'"'"'pi_version'"'"'\\s*=>\\s*'"'"'([^'"'"']+)'"'"'/", $s, $m)) { echo $m[1]; }')
+          if [ -z "$version" ]; then
+            echo "Unable to determine Forum version from autoinstall.php" >&2
+            exit 1
+          fi
+
+          rm -rf .package-stage dist
+          mkdir -p .package-stage/forum dist
+
+          rsync -a ./ .package-stage/forum/ \
+            --exclude '.git/' \
+            --exclude '.github/' \
+            --exclude 'dist/' \
+            --exclude '.package-stage/' \
+            --exclude '.DS_Store' \
+            --exclude 'Thumbs.db'
+
+          archive="dist/forum-${version}-discussion-forum-posting.zip"
+          (
+            cd .package-stage
+            zip -r -9 "../${archive}" forum -x '*/.DS_Store' '*/Thumbs.db'
+          )
+
+          unzip -t "$archive"
+          unzip -Z1 "$archive" | grep -qx 'forum/autoinstall.php'
+          unzip -Z1 "$archive" | grep -qx 'forum/functions.inc'
+          unzip -Z1 "$archive" | grep -qx 'forum/public_html/index.php'
+          unzip -Z1 "$archive" | grep -qx 'forum/public_html/viewtopic.php'
+          unzip -Z1 "$archive" | grep -qx 'forum/include/forum_structured_data.php'
+          unzip -Z1 "$archive" | grep -qx 'forum/include/viewtopic_core.php'
+
+          rm -rf .package-stage
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: forum-2.9.1-discussion-forum-posting
+          path: dist/*.zip
+          if-no-files-found: error
+
+      - name: Publish archive to dist
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A -f dist
+
+          if git diff --cached --quiet -- dist; then
+            echo "dist archive already up to date."
+            exit 0
+          fi
+
+          git commit -m "Build Forum 2.9.1 installable archive"
+          git push origin HEAD:v2.9.1-discussion-forum-posting
