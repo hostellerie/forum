@@ -989,6 +989,14 @@ if (($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($
     $submissionform_main->set_var ('required', $required);
     $submissionform_main->set_var ('subject', $subject);
     $submissionform_main->set_var ('smilies', $smilies);
+    $mediaPicker = '';
+    if (in_array('mediagallery', $_PLUGINS) && function_exists('MG_getMediaPickerButton')) {
+        $mediaPicker = MG_getMediaPickerButton(array(
+            'target' => 'textarea[name="comment"]',
+            'tag'    => 'media',
+        ));
+    }
+    $submissionform_main->set_var('mediagallery_picker', $mediaPicker);
     if (!empty($smilies)) {
 		$submissionform_main->parse ('smilies', 'submissionform_smilies');
 	}
