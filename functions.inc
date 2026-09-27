@@ -1271,6 +1271,9 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         $topicinfo .= "{$firstdate}<br" . XHTML . ">{$LANG_GF01['VIEWS']}:{$A['views']}, {$LANG_GF01['REPLIES']}:{$A['replies']}<br" . XHTML . ">";
         $topicinfo_short .= " &raquo; {$firstdate}";
         $repliesinfo = " {$LANG_GF01['REPLIES']}:{$A['replies']}";
+        $topicinfo_title = html_entity_decode(strip_tags($topicinfo), ENT_QUOTES, 'UTF-8');
+        $topicinfo_title = preg_replace('/\\s+/u', ' ', $topicinfo_title);
+        $topicinfo_title = htmlspecialchars(trim($topicinfo_title), ENT_QUOTES, 'UTF-8');
 
         if (empty ($A['last_reply_rec']) OR $A['last_reply_rec'] < 1) {
             $lastid = $A['id'];
@@ -1296,10 +1299,11 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         $lastpostinfo = htmlspecialchars($lastpostinfo, ENT_QUOTES, 'UTF-8');
         
         $cssid = ($cssid == 1) ? 2 : 1;
+        $lastpostlink = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic={$A['id']}&amp;lastpost=true#{$lastid}";
+        $block->set_var('lastpostURL', $lastpostlink);
 
         if ($f_tooltip) {
         	$block->set_var('gl-tooltip', true); // Used to verify gl tooltip is being set
-            $lastpostlink = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic={$A['id']}&amp;lastpost=true#{$lastid}";
             $block->set_var ('tooltip_date', COM_getTooltip($lastdate, $lastpostinfo, $lastpostlink));
             $topiclink = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic={$A['id']}";
             $block->set_var ('tooltip_topic_subject', COM_getTooltip($A['subject'], $topicinfo, $topiclink));
@@ -1307,6 +1311,7 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
          
         $block->set_var ('lastpostinfo', $lastpostinfo);
         $block->set_var ('topicinfo', $topicinfo);
+        $block->set_var ('topicinfo_title', $topicinfo_title);
         $block->set_var ('topicinfo_short', $topicinfo_short);
         $block->set_var ('repliesinfo', $repliesinfo);
         $block->set_var ('date', $lastdate);
