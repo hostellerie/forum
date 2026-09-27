@@ -49,6 +49,7 @@ jobs:
           rsync -a ./ .package-stage/forum/ \
             --exclude '.git/' \
             --exclude '.github/' \
+            --exclude '.gitignore' \
             --exclude 'dist/' \
             --exclude '.package-stage/' \
             --exclude '.DS_Store' \
