@@ -13,33 +13,52 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'functions.php') !== false) {
 /**
  * Return an array of CSS files to be loaded
  */
+/**
+ * Return true when the current request renders the Forum UI.
+ *
+ * Forum template resources are discovered globally by Geeklog, so loading
+ * UIKit unconditionally here leaks its global selectors (notably "a") into
+ * unrelated stories, static pages and plugins.
+ */
+function forum_is_denim_ui_request()
+{
+    $path = isset($_SERVER['PHP_SELF']) ? str_replace('\\\\', '/', strtolower((string) $_SERVER['PHP_SELF'])) : '';
+
+    return strpos($path, '/forum/') !== false
+        || strpos($path, '/admin/plugins/forum/') !== false;
+}
+
 function forum_css_denim()
 {
     global $_CONF, $LANG_DIRECTION;
 
     $direction = ($LANG_DIRECTION == 'rtl') ? '_rtl' : '';
+    $css = array();
 
-    return array(
-        array(
+    if (forum_is_denim_ui_request()) {
+        $css[] = array(
             'name'       => 'uikit',
             'file'       => '/vendor/uikit/css' . $direction . '/uikit.gradient.min.css',
             'attributes' => array('media' => 'all'),
             'priority'   => 80
-        ),
-        
-        array(
+        );
+
+        $css[] = array(
             'name'       => 'uikit-tooltip',
             'file'       => '/vendor/uikit/css' . $direction . '/components/tooltip.gradient.min.css',
             'attributes' => array('media' => 'all'),
             'priority'   => 70
-        ),        
+        );
+    }
 
-        array(
-            'name'       => 'main', // don't use the name 'theme' to control the priority
-            'file'       => '/layout/' . $_CONF['theme'] . '/css_' . $LANG_DIRECTION . '/style.css', // change '/style.css' during debugging
-            'attributes' => array('media' => 'all')
-        )
+    // Keep the historical theme stylesheet registration for compatibility.
+    $css[] = array(
+        'name'       => 'main', // don't use the name 'theme' to control the priority
+        'file'       => '/layout/' . $_CONF['theme'] . '/css_' . $LANG_DIRECTION . '/style.css', // change '/style.css' during debugging
+        'attributes' => array('media' => 'all')
     );
+
+    return $css;
 }
 
 /**
@@ -47,6 +66,10 @@ function forum_css_denim()
  */
 function forum_js_libs_denim()
 {
+    if (!forum_is_denim_ui_request()) {
+        return array();
+    }
+
     return array(
        array(
             'library' => 'jquery',
@@ -61,6 +84,10 @@ function forum_js_libs_denim()
 function forum_js_files_denim()
 {
     global $_CONF;
+
+    if (!forum_is_denim_ui_request()) {
+        return array();
+    }
 
     return array(
 
