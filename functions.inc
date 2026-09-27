@@ -1358,10 +1358,10 @@ function stripBBCode($text_to_search) {
 */
 function plugin_getheadercode_forum()
 {
-    global $_SCRIPTS, $FORUM_CSS;
+    global $_SCRIPTS, $FORUM_CSS, $CONF_FORUM;
 
-    // Forum resources are only needed on Forum pages/admin pages, or when a
-    // Forum block explicitly requests the plugin CSS through $FORUM_CSS.
+    // This branch targets Geeklog 2.1.1. Keep the legacy Forum resources,
+    // but do not load them globally on unrelated pages.
     $requestUri = isset($_SERVER['REQUEST_URI']) ? (string) $_SERVER['REQUEST_URI'] : '';
     $requestPath = parse_url($requestUri, PHP_URL_PATH);
     $requestPath = is_string($requestPath) ? strtolower(trim($requestPath, '/')) : '';
@@ -1374,8 +1374,15 @@ function plugin_getheadercode_forum()
     if (!empty($FORUM_CSS) || $isForumPage || $isForumAdminPage) {
         $_SCRIPTS->setCSSFile('forum', CTL_plugin_themeFindFile('forum', 'css', 'forum.css'));
 
-        // Let the active theme provide Forum-specific CSS/JS dependencies.
+        // Let the active theme provide the Forum-specific presentation bridge.
         CTL_plugin_setTemplatesFunctions("forum");
+    }
+
+    // Geeklog 2.1.1 Forum still uses the legacy smilies stylesheet on Forum
+    // pages. Do not inject it merely because a Forum block is displayed.
+    if (($isForumPage || $isForumAdminPage) && !empty($CONF_FORUM['css_smilies_url'])) {
+        return '<link rel="stylesheet" type="text/css" href="' .
+            $CONF_FORUM['css_smilies_url'] . '"' . XHTML . '>';
     }
 
     return '';
