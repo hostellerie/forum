@@ -68,6 +68,15 @@ jobs:
           unzip -Z1 "$archive" | grep -qx 'forum/include/forum_structured_data.php'
           unzip -Z1 "$archive" | grep -qx 'forum/include/viewtopic_core.php'
 
+          # Validate the actual provider extension hook inside the packaged
+          # private Forum controller, not only the presence of the file.
+          rm -rf .archive-check
+          mkdir -p .archive-check
+          unzip -q "$archive" 'forum/include/viewtopic_core.php' -d .archive-check
+          grep -Fq "PLG_itemDisplay((string) \$showtopic, 'forum')" \
+            .archive-check/forum/include/viewtopic_core.php
+          rm -rf .archive-check
+
           rm -rf .package-stage
 
       - name: Upload workflow artifact
