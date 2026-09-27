@@ -1358,17 +1358,27 @@ function stripBBCode($text_to_search) {
 */
 function plugin_getheadercode_forum()
 {
-    global $_SCRIPTS, $CONF_FORUM;
+    global $_SCRIPTS, $FORUM_CSS;
 
-    $_SCRIPTS->setCSSFile('forum', CTL_plugin_themeFindFile('forum', 'css', 'forum.css'));
-    
-    // Look for forum templates functions.php for current theme. If exist add in its required javascript and css
-    CTL_plugin_setTemplatesFunctions("forum");
+    // Forum resources are only needed on Forum pages/admin pages, or when a
+    // Forum block explicitly requests the plugin CSS through $FORUM_CSS.
+    $requestUri = isset($_SERVER['REQUEST_URI']) ? (string) $_SERVER['REQUEST_URI'] : '';
+    $requestPath = parse_url($requestUri, PHP_URL_PATH);
+    $requestPath = is_string($requestPath) ? strtolower(trim($requestPath, '/')) : '';
 
-    // Left this as is since it is a php file that returns css
-	$retval = '<link rel="stylesheet" type="text/css" href="' . $CONF_FORUM['css_smilies_url'] . '"' . XHTML . '>';
-    
-    return $retval;
+    $isForumPage = ($requestPath === 'forum')
+        || (strpos($requestPath, 'forum/') === 0);
+    $isForumAdminPage = ($requestPath === 'admin/plugins/forum')
+        || (strpos($requestPath, 'admin/plugins/forum/') === 0);
+
+    if (!empty($FORUM_CSS) || $isForumPage || $isForumAdminPage) {
+        $_SCRIPTS->setCSSFile('forum', CTL_plugin_themeFindFile('forum', 'css', 'forum.css'));
+
+        // Let the active theme provide Forum-specific CSS/JS dependencies.
+        CTL_plugin_setTemplatesFunctions("forum");
+    }
+
+    return '';
 }
 
 /**
