@@ -1289,10 +1289,11 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
             }
         }
         $lastpostinfo = strip_tags(COM_truncate($lastcomment, $CONF_FORUM['contentinfo_numchars'], '...'));
-        $lastpostinfo = stripBBCode($lastpostinfo); // Simple function to strip out bbcode so tooltips display better
-        $lastpostinfo = forum_mb_wordwrap($lastpostinfo, $CONF_FORUM['linkinfo_width'], LB);
-        $lastpostinfo = htmlspecialchars($lastpostinfo); // Escape things like " so it displays properly in tooltip
-        $lastpostinfo = str_replace(LB, "<br" . XHTML . ">", $lastpostinfo); // Do this last
+        $lastpostinfo = stripBBCode($lastpostinfo); // Keep tooltip content as plain text.
+        $lastpostinfo = html_entity_decode($lastpostinfo, ENT_QUOTES, 'UTF-8');
+        $lastpostinfo = preg_replace('/\\s+/u', ' ', $lastpostinfo);
+        $lastpostinfo = trim($lastpostinfo);
+        $lastpostinfo = htmlspecialchars($lastpostinfo, ENT_QUOTES, 'UTF-8');
         
         $cssid = ($cssid == 1) ? 2 : 1;
 
