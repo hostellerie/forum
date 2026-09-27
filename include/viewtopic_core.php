@@ -444,6 +444,29 @@ while ($topicRec = DB_fetchArray($result)) {
     }
 }
 
+/*
+ * Generic Geeklog public item extension point.
+ *
+ * Keep Forum independent from Hub or any other consumer: Forum only announces
+ * that the full public topic identified by forum:<id> is being displayed.
+ * Active plugins may contribute server-rendered contextual fragments through
+ * plugin_itemdisplay_PLUGIN(). PLG_itemDisplay() is available in Geeklog
+ * 2.1.1 through 2.2.2.
+ *
+ * Preview and onlytopic/embedded output intentionally do not expose this
+ * extension point.
+ */
+if ($mode != 'preview' && $onlytopic != 1) {
+    $itemDisplayFragments = PLG_itemDisplay((string) $showtopic, 'forum');
+    if (is_array($itemDisplayFragments)) {
+        foreach ($itemDisplayFragments as $itemDisplayFragment) {
+            if (is_string($itemDisplayFragment) && $itemDisplayFragment !== '') {
+                $display .= $itemDisplayFragment;
+            }
+        }
+    }
+}
+
 if ($mode != 'preview') {
     $topic_footer = COM_newTemplate(CTL_plugin_templatePath('forum'));
     $topic_footer->set_file (array ('topicfooter'=>'topicfooter.thtml',
