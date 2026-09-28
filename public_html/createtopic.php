@@ -48,6 +48,31 @@ require_once $CONF_FORUM['path_include'] . 'forum_editor.php';
 // the existing validation, spam checks and persistence logic run.
 forum_editor_preparePost();
 
+// Add JavaScript
+$_SCRIPTS->setJavaScriptFile(
+    'forum_creattopic',
+    forum_assetUrl(CTL_plugin_themeFindFile('forum', 'javascript', 'createtopic.js'))
+);
+$_SCRIPTS->setJavaScriptFile(
+    'forum_visual_editor',
+    forum_assetUrl($_CONF['site_url'] . '/forum/javascript/forum-editor.js')
+);
+$_SCRIPTS->setCSSFile(
+    'forum_visual_editor',
+    forum_assetUrl($_CONF['site_url'] . '/forum/forum-editor.css')
+);
+
+if (in_array('mediagallery', $_PLUGINS, true) && function_exists('MG_getMediaPickerButton')) {
+    $_SCRIPTS->setJavaScriptFile(
+        'mediagallery-media-picker',
+        '/mediagallery/js/media-picker.js'
+    );
+    $_SCRIPTS->setCSSFile(
+        'mediagallery-media-picker',
+        '/mediagallery/media-picker.css'
+    );
+}
+
 $display = '';
 
 
@@ -491,31 +516,6 @@ if ($method == 'edit') {
         $display .= alertMessage($LANG_GF02['msg72'],$LANG_GF02['msg191']);
         exit;
     }
-}
-
-// Add JavaScript
-$_SCRIPTS->setJavaScriptFile(
-    'forum_creattopic',
-    forum_assetUrl(CTL_plugin_themeFindFile('forum', 'javascript', 'createtopic.js'))
-);
-$_SCRIPTS->setJavaScriptFile(
-    'forum_visual_editor',
-    forum_assetUrl($_CONF['site_url'] . '/forum/javascript/forum-editor.js')
-);
-$_SCRIPTS->setCSSFile(
-    'forum_visual_editor',
-    forum_assetUrl($_CONF['site_url'] . '/forum/forum-editor.css')
-);
-
-if (in_array('mediagallery', $_PLUGINS, true) && function_exists('MG_getMediaPickerButton')) {
-    $_SCRIPTS->setJavaScriptFile(
-        'mediagallery-media-picker',
-        '/mediagallery/js/media-picker.js'
-    );
-    $_SCRIPTS->setCSSFile(
-        'mediagallery-media-picker',
-        '/mediagallery/media-picker.css'
-    );
 }
 
 // PREVIEW TOPIC
