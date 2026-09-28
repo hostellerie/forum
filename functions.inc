@@ -1391,7 +1391,7 @@ function stripBBCode($text_to_search) {
 */
 function plugin_getheadercode_forum()
 {
-    global $_SCRIPTS, $FORUM_CSS, $CONF_FORUM;
+    global $_SCRIPTS, $_CONF, $_PLUGINS, $FORUM_CSS, $CONF_FORUM;
 
     // This branch targets Geeklog 2.1.1. Keep the legacy Forum resources,
     // but do not load them globally on unrelated pages.
@@ -1412,6 +1412,32 @@ function plugin_getheadercode_forum()
 
         // Let the active theme provide the Forum-specific presentation bridge.
         CTL_plugin_setTemplatesFunctions("forum");
+    }
+
+    // Posting assets must be registered from the plugin header hook. On
+    // Geeklog 2.1.1 this hook runs while the document head is still being
+    // assembled; registering them later from createtopic.php is too late for
+    // themes such as Eclipse.
+    if ($requestPath === 'forum/createtopic.php') {
+        $_SCRIPTS->setJavaScriptFile(
+            'forum_visual_editor',
+            forum_assetUrl($_CONF['site_url'] . '/forum/javascript/forum-editor.js')
+        );
+        $_SCRIPTS->setCSSFile(
+            'forum_visual_editor',
+            forum_assetUrl($_CONF['site_url'] . '/forum/forum-editor.css')
+        );
+
+        if (in_array('mediagallery', $_PLUGINS, true)) {
+            $_SCRIPTS->setJavaScriptFile(
+                'mediagallery-media-picker',
+                $_CONF['site_url'] . '/mediagallery/js/media-picker.js'
+            );
+            $_SCRIPTS->setCSSFile(
+                'mediagallery-media-picker',
+                $_CONF['site_url'] . '/mediagallery/media-picker.css'
+            );
+        }
     }
 
     // Geeklog 2.1.1 Forum still uses the legacy smilies stylesheet on Forum
