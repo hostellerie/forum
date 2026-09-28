@@ -1862,7 +1862,7 @@ function forum_stripBBCode($text_to_search) {
 */
 function plugin_getheadercode_forum()
 {
-    global $_SCRIPTS, $FORUM_CSS;
+    global $_SCRIPTS, $_CONF, $_PLUGINS, $FORUM_CSS;
 
 	// Figure out web path is forum then assume loading a forum file so need css (also consider forum admin pages)
 	// Easier to do than setting $FORUM_CSS on all forum pages
@@ -1875,6 +1875,33 @@ function plugin_getheadercode_forum()
 		// Look for forum templates functions.php for current theme. If exist add in its required javascript and css
 		CTL_plugin_setTemplatesFunctions("forum");
 	}
+
+    $requestPath = parse_url(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '', PHP_URL_PATH);
+    $requestPath = is_string($requestPath) ? strtolower(trim($requestPath, '/')) : '';
+
+    // Register posting assets while Geeklog is still assembling the document
+    // head. This keeps the editor independent from the active theme.
+    if ($requestPath === 'forum/createtopic.php') {
+        $_SCRIPTS->setJavaScriptFile(
+            'forum_visual_editor',
+            $_CONF['site_url'] . '/forum/javascript/forum-editor.js'
+        );
+        $_SCRIPTS->setCSSFile(
+            'forum_visual_editor',
+            $_CONF['site_url'] . '/forum/forum-editor.css'
+        );
+
+        if (in_array('mediagallery', $_PLUGINS, true)) {
+            $_SCRIPTS->setJavaScriptFile(
+                'mediagallery-media-picker',
+                $_CONF['site_url'] . '/mediagallery/js/media-picker.js'
+            );
+            $_SCRIPTS->setCSSFile(
+                'mediagallery-media-picker',
+                $_CONF['site_url'] . '/mediagallery/media-picker.css'
+            );
+        }
+    }
 }
 
 /**
