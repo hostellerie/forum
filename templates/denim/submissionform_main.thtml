@@ -13,6 +13,7 @@
 <div class="uk-form-row">
 	<div class="uk-form-controls">
 		<textarea name="comment" id="form-forum-text" rows="20" class="post" style="width:98%" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);">{post_message}</textarea>
+		<div class="forum-media-picker-wrap">{mediagallery_picker}</div>
 	</div>	
 </div>
 {options}
