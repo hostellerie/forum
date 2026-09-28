@@ -765,35 +765,41 @@ if (($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($
     }
 
     if ($CONF_FORUM['show_moods']) {
+        global $LANG_GF_MOODS;
+
+        $selectedMood = ($mood != '') ? $mood : '';
         $moodoptions = '';
-        if ($mood != '') {
-            $edittopic['mood'] = $mood;
-        } else {
-            $edittopic['mood'] = '';
-            $moodoptions = '<option value="" selected="selected">' . $LANG_GF01['NOMOOD'] . "</option>\n";
-        }
+
+        $noneLabel = isset($LANG_GF_MOODS['none']) ? $LANG_GF_MOODS['none'] : $LANG_GF01['NOMOOD'];
+        $moodoptions .= '<label class="forum-mood-choice">'
+                     . '<input type="radio" name="mood" value=""' . ($selectedMood === '' ? ' checked="checked"' : '') . '>'
+                     . '<span>' . htmlspecialchars($noneLabel, ENT_QUOTES, $CONF_FORUM['charset']) . '</span>'
+                     . '</label>';
+
         if ($dir = @opendir("{$CONF_FORUM['imgset_path']}/moods")) {
+            $moodFiles = array();
             while (($file = readdir($dir)) !== false) {
-                if ((strlen($file) > 3) && substr(strtolower(trim($file)), -4, 4) == '.gif') {
-                    $file = str_replace('.gif', '', $file);
-                    if ($file == $edittopic['mood']) {
-                        $moodoptions .= '<option value="' . $file . '" selected="selected">' . $file . "</option>\n";
-                    } else {
-                        $moodoptions .= '<option value="' . $file . '" style="height:40px; background-repeat: no-repeat; text-align:right; '
-                                      . 'background-image:URL(\'' . $CONF_FORUM['layout_url'] . '/image_set/moods/' . $file . '.gif\')">' .$file. "</option>\n";
-                    }
-                } else {
-                    $moodoptions .= '';
+                if ((strlen($file) > 4) && substr(strtolower(trim($file)), -4) === '.gif') {
+                    $moodFiles[] = str_replace('.gif', '', $file);
                 }
             }
             closedir($dir);
+            sort($moodFiles, SORT_STRING);
+
+            foreach ($moodFiles as $moodKey) {
+                $label = isset($LANG_GF_MOODS[$moodKey]) ? $LANG_GF_MOODS[$moodKey] : ucfirst(str_replace(array('_', '-'), ' ', $moodKey));
+                $moodoptions .= '<label class="forum-mood-choice">'
+                             . '<input type="radio" name="mood" value="' . htmlspecialchars($moodKey, ENT_QUOTES, $CONF_FORUM['charset']) . '"'
+                             . ($selectedMood === $moodKey ? ' checked="checked"' : '') . '>'
+                             . '<span>' . htmlspecialchars($label, ENT_QUOTES, $CONF_FORUM['charset']) . '</span>'
+                             . '</label>';
+            }
         }
-        $submissionform_main->set_var ('LANG_MOOD', $LANG_GF02['msg36']);
-        $submissionform_main->set_var ('moodoptions', $moodoptions);
-        $submissionform_main->parse ('moods', 'submissionform_moods');
+
+        $submissionform_main->set_var('LANG_MOOD', $LANG_GF02['msg36']);
+        $submissionform_main->set_var('moodoptions', $moodoptions);
+        $submissionform_main->parse('moods', 'submissionform_moods');
     } else {
-        // The main submission template contains {moods}. With
-        // set_unknowns('keep'), an unset variable is rendered literally.
         $submissionform_main->set_var('moods', '');
     }
 
