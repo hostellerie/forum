@@ -42,6 +42,11 @@ if (!in_array('forum', $_PLUGINS)) {
 
 require_once $CONF_FORUM['path_include'] . 'gf_showtopic.php';
 require_once $CONF_FORUM['path_include'] . 'gf_format.php';
+require_once $CONF_FORUM['path_include'] . 'forum_editor.php';
+
+// Convert the visual editor payload back to the Forum source format before
+// the existing validation, spam checks and persistence logic run.
+forum_editor_preparePost();
 
 $display = '';
 
@@ -493,6 +498,14 @@ $_SCRIPTS->setJavaScriptFile(
     'forum_creattopic',
     forum_assetUrl(CTL_plugin_themeFindFile('forum', 'javascript', 'createtopic.js'))
 );
+$_SCRIPTS->setJavaScriptFile(
+    'forum_visual_editor',
+    forum_assetUrl($_CONF['site_url'] . '/forum/javascript/forum-editor.js')
+);
+$_SCRIPTS->setCSSFile(
+    'forum_visual_editor',
+    forum_assetUrl($_CONF['site_url'] . '/forum/forum-editor.css')
+);
 
 if (in_array('mediagallery', $_PLUGINS, true) && function_exists('MG_getMediaPickerButton')) {
     $_SCRIPTS->setJavaScriptFile(
@@ -890,7 +903,7 @@ if (($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($
     $mediagalleryPicker = '';
     if (in_array('mediagallery', $_PLUGINS, true) && function_exists('MG_getMediaPickerButton')) {
         $mediagalleryPicker = MG_getMediaPickerButton(array(
-            'target' => 'textarea[name="comment"]',
+            'target' => 'textarea[name="forum_media_transport"]',
             'label'  => (isset($_CONF['language']) && strpos($_CONF['language'], 'french') === 0)
                 ? 'Média'
                 : 'Media',
@@ -898,7 +911,7 @@ if (($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($
         ));
         if ($mediagalleryPicker === '') {
             $mediagalleryPicker = MG_getMediaPickerButton(array(
-                'target' => 'textarea[name="comment"]',
+                'target' => 'textarea[name="forum_media_transport"]',
                 'label'  => (isset($_CONF['language']) && strpos($_CONF['language'], 'french') === 0)
                     ? 'Média'
                     : 'Media',
@@ -1088,6 +1101,43 @@ if (($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($
         $submissionform_main->set_var ('post_message', htmlspecialchars($comment,ENT_QUOTES, $CONF_FORUM['charset']));
     }
     
+    $editorSource = $comment;
+    if ($method == 'edit' && $preview != 'Preview') {
+        $editorSource = $edittopic['comment'];
+    } elseif ($method != 'edit') {
+        $editorSource = COM_stripslashes($comment);
+    } else {
+        $editorSource = htmlspecialchars_decode($comment, ENT_QUOTES);
+    }
+
+    $submissionform_main->set_var('editor_html', forum_editor_renderSource($editorSource, $postmode));
+    $submissionform_main->set_var('editor_render_url', $_CONF['site_url'] . '/forum/editor-render.php');
+
+    $isFrenchEditor = isset($_CONF['language']) && strpos($_CONF['language'], 'french') === 0;
+    $editorLabels = $isFrenchEditor
+        ? array(
+            'bold' => 'Gras',
+            'italic' => 'Italique',
+            'list' => 'Liste',
+            'olist' => 'Liste numérotée',
+            'quote' => 'Citation',
+            'link' => 'Lien',
+            'code' => 'Code'
+        )
+        : array(
+            'bold' => 'Bold',
+            'italic' => 'Italic',
+            'list' => 'List',
+            'olist' => 'Numbered list',
+            'quote' => 'Quote',
+            'link' => 'Link',
+            'code' => 'Code'
+        );
+
+    foreach ($editorLabels as $editorLabelKey => $editorLabelValue) {
+        $submissionform_main->set_var('LANG_EDITOR_' . strtoupper($editorLabelKey), $editorLabelValue);
+    }
+
     $submissionform_main->set_var ('postmode', $postmode);
     $submissionform_main->parse ('output', 'submissionform_main');
     $display .= $submissionform_main->finish($submissionform_main->get_var('output'));
