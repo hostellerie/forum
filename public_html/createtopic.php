@@ -50,9 +50,495 @@ require_once $CONF_FORUM['path_include'] . 'forum_editor.php';
 // the existing validation, spam checks and persistence logic run.
 forum_editor_preparePost();
 
-// Posting assets are registered by plugin_getheadercode_forum() while the
-// document head is being assembled.
- 
+// Posting assets are registered by plugin_getheadercode_forum() while the document head is assembled.
+
+
+// Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
+$id          = isset($_REQUEST['id'])              ? COM_applyFilter($_REQUEST['id'],true)              : 0; // Forum id, Reply Topic Parent Id or Edit Topic Id always required so set to 0 if not found (so it will error during permission check)
+$method      = isset($_REQUEST['method'])          ? COM_applyFilter($_REQUEST['method'])               : ''; // Can equal newtopic, postreply, or edit
+$mood        = isset($_POST['mood'])               ? COM_applyFilter($_POST['mood'])                    : '';
+$notify      = isset($_POST['notify'])             ? COM_applyFilter($_POST['notify'])                  : '';
+$quoteid     = isset($_REQUEST['quoteid'])         ? COM_applyFilter($_REQUEST['quoteid'],true)         : '';
+$submit      = isset($_POST['submitmode'])         ? COM_applyFilter($_POST['submitmode'])              : '';
+$aname       = isset($_POST['aname'])              ? trim(strip_tags($_POST['aname']))                  : '';
+$subject 	 = isset($_POST['subject']) 		   ? trim($_POST['subject'])							: ''; 
+$comment 	 = isset($_POST['comment']) 		   ? trim($_POST['comment'])							: ''; 
+$postmode    = isset($_POST['postmode'])           ? COM_applyFilter($_POST['postmode'])                : '';
+$mode_switch = isset($_REQUEST['postmode_switch']) ? COM_applyFilter($_REQUEST['postmode_switch'],true) : '';
+$captcha 	 = isset($_POST['captcha']) 		   ? $_POST['captcha']									: ''; // this is needed to support the captcha plugin (not the recaptcha plugin) used when $method = 'postreply' or 'newtopic'
+
+// Okay lets figure out what the id url variable is (either topic or forum id). This is based on $method
+if ($method == 'newtopic') {
+	// Then this is a new topic so id is used as forum id in editor
+	$forum = $id;
+	$id = '';
+	$pid = 0;
+	$isParent = true;	
+	
+	// Grab Anonymous user name if set before by comment;
+    if (COM_isAnonUser() && empty($aname) && isset($_COOKIE[$_CONF['cookie_anon_name']])) {
+        $aname = GLText::stripTags($_COOKIE[$_CONF['cookie_anon_name']]);
+        $aname = COM_checkWords($aname, 'comment');
+        $aname = GLText::remove4byteUtf8Chars($aname);
+    }
+} elseif ($method == 'postreply' || $method == 'edit') {
+	// Get parent Topic and forum ids from id
+	$result = DB_query("SELECT forum, pid FROM {$_TABLES['forum_topic']} WHERE id = $id");
+	list($forum, $pid) = DB_fetchArray($result);
+	
+	if ($method == 'edit') {
+		if ($pid == 0) {// Then this is a parent topic already
+			$pid = $id;
+			$isParent = true;
+		} else {
+			$isParent = false;
+		}	
+	} else {
+		// New reply so id is parent
+		// Keep $id equal to parent id as that is how the code works below
+		$pid = $id;
+		$isParent = false;
+	}
+} else {
+	COM_handle404("{$_CONF['site_url']}/forum/index.php");
+}
+
+// Check if user is anonymous and can post
+if ($CONF_FORUM['registered_to_post'] && COM_isAnonUser()) {
+	$secureCheck = true;
+} else {
+	$secureCheck = false;
+}
+// Check is anonymous users can access and if not, regular user can access
+forum_chkUsercanAccess($secureCheck, $forum, $id);
+
+// Lets check quote id now for security if passed
+// Note: this doesn't check if quoteid belongs to the parent topic though (not a big deal)
+if (!empty($quoteid)) {
+	forum_chkUsercanAccess(false, '', $quoteid);
+}
+
+$display = '';
+$editorDisplay = true;
+
+// Check if IP of user has been banned
+$ip = getenv("REMOTE_ADDR");
+$sqlresult = DB_query ("SELECT * FROM {$_TABLES['forum_banned_ip']} WHERE host_ip like '$ip'");
+$numRows = DB_numRows($sqlresult);
+if ($numRows > 0) {
+	ForumHeader('', $forum, $id, $display);
+    //$display .= alertMessage(sprintf($LANG_GF02['msg14'], $_CONF['site_mail']), $LANG_GF00['access_denied']);
+	$display .= COM_showMessageText(sprintf($LANG_GF02['msg14'], $_CONF['site_mail']), $LANG_GF00['access_denied']); // Banned Message
+    $display = COM_createHTMLDocument($display);
+    COM_output($display);
+    exit();
+}
+
+// Debug Code to show variables
+$display .= gf_showVariables();
+
+ForumHeader('', $forum, $id, $display);
+
+if (empty($_USER['uid']) OR $_USER['uid'] == 1 ) {
+    $uid = 1;
+} else {
+    $uid = $_USER['uid'];
+}
+
+// Is user an edit moderator?
+if (forum_modPermission($forum, $uid, 'mod_edit')) {
+	$editmoderator = true;
+} else {
+	$editmoderator = false;
+}
+
+// CHECK TO SEE IF CANCELED
+if ($submit == $LANG_GF01['CANCEL']) {
+	if ($method == 'newtopic') {
+		$url = $_CONF['site_url'] . "/forum/index.php?msg=9&amp;forum=$forum";
+	} elseif ($method == 'postreply') {
+		$url = html_entity_decode(forum_buildForumPostURL($pid, '&amp;msg=9', '', false));
+	} elseif ($method == 'edit') {
+		$url = html_entity_decode(forum_buildForumPostURL($id, '&amp;msg=9'));
+    } else {
+        // Something wrong so just go back
+        $url = $_CONF['site_url'] . "/forum/index.php?msg=9";
+    }
+	
+	COM_redirect($url);
+}
+
+// Check Speed Limit for New Topics and New Replies
+if (empty($submit) && ($method == 'newtopic' || $method == 'postreply')) {
+	COM_clearSpeedlimit($CONF_FORUM['post_speedlimit'], 'forum');
+	$last = COM_checkSpeedlimit('forum');
+	if ($last > 0) {
+		$message = sprintf($LANG_GF01['SPEEDLIMIT'], $last, $CONF_FORUM['post_speedlimit']);
+		// $display .= alertMessage($message, $LANG_GF02['msg180']);
+		if ($method == 'newtopic') {
+			$link = "{$_CONF['site_url']}/forum/index.php?forum=$forum";
+		} else {
+			$link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic=$pid";
+		}
+		COM_setSystemMessage($message, $LANG_GF02['msg180']);
+		COM_redirect($link);
+	}
+}
+
+// Update EDITED TOPIC
+if (($submit == $LANG_GF01['SUBMIT']) && ($method == 'edit') && SEC_checkToken()) {
+    $date = time();
+
+    $editAllowed = false;
+    $moderator_anon_post = false;
+	$uidPost = DB_getItem($_TABLES['forum_topic'],'uid',"id='$id'");
+    if ($editmoderator) {
+        $editAllowed = true;
+        if ($uidPost == 1) {
+            $moderator_anon_post = true;
+        }
+    } else {
+		// Edit window must exist and topic cannot be locked
+		$is_readonly = DB_getItem($_TABLES['forum_forums'],'is_readonly', "forum_id = $forum");
+		$is_lockedtopic = DB_getItem($_TABLES['forum_topic'],'locked',"id = $pid");
+        if ($CONF_FORUM['allowed_editwindow'] > 0 && !$is_lockedtopic && !$is_readonly) {
+            $t1 = DB_getItem($_TABLES['forum_topic'],'date',"id='$id'");
+            $t2 = $CONF_FORUM['allowed_editwindow'];
+            $time = time();
+            if ((time() - $t2) < $t1) {
+                $editAllowed = true;
+            }
+        } elseif ($CONF_FORUM['allowed_editwindow'] == -1) {
+            $editAllowed = true;
+        }
+    }
+
+    if (($isParent) && ($subject == '')) {
+		// $display .= alertMessage($LANG_GF02['msg18'], $LANG_GF02['msg180']);
+		$display .= COM_showMessageText($LANG_GF02['msg18'], $LANG_GF02['msg180']); // All fields are required
+    } elseif (!$editAllowed) {
+		$url = html_entity_decode(forum_buildForumPostURL($id));
+        //$display .= alertMessage('',$LANG_GF02['msg189'], sprintf($LANG_GF02['msg187'], $link));
+		COM_setSystemMessage($LANG_GF02['msg189'], $LANG_GF02['msg180']); // Cannot edit post anymore
+		COM_redirect($url);
+    } else {
+        if ($moderator_anon_post) {
+            $name = gf_preparefordb($aname, 'text'); // This happens if mod is editing an anonymous post since anonymous nick name can be changed
+        } else {
+			$name = gf_preparefordb(COM_getDisplayName($uidPost), 'text');
+        }
+        
+        if (strlen($name) >= $CONF_FORUM['min_username_length'] AND
+            strlen($subject) >= $CONF_FORUM['min_subject_length'] AND
+            strlen($comment) >= $CONF_FORUM['min_comment_length']) {
+            
+			// If spam found error message will display
+			gf_postSpamCheck($display, $subject, $comment, $name); 
+            
+            $postmode = gf_chkpostmode($postmode, $mode_switch);
+            $subject  = gf_preparefordb(strip_tags($subject), 'text');
+            $comment  = gf_preparefordb($comment, $postmode);
+
+            // If user has moderator edit rights only
+            $locked = 0;
+            $sticky = 0;
+            if ($editmoderator) {
+                if (isset($_POST['locked_switch']) AND $_POST['locked_switch'] == 1)  $locked = 1;
+                if (isset($_POST['sticky_switch']) AND $_POST['sticky_switch'] == 1)  $sticky = 1;
+            }
+            $sql = "UPDATE {$_TABLES['forum_topic']} SET subject='$subject',comment='$comment',postmode='$postmode', ";
+            if ($moderator_anon_post) {
+                $sql .= "name='$name', ";
+            }
+            $sql .= "mood='$mood', sticky='$sticky', locked='$locked' WHERE (id='$id')";
+            DB_query($sql);
+
+			// If moderator and a root post
+			if ($editmoderator && $isParent) {
+				TOPIC_saveTopicSelectionControl(FORUM_PLUGIN_NAME, $id, TOPIC_TYPE_FORUM_TOPIC);
+			}                
+
+            //NOTIFY - Checkbox variable in form set to "on" when checked and they have not already subscribed to forum
+			// Make sure user only changes notifications for his own posts when editing
+			if ($uid == $uidPost) {
+				gf_setnotification($notify, $forum, $pid, $uid);
+			}
+
+            // if user has un-checked the Silent option then they want to have user alerted of the edit and update the topic timestamp
+			if (isset($_POST['silentedit']) && $_POST['silentedit'] == 1 ) {
+            	// This needs to be outside silentedit check since forum notification for site needs to be sent at least
+				gf_chknotifications($id, $uid, true, true);
+			} else {
+                DB_query("UPDATE {$_TABLES['forum_topic']} SET lastupdated = $date WHERE id=$pid");
+                //Remove any lastviewed records in the log so that the new updated topic indicator will appear
+                DB_query("DELETE FROM {$_TABLES['forum_log']} WHERE topic='$pid' and time > 0");
+				
+				// Check for any users subscribed notifications
+				gf_chknotifications($id, $uid, true);
+			}
+
+            PLG_itemSaved($id, 'forum');
+            COM_rdfUpToDateCheck('forum'); // forum rss feeds update
+            
+			// Remove new block and centerblock cached items
+            $cacheInstance = 'forum__newpostsblock_';
+            CACHE_remove_instance($cacheInstance);
+            $cacheInstance = 'forum__centerblock_';
+            CACHE_remove_instance($cacheInstance);
+
+			$url = html_entity_decode(forum_buildForumPostURL($id, '&amp;msg=1'));
+            COM_redirect($url);
+        } else {
+            $display .= COM_showMessageText($LANG_GF02['msg18'], $LANG_GF02['msg180']);
+        }
+    }
+	
+	// If reaches here then something is not correct when editing a post
+	$submit = $LANG_GF01['PREVIEW'];
+
+    //$display = gf_createHTMLDocument($display);
+    //COM_output($display);
+    //exit;
+}
+
+// ADD TOPIC
+if (($submit == $LANG_GF01['SUBMIT']) && (($uid == 1) || SEC_checkToken())) {
+    $captchaMsg = '';
+    $date = time();
+    $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
+	
+    if ($method == 'newtopic') {
+        if ($uid == 1) {
+			// Save anonymous username to cookie for use later 
+			$aname = COM_checkWords(GLText::stripTags($aname, 'comment'));
+			$aname = GLText::remove4byteUtf8Chars($aname);
+			SEC_setCookie($_CONF['cookie_anon_name'], $aname, time() + 31536000);
+			
+            $name = gf_preparefordb($aname,'text');
+        } else {
+			$name = gf_preparefordb(COM_getDisplayName($uid), 'text');
+        }
+		
+		$captchaMsg = gf_passCaptchaCheck($captcha);
+        if ($captchaMsg == '') {
+            if (strlen($name) >= $CONF_FORUM['min_username_length'] AND
+                strlen($subject) >= $CONF_FORUM['min_subject_length'] AND
+                strlen($comment) >= $CONF_FORUM['min_comment_length'] AND
+                TOPIC_hasMultiTopicAccess('topic') > 2) {
+                // Note: TOPIC_checkTopicSelectionControl not required since Geeklog topics not required for parent forum topic
+
+				// If spam found error message will display
+				gf_postSpamCheck($display, $subject, $comment, $name); 
+				
+				$postmode = gf_chkpostmode($postmode, $mode_switch);
+				$subject = gf_preparefordb(strip_tags($subject), 'text');
+
+				if (mb_strlen($subject) > 100) {
+					$subject = COM_truncate($subject, 99, '...');
+				}
+				$comment = gf_preparefordb($comment, $postmode);
+				$locked = 0;
+				$sticky = 0;
+				if ($editmoderator) {
+					if (Input::post('locked_switch', 0) == 1)  $locked = 1;
+					if (Input::post('sticky_switch', 0) == 1)  $sticky = 1;
+				}
+
+				$fields = "forum,name,date,lastupdated,subject,comment,postmode,ip,mood,uid,pid,sticky,locked";
+				$sql  = "INSERT INTO {$_TABLES['forum_topic']} ($fields) ";
+				$sql .= "VALUES ('$forum','$name','$date',$date,'$subject','$comment', ";
+				$sql .= "'$postmode','$REMOTE_ADDR','$mood','$uid','0','$sticky','$locked')";
+				DB_query($sql);
+				
+				// Find the id of the last inserted topic
+				list ($lastid) = DB_fetchArray(DB_query("SELECT max(id) FROM {$_TABLES['forum_topic']} "));
+				
+				// If moderator on a root post
+				if ($editmoderator) {
+					TOPIC_saveTopicSelectionControl(FORUM_PLUGIN_NAME, $lastid, TOPIC_TYPE_FORUM_TOPIC);
+				}
+
+				PLG_itemSaved($lastid, 'forum');
+				COM_rdfUpToDateCheck('forum'); // forum rss feeds update
+				
+				// Remove new block and centerblock cached items
+				$cacheInstance = 'forum__newpostsblock_';
+				CACHE_remove_instance($cacheInstance);
+				$cacheInstance = 'forum__centerblock_';
+				CACHE_remove_instance($cacheInstance);
+
+				// Update forums record
+				DB_query("UPDATE {$_TABLES['forum_forums']} SET post_count=post_count+1, topic_count=topic_count+1, last_post_rec=$lastid WHERE forum_id=$forum");
+
+				// Check for any users subscribed notifications - would only be for users subscribed to the forum
+				gf_chknotifications($lastid, $uid);
+				
+				// NOTIFY - Checkbox variable in form set to "on" when checked and they have not already subscribed to forum
+				gf_setnotification($notify, $forum, $lastid, $uid);
+
+				COM_updateSpeedlimit ('forum');
+
+				// Insert a new log record for all logged in users that posted so it does not appear as new
+				if ($uid != '1') {
+					DB_query("INSERT INTO {$_TABLES['forum_log']} (uid,forum,topic,time) VALUES ('{$_USER['uid']}','$forum','$lastid','$date')");
+				}
+				
+				COM_redirect($_CONF['site_url'] . "/forum/viewtopic.php?msg=1&amp;showtopic=$lastid");
+            } else {
+                //$display .= alertMessage($LANG_GF02['msg18'], $LANG_GF02['msg180']);
+				$display .= COM_showMessageText($LANG_GF02['msg18'], $LANG_GF02['msg180']); // All fields are required
+            }
+        } else {
+			// Add captcha failure message to display
+			$display .= $captchaMsg;
+		}
+// END OF A NEW TOPIC...
+
+// ADD REPLY
+     } elseif ($method == 'postreply') {
+
+		$captchaMsg = gf_passCaptchaCheck($captcha);
+        if ($captchaMsg == '') {
+			if ($uid == 1) {
+				$name = gf_preparefordb($aname,'text');
+			} else {
+				$name = gf_preparefordb(COM_getDisplayName($uid), 'text');
+			}
+            
+            if (strlen($name) >= $CONF_FORUM['min_username_length'] AND 
+                strlen($subject) >= $CONF_FORUM['min_subject_length'] AND
+                strlen($comment) >= $CONF_FORUM['min_comment_length']) {            
+
+				// If spam found error message will display
+				gf_postSpamCheck($display, $subject, $comment, $name); 
+
+				$postmode = gf_chkpostmode($postmode, $mode_switch);
+				$subject = gf_preparefordb($subject, 'text');
+				$comment = gf_preparefordb($comment, $postmode);
+
+				$fields = "name,date,subject,comment,postmode,ip,mood,uid,pid,forum";
+				$sql  = "INSERT INTO {$_TABLES['forum_topic']} ($fields) ";
+				$sql .= "VALUES  ('$name','$date','$subject','$comment',";
+				$sql .= "'$postmode','$REMOTE_ADDR','$mood','$uid','$id','$forum')";
+				DB_query($sql);
+
+				// Find the id of the last inserted topic
+				list($lastid) = DB_fetchArray(DB_query("SELECT max(id) FROM {$_TABLES['forum_topic']} "));
+				
+				// Make sure users know new reply for parent topic
+				DB_query("DELETE FROM {$_TABLES['forum_log']} WHERE topic='$id' and time > 0");
+				
+				// Check for any users subscribed notifications
+				gf_chknotifications($lastid, $uid);
+
+				PLG_itemSaved($lastid, 'forum');
+				COM_rdfUpToDateCheck('forum'); // forum rss feeds update
+				
+				// Remove new block and centerblock cached items
+				$cacheInstance = 'forum__newpostsblock_';
+				CACHE_remove_instance($cacheInstance);
+				$cacheInstance = 'forum__centerblock_';
+				CACHE_remove_instance($cacheInstance);
+				
+				DB_query("UPDATE {$_TABLES['forum_topic']} SET replies=replies + 1, lastupdated = $date,last_reply_rec=$lastid WHERE id=$id");
+				DB_query("UPDATE {$_TABLES['forum_forums']} SET post_count=post_count+1, last_post_rec=$lastid WHERE forum_id=$forum");
+
+				//NOTIFY - Checkbox variable in form set to "on" when checked and they don't already have subscribed to forum or topic
+				gf_setnotification($notify, $forum, $id, $uid);
+				
+				COM_updateSpeedlimit ('forum');
+				$url = html_entity_decode(forum_buildForumPostURL($lastid));
+				COM_redirect($url);
+            } else {
+                //$display .= alertMessage($LANG_GF02['msg18'], $LANG_GF02['msg180']);
+				$display .= COM_showMessageText($LANG_GF02['msg18'], $LANG_GF02['msg180']); // All fields are required
+            }
+        } else {
+			// Add captcha failure message to display
+			$display .= $captchaMsg;
+		}
+    }
+	
+	// If reaches here then something is not correct when adding new topic or reply
+	$submit = $LANG_GF01['PREVIEW'];
+}
+
+
+// EDIT MESSAGE
+$comment = COM_stripslashes($comment);
+$subject = COM_stripslashes($subject);
+
+// New or Edit Reply or Edit Topic
+if ($id > 0) {
+    $sql  = "SELECT a.forum,a.pid,a.comment,a.date,a.locked,a.subject,a.mood,a.sticky,a.uid,a.name,a.postmode,b.forum_cat,b.forum_name,b.is_readonly,c.cat_name,c.id ";
+    $sql .= "FROM {$_TABLES['forum_topic']} a ";
+    $sql .= "LEFT JOIN {$_TABLES['forum_forums']} b ON b.forum_id=a.forum ";
+    $sql .= "LEFT JOIN {$_TABLES['forum_categories']} c ON c.id=b.forum_cat ";
+    $sql .= "WHERE a.id=$id";
+    $edittopic = DB_fetchArray(DB_query($sql),false);
+// New Topic
+} else {
+    $sql  = "SELECT a.forum_name,a.is_readonly,b.cat_name,b.id ";
+    $sql .= "FROM {$_TABLES['forum_forums']} a ";
+    $sql .= "LEFT JOIN {$_TABLES['forum_categories']} b ON b.id=a.forum_cat ";
+    $sql .= "WHERE a.forum_id=$forum";
+    $newtopic = DB_fetchArray(DB_query($sql),false);
+}
+
+if ($method == 'edit') {
+    $editAllowed = false;
+	$editAllowedTimedCheck = false;
+    if ($editmoderator) {
+        $editAllowed = true;
+    } else {
+        // User is trying to edit their topic post - this is allowed
+        if ($edittopic['date'] > 0 AND $edittopic['uid'] == $_USER['uid']) {
+			$editAllowedTimedCheck = true;
+			
+			// Edit window must exist and topic cannot be locked
+			$is_readonly = DB_getItem($_TABLES['forum_forums'],'is_readonly', "forum_id = $forum");
+			$is_lockedtopic = DB_getItem($_TABLES['forum_topic'],'locked',"id = $pid");
+			if ($CONF_FORUM['allowed_editwindow'] > 0 && !$is_lockedtopic && !$is_readonly) {			
+                $t2 = $CONF_FORUM['allowed_editwindow'];
+                $time = time();
+                if ((time() - $t2) < $edittopic['date']) {
+                    $editAllowed = true;
+                }
+            } elseif ($CONF_FORUM['allowed_editwindow'] == -1) {
+                $editAllowed = true;
+            }
+        }
+    }
+    // Moderator or logged-in User is editing their topic post
+    if (!COM_isAnonUser() AND $editAllowed) {
+        // Check to see if user has this topic or complete forum is selected for notifications
+        $fields1 = array( 'topic_id','uid' );
+        $values1 = array( $id,$edittopic['uid'] );
+        $fields2 = array( 'topic_id','forum_id','uid' );
+        $values2 = array( 0,$edittopic['forum'],$edittopic['uid']);
+        // Check if there are any notification records for the topic or the forum - topic_id = 0
+        if ((DB_count($_TABLES['forum_watch'],$fields1,$values1) > 0) OR (DB_count($_TABLES['forum_watch'],$fields2,$values2) > 0)) {
+            $notify_val= 'checked="checked"';
+        }
+    } else {
+        //$display .= alertMessage($LANG_GF02['msg72'],$LANG_GF02['msg191']);
+		if ($editAllowedTimedCheck) {
+			$display .= COM_showMessageText($LANG_GF02['msg191'], $LANG_GF01['ACCESSERROR']); // Edit not permitted. Allowable edit time frame expired
+		} else { 
+			if (forum_modPermission($uid)) {
+				$display .= COM_showMessageText($LANG_GF02['msg72'], $LANG_GF01['ACCESSERROR']); // You do not have rights to perform this moderation function
+			} else {
+				// No mod privileges at all so 404 to hide details about moderation.php
+				COM_handle404("{$_CONF['site_url']}/forum/index.php");				
+			}
+		}
+		$display = gf_createHTMLDocument($display);
+		COM_output($display);		
+        exit;
+    }
+}
+
+
 // PREVIEW TOPIC
 if ($submit == $LANG_GF01['PREVIEW']) {
     $previewitem = array();
