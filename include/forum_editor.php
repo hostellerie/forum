@@ -201,6 +201,16 @@ function forum_editor_htmlToHtml($html)
         $node->parentNode->replaceChild($doc->createTextNode($marker), $node);
     }
 
+    // Keep Forum quote semantics even in HTML mode. The historical renderer
+    // expects [quote] so it can output the standard quotemain markup.
+    $quotes = $xpath->query('//blockquote');
+    for ($i = $quotes->length - 1; $i >= 0; $i--) {
+        $node = $quotes->item($i);
+        $marker = '___FORUM_EDITOR_QUOTE_' . $i . '___';
+        $autotags[$marker] = '[quote]' . trim($node->textContent) . '[/quote]';
+        $node->parentNode->replaceChild($doc->createTextNode($marker), $node);
+    }
+
     $output = '';
     foreach ($root->childNodes as $child) {
         $output .= $doc->saveHTML($child);
@@ -216,6 +226,12 @@ function forum_editor_htmlToHtml($html)
 function forum_editor_preparePost()
 {
     if (empty($_POST['forum_editor_dirty']) || !isset($_POST['forum_editor_html'])) {
+        return;
+    }
+
+    // If the browser did not populate the visual payload, keep the synchronized
+    // plain source field instead of replacing the comment with an empty string.
+    if (trim($_POST['forum_editor_html']) === '') {
         return;
     }
 
