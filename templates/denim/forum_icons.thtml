@@ -65,7 +65,7 @@
 <!-- END topiclocked_icon -->
 
 <!-- BEGIN mood_icon -->
-	<div><img src="{moodicon}" title="{moodicontitle}" alt="{moodtitle}"{xhtml}></div>
+<span class="forum-mood-badge"><span class="forum-mood-badge__label">{moodlabel}:</span> {moodtitle}</span>
 <!-- END mood_icon -->
 
 <!-- BEGIN memberbadge_icon -->
