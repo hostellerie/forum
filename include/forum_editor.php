@@ -171,6 +171,62 @@ function forum_editor_htmlToBBCode($html)
     return trim($source);
 }
 
+function forum_editor_normalizeVisualBlocks($doc, $root)
+{
+    // contenteditable (notably Chromium) represents a new paragraph with
+    // top-level <div> or <p> nodes. Saving those nodes and rendering them again
+    // through the historical Forum formatter can add another visual blank line
+    // on every edit. Flatten only top-level editor paragraphs to one canonical
+    // Forum separator so the round trip is idempotent.
+    $blocks = array();
+    foreach ($root->childNodes as $child) {
+        if ($child->nodeType === XML_ELEMENT_NODE) {
+            $name = strtolower($child->nodeName);
+            if ($name === 'div' || $name === 'p') {
+                $blocks[] = $child;
+            }
+        }
+    }
+
+    foreach ($blocks as $block) {
+        while ($block->firstChild) {
+            $root->insertBefore($block->firstChild, $block);
+        }
+        $root->insertBefore($doc->createElement('br'), $block);
+        $root->insertBefore($doc->createElement('br'), $block);
+        $root->removeChild($block);
+    }
+
+    // Never let repeated editing grow a run of line breaks indefinitely.
+    $run = 0;
+    $children = array();
+    foreach ($root->childNodes as $child) {
+        $children[] = $child;
+    }
+
+    foreach ($children as $child) {
+        if ($child->nodeType === XML_ELEMENT_NODE && strtolower($child->nodeName) === 'br') {
+            $run++;
+            if ($run > 2) {
+                $root->removeChild($child);
+            }
+        } elseif ($child->nodeType === XML_TEXT_NODE && trim($child->nodeValue) === '') {
+            // Whitespace between BR nodes does not reset the run.
+            continue;
+        } else {
+            $run = 0;
+        }
+    }
+
+    // Trailing editor paragraph markers are structural, not user content.
+    while ($root->lastChild
+        && $root->lastChild->nodeType === XML_ELEMENT_NODE
+        && strtolower($root->lastChild->nodeName) === 'br'
+    ) {
+        $root->removeChild($root->lastChild);
+    }
+}
+
 function forum_editor_htmlToHtml($html)
 {
     if (!class_exists('DOMDocument')) {
@@ -189,6 +245,8 @@ function forum_editor_htmlToHtml($html)
     if (!$root) {
         return $html;
     }
+
+    forum_editor_normalizeVisualBlocks($doc, $root);
 
     $autotags = array();
     $xpath = new DOMXPath($doc);
