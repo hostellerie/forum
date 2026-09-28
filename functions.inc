@@ -1420,6 +1420,10 @@ function plugin_getheadercode_forum()
     // themes such as Eclipse.
     if ($requestPath === 'forum/createtopic.php') {
         $_SCRIPTS->setJavaScriptFile(
+            'forum_creattopic',
+            forum_assetUrl(CTL_plugin_themeFindFile('forum', 'javascript', 'createtopic.js'))
+        );
+        $_SCRIPTS->setJavaScriptFile(
             'forum_visual_editor',
             forum_assetUrl($_CONF['site_url'] . '/forum/javascript/forum-editor.js')
         );
