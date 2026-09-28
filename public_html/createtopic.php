@@ -219,6 +219,7 @@ if (($submit == $LANG_GF01['SUBMIT']) && ($editpost == 'yes') && SEC_checkToken(
 }
 
 // ADD TOPIC
+$postingValidationFailed = false;
 if (($submit == $LANG_GF01['SUBMIT']) && (($uid == 1) || SEC_checkToken())) {
     $msg = '';
     $date = time();
@@ -324,6 +325,7 @@ if (($submit == $LANG_GF01['SUBMIT']) && (($uid == 1) || SEC_checkToken())) {
                 }
 
             } else {
+                $postingValidationFailed = true;
                 $display .= alertMessage($LANG_GF02['msg18'], $LANG_GF02['msg180']);
             }
         }
@@ -422,12 +424,13 @@ if (($submit == $LANG_GF01['SUBMIT']) && (($uid == 1) || SEC_checkToken())) {
                 }
 
             } else {
+                $postingValidationFailed = true;
                 $display .= alertMessage($LANG_GF02['msg18'], $LANG_GF02['msg180']);
             }
         }
     }
 
-    if ( $msg == '' ) {
+    if ( $msg == '' && !$postingValidationFailed ) {
         $display = gf_createHTMLDocument($display);
         COM_output($display);
         exit;
