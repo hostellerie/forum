@@ -212,15 +212,18 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1)
         $userlink = urldecode($showtopic['name']);
     }
 
-    if ($CONF_FORUM['show_moods'] &&  $showtopic['mood'] != "") {
-		$topictemplate->set_var ('moodicon', gf_getImage($showtopic['mood'],'moods'));
-		$topictemplate->set_var ('moodicontext', $showtopic['mood']);
-		$topictemplate->parse ('mood_icon', 'mood_icon');
-        
-		$min_height = $min_height + 30;
+    if ($CONF_FORUM['show_moods'] && $showtopic['mood'] != '') {
+        global $LANG_GF_MOODS;
+        $moodKey = $showtopic['mood'];
+        $moodTitle = isset($LANG_GF_MOODS[$moodKey])
+            ? $LANG_GF_MOODS[$moodKey]
+            : ucfirst(str_replace(array('_', '-'), ' ', $moodKey));
+        $topictemplate->set_var('moodlabel', $LANG_GF02['msg36']);
+        $topictemplate->set_var('moodtitle', htmlspecialchars($moodTitle, ENT_QUOTES, $CONF_FORUM['charset']));
+        $topictemplate->parse('mood_icon', 'mood_icon');
     } else {
-		$topictemplate->set_var ('mood_icon', '');
-	}
+        $topictemplate->set_var('mood_icon', '');
+    }
 
 
     //$intervalTime = $mytimer->stopTimer();
