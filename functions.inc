@@ -1425,11 +1425,11 @@ function plugin_getheadercode_forum()
         );
         $_SCRIPTS->setJavaScriptFile(
             'forum_visual_editor',
-            forum_assetUrl($_CONF['site_url'] . '/forum/javascript/forum-editor.js')
+            forum_assetUrl('/forum/javascript/forum-editor.js')
         );
         $_SCRIPTS->setCSSFile(
             'forum_visual_editor',
-            forum_assetUrl($_CONF['site_url'] . '/forum/forum-editor.css')
+            forum_assetUrl('/forum/forum-editor.css')
         );
 
         if (in_array('mediagallery', $_PLUGINS, true)) {
