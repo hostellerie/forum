@@ -218,7 +218,7 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1)
         $moodTitle = isset($LANG_GF_MOODS[$moodKey])
             ? $LANG_GF_MOODS[$moodKey]
             : ucfirst(str_replace(array('_', '-'), ' ', $moodKey));
-        $topictemplate->set_var('moodlabel', $LANG_GF02['msg36']);
+        $topictemplate->set_var('moodlabel', rtrim($LANG_GF02['msg36'], " :\t\n\r\0\x0B"));
         $topictemplate->set_var('moodtitle', htmlspecialchars($moodTitle, ENT_QUOTES, $CONF_FORUM['charset']));
         $topictemplate->parse('mood_icon', 'mood_icon');
     } else {
