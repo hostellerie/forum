@@ -887,6 +887,27 @@ if (($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($
         $submissionform_main->set_var ('hide_imgbutton_end','-->');
     }
 
+    $mediagalleryPicker = '';
+    if (in_array('mediagallery', $_PLUGINS, true) && function_exists('MG_getMediaPickerButton')) {
+        $mediagalleryPicker = MG_getMediaPickerButton(array(
+            'target' => 'textarea[name="comment"]',
+            'label'  => (isset($_CONF['language']) && strpos($_CONF['language'], 'french') === 0)
+                ? 'Média'
+                : 'Media',
+            'class'  => 'uk-button forum-media-picker'
+        ));
+        if ($mediagalleryPicker === '') {
+            $mediagalleryPicker = MG_getMediaPickerButton(array(
+                'target' => 'textarea[name="comment"]',
+                'label'  => (isset($_CONF['language']) && strpos($_CONF['language'], 'french') === 0)
+                    ? 'Média'
+                    : 'Media',
+                'class'  => 'button forum-media-picker'
+            ));
+        }
+    }
+    $submissionform_main->set_var('mediagallery_picker', $mediagalleryPicker);
+
     $submissionform_main->set_var ('site_name', $_CONF['site_name']);
     $submissionform_main->parse ('modal_bbcode_help', 'submissionform_bbcode_help');
     
@@ -1040,26 +1061,6 @@ if (($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($
     $submissionform_main->set_var ('required', $required);
     $submissionform_main->set_var ('subject', $subject);
     $submissionform_main->set_var ('smilies', $smilies);
-    $mediagalleryPicker = '';
-    if (in_array('mediagallery', $_PLUGINS, true) && function_exists('MG_getMediaPickerButton')) {
-        $mediagalleryPicker = MG_getMediaPickerButton(array(
-            'target' => 'textarea[name="comment"]',
-            'label'  => (isset($_CONF['language']) && strpos($_CONF['language'], 'french') === 0)
-                ? 'Ajouter un média'
-                : 'Add media',
-            'class'  => 'uk-button forum-media-picker'
-        ));
-        if ($mediagalleryPicker === '') {
-            $mediagalleryPicker = MG_getMediaPickerButton(array(
-                'target' => 'textarea[name="comment"]',
-                'label'  => (isset($_CONF['language']) && strpos($_CONF['language'], 'french') === 0)
-                    ? 'Ajouter un média'
-                    : 'Add media',
-                'class'  => 'button forum-media-picker'
-            ));
-        }
-    }
-    $submissionform_main->set_var('mediagallery_picker', $mediagalleryPicker);
     if (!empty($smilies)) {
 		$submissionform_main->parse ('smilies', 'submissionform_smilies');
 	}
