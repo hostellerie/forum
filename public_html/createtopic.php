@@ -1003,6 +1003,24 @@ if (($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($
          * receives "&tag=media" from the data attribute.
          */
         $mediaPicker = str_replace('&amp;amp;', '&amp;', $mediaPicker);
+
+        /*
+         * Register the picker assets explicitly from Forum as well. This
+         * keeps the integration reliable on Geeklog 2.1.1 where relying on
+         * the helper's side effect alone may leave the rendered button
+         * without its click/message handler.
+         */
+        if (isset($_SCRIPTS) && is_object($_SCRIPTS)
+            && isset($_MG_CONF['site_url']) && $_MG_CONF['site_url'] !== '') {
+            $_SCRIPTS->setJavaScriptFile(
+                'mediagallery-media-picker',
+                $_MG_CONF['site_url'] . '/js/media-picker.js'
+            );
+            $_SCRIPTS->setCSSFile(
+                'mediagallery-media-picker',
+                $_MG_CONF['site_url'] . '/media-picker.css'
+            );
+        }
     }
     $submissionform_main->set_var('mediagallery_picker', $mediaPicker);
     if (!empty($smilies)) {
