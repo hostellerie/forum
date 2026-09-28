@@ -50,6 +50,28 @@ require_once $CONF_FORUM['path_include'] . 'forum_editor.php';
 // the existing validation, spam checks and persistence logic run.
 forum_editor_preparePost();
 
+// Add JavaScript
+$_SCRIPTS->setJavaScriptFile('forum_creattopic', CTL_plugin_themeFindFile('forum', 'javascript', 'createtopic.js'));
+$_SCRIPTS->setJavaScriptFile(
+    'forum_visual_editor',
+    $_CONF['site_url'] . '/forum/javascript/forum-editor.js'
+);
+$_SCRIPTS->setCSSFile(
+    'forum_visual_editor',
+    $_CONF['site_url'] . '/forum/forum-editor.css'
+);
+
+if (in_array('mediagallery', $_PLUGINS, true) && function_exists('MG_getMediaPickerButton')) {
+    $_SCRIPTS->setJavaScriptFile(
+        'mediagallery-media-picker',
+        '/mediagallery/js/media-picker.js'
+    );
+    $_SCRIPTS->setCSSFile(
+        'mediagallery-media-picker',
+        '/mediagallery/media-picker.css'
+    );
+}
+ 
 // Pass thru filter any get or post variables to only allow numeric values and remove any hostile data
 $id          = isset($_REQUEST['id'])              ? COM_applyFilter($_REQUEST['id'],true)              : 0; // Forum id, Reply Topic Parent Id or Edit Topic Id always required so set to 0 if not found (so it will error during permission check)
 $method      = isset($_REQUEST['method'])          ? COM_applyFilter($_REQUEST['method'])               : ''; // Can equal newtopic, postreply, or edit
@@ -535,28 +557,7 @@ if ($method == 'edit') {
     }
 }
 
-// Add JavaScript
-$_SCRIPTS->setJavaScriptFile('forum_creattopic', CTL_plugin_themeFindFile('forum', 'javascript', 'createtopic.js'));
-$_SCRIPTS->setJavaScriptFile(
-    'forum_visual_editor',
-    $_CONF['site_url'] . '/forum/javascript/forum-editor.js'
-);
-$_SCRIPTS->setCSSFile(
-    'forum_visual_editor',
-    $_CONF['site_url'] . '/forum/forum-editor.css'
-);
 
-if (in_array('mediagallery', $_PLUGINS, true) && function_exists('MG_getMediaPickerButton')) {
-    $_SCRIPTS->setJavaScriptFile(
-        'mediagallery-media-picker',
-        '/mediagallery/js/media-picker.js'
-    );
-    $_SCRIPTS->setCSSFile(
-        'mediagallery-media-picker',
-        '/mediagallery/media-picker.css'
-    );
-}
- 
 // PREVIEW TOPIC
 if ($submit == $LANG_GF01['PREVIEW']) {
     $previewitem = array();
