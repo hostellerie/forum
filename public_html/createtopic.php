@@ -791,6 +791,10 @@ if (($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($
         $submissionform_main->set_var ('LANG_MOOD', $LANG_GF02['msg36']);
         $submissionform_main->set_var ('moodoptions', $moodoptions);
         $submissionform_main->parse ('moods', 'submissionform_moods');
+    } else {
+        // The main submission template contains {moods}. With
+        // set_unknowns('keep'), an unset variable is rendered literally.
+        $submissionform_main->set_var('moods', '');
     }
 
     $sub_dot = '...';
