@@ -1,0 +1,70 @@
+.forum-visual-editor-shell {
+    width: 100%;
+}
+
+.forum-visual-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem;
+    margin: 0 0 .6rem;
+    align-items: center;
+}
+
+.forum-visual-toolbar button,
+.forum-visual-toolbar .forum-media-picker {
+    min-width: 2.25rem;
+}
+
+.forum-visual-editor {
+    min-height: 18rem;
+    padding: .85rem 1rem;
+    border: 1px solid #cfd6dd;
+    border-radius: .25rem;
+    background: #fff;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+}
+
+.forum-visual-editor:focus {
+    outline: 2px solid currentColor;
+    outline-offset: 1px;
+}
+
+.forum-visual-editor ul,
+.forum-visual-editor ol {
+    margin: .65rem 0 .65rem 1.75rem;
+}
+
+.forum-visual-editor blockquote {
+    margin: .75rem 0;
+    padding: .55rem .8rem;
+    border-left: 3px solid #aeb7c0;
+}
+
+.forum-visual-editor pre {
+    overflow: auto;
+    padding: .75rem;
+    background: rgba(0, 0, 0, .05);
+    white-space: pre-wrap;
+}
+
+.forum-editor-embed {
+    display: inline-block;
+    max-width: 100%;
+    margin: .25rem;
+    vertical-align: middle;
+    cursor: default;
+}
+
+.forum-editor-embed img {
+    max-width: 100%;
+    height: auto;
+}
+
+.forum-editor-embed-label {
+    display: inline-block;
+    padding: .3rem .55rem;
+    border: 1px solid #cfd6dd;
+    border-radius: .25rem;
+    background: rgba(0, 0, 0, .04);
+}
