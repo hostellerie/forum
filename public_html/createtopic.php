@@ -995,6 +995,14 @@ if (($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($
             'target' => 'textarea[name="comment"]',
             'tag'    => 'media',
         ));
+
+        /*
+         * MediaGallery 1.8.x/1.9-dev may return an already HTML-escaped
+         * query separator which is escaped a second time by its helper.
+         * Normalize only that double-escaped separator here so the browser
+         * receives "&tag=media" from the data attribute.
+         */
+        $mediaPicker = str_replace('&amp;amp;', '&amp;', $mediaPicker);
     }
     $submissionform_main->set_var('mediagallery_picker', $mediaPicker);
     if (!empty($smilies)) {
