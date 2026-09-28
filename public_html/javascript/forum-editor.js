@@ -17,7 +17,10 @@
         var dirtyField = document.getElementById('forum-editor-dirty');
         var transport = document.getElementById('forum-media-transport');
         var toolbar = document.querySelector('.forum-visual-toolbar');
-        var form = editor.form || document.forumpost;
+        var form = editor.closest ? editor.closest('form') : null;
+        if (!form && document.forms) {
+            form = document.forms['forumpost'];
+        }
         var renderUrl = editor.getAttribute('data-render-url');
         var savedRange = null;
 
@@ -47,6 +50,7 @@
 
         function markDirty() {
             dirtyField.value = '1';
+            htmlField.value = editor.innerHTML;
             if (source) {
                 source.value = editor.innerText || editor.textContent || '';
             }
