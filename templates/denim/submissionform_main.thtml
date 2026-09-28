@@ -49,13 +49,13 @@
 <!-- END submissionform_anontop -->
 
 <!-- BEGIN submissionform_moods -->
-<div class="uk-form-row">
-	<label class="uk-form-label" for="form-forum-mood">{LANG_MOOD}</label>
+<div class="uk-form-row forum-mood-field">
+	<div class="uk-form-label">{LANG_MOOD}</div>
 	<div class="uk-form-controls">
-		<select id="form-forum-mood" name="mood" class="uk-form-width-medium">
+		<div class="forum-mood-grid" role="radiogroup" aria-label="{LANG_MOOD}">
 			{moodoptions}
-		</select>
-	</div>	
+		</div>
+	</div>
 </div>
 <!-- END submissionform_moods -->
         
