@@ -103,4 +103,34 @@ div .css { height:300px; overflow:auto; width:auto; min-height:100px; }
 /* CSS Declarations for reCAPTCHA Plugin */
 div.gl-recaptcha_forum { float:right; margin-right:10px; }
 
+
+
+/* MediaGallery legacy browser link styled as a Forum action button */
+#mg_browser {
+  background: #3157c8;
+  border: 0;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: .5rem 0;
+  padding: .7rem 1.2rem;
+  text-decoration: none;
+}
+
+#mg_browser:hover,
+#mg_browser:focus {
+  color: #fff;
+  text-decoration: none;
+  filter: brightness(.92);
+}
+
+#mg_browser:focus {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
 /* END of Forum Plugin CSS */
