@@ -494,6 +494,17 @@ $_SCRIPTS->setJavaScriptFile(
     forum_assetUrl(CTL_plugin_themeFindFile('forum', 'javascript', 'createtopic.js'))
 );
 
+if (in_array('mediagallery', $_PLUGINS, true) && function_exists('MG_getMediaPickerButton')) {
+    $_SCRIPTS->setJavaScriptFile(
+        'mediagallery-media-picker-early',
+        '/mediagallery/js/media-picker.js'
+    );
+    $_SCRIPTS->setCSSFile(
+        'mediagallery-media-picker-early',
+        '/mediagallery/media-picker.css'
+    );
+}
+
 // PREVIEW TOPIC
 if ($preview == 'Preview') {
     $previewitem = array();
