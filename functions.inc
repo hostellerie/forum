@@ -125,6 +125,33 @@ if (!empty($_USER['uid']) AND ($_USER['uid'] > 1) AND DB_getItem($_TABLES['forum
 
 $CONF_FORUM['installed_version'] = floatval(DB_getItem($_TABLES['plugins'], 'pi_version', "pi_name = 'forum'"));
 
+/*
+ * Static asset revision.
+ *
+ * Keep this independent from the plugin version so CSS/JS changes made while
+ * maintaining the same Forum release still invalidate browser caches.
+ */
+$CONF_FORUM['asset_version'] = '2.9.1-20260928.1';
+
+/**
+ * Append the Forum asset revision to a local CSS/JS URL.
+ *
+ * @param string $url
+ * @return string
+ */
+function forum_assetUrl($url)
+{
+    global $CONF_FORUM;
+
+    $version = isset($CONF_FORUM['asset_version'])
+        ? (string) $CONF_FORUM['asset_version']
+        : '2.9.1';
+
+    return $url
+        . (strpos($url, '?') === false ? '?' : '&')
+        . 'v=' . rawurlencode($version);
+}
+
 /**
 * Initialise the handling of smilies
 */
@@ -1378,7 +1405,10 @@ function plugin_getheadercode_forum()
         || (strpos($requestPath, 'admin/plugins/forum/') === 0);
 
     if (!empty($FORUM_CSS) || $isForumPage || $isForumAdminPage) {
-        $_SCRIPTS->setCSSFile('forum', CTL_plugin_themeFindFile('forum', 'css', 'forum.css'));
+        $_SCRIPTS->setCSSFile(
+            'forum',
+            forum_assetUrl(CTL_plugin_themeFindFile('forum', 'css', 'forum.css'))
+        );
 
         // Let the active theme provide the Forum-specific presentation bridge.
         CTL_plugin_setTemplatesFunctions("forum");
@@ -1388,7 +1418,7 @@ function plugin_getheadercode_forum()
     // pages. Do not inject it merely because a Forum block is displayed.
     if (($isForumPage || $isForumAdminPage) && !empty($CONF_FORUM['css_smilies_url'])) {
         return '<link rel="stylesheet" type="text/css" href="' .
-            $CONF_FORUM['css_smilies_url'] . '"' . XHTML . '>';
+            forum_assetUrl($CONF_FORUM['css_smilies_url']) . '"' . XHTML . '>';
     }
 
     return '';
