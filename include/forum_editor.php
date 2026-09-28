@@ -173,11 +173,11 @@ function forum_editor_htmlToBBCode($html)
 
 function forum_editor_normalizeVisualBlocks($doc, $root)
 {
-    // contenteditable (notably Chromium) represents a new paragraph with
-    // top-level <div> or <p> nodes. Saving those nodes and rendering them again
-    // through the historical Forum formatter can add another visual blank line
-    // on every edit. Flatten only top-level editor paragraphs to one canonical
-    // Forum separator so the round trip is idempotent.
+    // Chromium commonly serializes Enter in contenteditable as:
+    //   text<div>next line</div><div>third line</div>
+    // A block therefore means "start a new visual line". Insert the separator
+    // BEFORE its contents; inserting it after the block merges the first two
+    // lines (text + first div) and creates a blank line later.
     $blocks = array();
     foreach ($root->childNodes as $child) {
         if ($child->nodeType === XML_ELEMENT_NODE) {
@@ -189,15 +189,30 @@ function forum_editor_normalizeVisualBlocks($doc, $root)
     }
 
     foreach ($blocks as $block) {
+        $previous = $block->previousSibling;
+        while ($previous
+            && $previous->nodeType === XML_TEXT_NODE
+            && trim($previous->nodeValue) === ''
+        ) {
+            $previous = $previous->previousSibling;
+        }
+
+        // Do not add a second break if the previous node already ends the line.
+        if ($previous
+            && !($previous->nodeType === XML_ELEMENT_NODE
+                && strtolower($previous->nodeName) === 'br')
+        ) {
+            $root->insertBefore($doc->createElement('br'), $block);
+        }
+
         while ($block->firstChild) {
             $root->insertBefore($block->firstChild, $block);
         }
-        $root->insertBefore($doc->createElement('br'), $block);
-        $root->insertBefore($doc->createElement('br'), $block);
         $root->removeChild($block);
     }
 
-    // Never let repeated editing grow a run of line breaks indefinitely.
+    // Collapse only accidental runs created by repeated round trips. Keep at
+    // most two BRs so an intentional blank line is preserved.
     $run = 0;
     $children = array();
     foreach ($root->childNodes as $child) {
@@ -211,14 +226,12 @@ function forum_editor_normalizeVisualBlocks($doc, $root)
                 $root->removeChild($child);
             }
         } elseif ($child->nodeType === XML_TEXT_NODE && trim($child->nodeValue) === '') {
-            // Whitespace between BR nodes does not reset the run.
             continue;
         } else {
             $run = 0;
         }
     }
 
-    // Trailing editor paragraph markers are structural, not user content.
     while ($root->lastChild
         && $root->lastChild->nodeType === XML_ELEMENT_NODE
         && strtolower($root->lastChild->nodeName) === 'br'
