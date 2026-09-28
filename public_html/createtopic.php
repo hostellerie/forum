@@ -1068,7 +1068,7 @@ if ($editorDisplay) {
     $mediagalleryPicker = '';
     if (in_array('mediagallery', $_PLUGINS, true) && function_exists('MG_getMediaPickerButton')) {
         $mediagalleryPicker = MG_getMediaPickerButton(array(
-            'target' => '#form-forum-text',
+            'target' => 'textarea[name="comment"]',
             'label'  => (isset($_CONF['language']) && strpos($_CONF['language'], 'french') === 0)
                 ? 'Ajouter un média'
                 : 'Add media',
