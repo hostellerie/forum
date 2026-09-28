@@ -989,40 +989,7 @@ if (($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($
     $submissionform_main->set_var ('required', $required);
     $submissionform_main->set_var ('subject', $subject);
     $submissionform_main->set_var ('smilies', $smilies);
-    $mediaPicker = '';
-    if (in_array('mediagallery', $_PLUGINS) && function_exists('MG_getMediaPickerButton')) {
-        $mediaPicker = MG_getMediaPickerButton(array(
-            'target' => 'textarea[name="comment"]',
-            'tag'    => 'media',
-        ));
-
-        /*
-         * MediaGallery 1.8.x/1.9-dev may return an already HTML-escaped
-         * query separator which is escaped a second time by its helper.
-         * Normalize only that double-escaped separator here so the browser
-         * receives "&tag=media" from the data attribute.
-         */
-        $mediaPicker = str_replace('&amp;amp;', '&amp;', $mediaPicker);
-
-        /*
-         * Register the picker assets explicitly from Forum as well. This
-         * keeps the integration reliable on Geeklog 2.1.1 where relying on
-         * the helper's side effect alone may leave the rendered button
-         * without its click/message handler.
-         */
-        if (isset($_SCRIPTS) && is_object($_SCRIPTS)
-            && isset($_MG_CONF['site_url']) && $_MG_CONF['site_url'] !== '') {
-            $_SCRIPTS->setJavaScriptFile(
-                'mediagallery-media-picker',
-                $_MG_CONF['site_url'] . '/js/media-picker.js'
-            );
-            $_SCRIPTS->setCSSFile(
-                'mediagallery-media-picker',
-                $_MG_CONF['site_url'] . '/media-picker.css'
-            );
-        }
-    }
-    $submissionform_main->set_var('mediagallery_picker', $mediaPicker);
+    $submissionform_main->set_var('mediagallery_picker', '');
     if (!empty($smilies)) {
 		$submissionform_main->parse ('smilies', 'submissionform_smilies');
 	}
