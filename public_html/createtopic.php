@@ -123,6 +123,7 @@ if ($submit == $LANG_GF01['CANCEL']) {
 }
 
 // ADD EDITED TOPIC
+$editValidationFailed = false;
 if (($submit == $LANG_GF01['SUBMIT']) && ($editpost == 'yes') && SEC_checkToken()) {
     $date = time();
 
@@ -143,7 +144,8 @@ if (($submit == $LANG_GF01['SUBMIT']) && ($editpost == 'yes') && SEC_checkToken(
     }
 
     if (($editpid < 1) && (trim($_POST['subject']) == '')) {
-		$display .= alertMessage($LANG_GF02['msg18'], '');
+        $editValidationFailed = true;
+		$display .= alertMessage($LANG_GF02['msg18'], '', '0');
     } elseif (!$editAllowed) {
         $link = "{$_CONF['site_url']}/forum/viewtopic.php?showtopic={$id}";
         $display .= alertMessage('',$LANG_GF02['msg189'], sprintf($LANG_GF02['msg187'],$link));
@@ -209,13 +211,18 @@ if (($submit == $LANG_GF01['SUBMIT']) && ($editpost == 'yes') && SEC_checkToken(
             exit;
 
         } else {
-            $display .= alertMessage($LANG_GF01['msg18'], $LANG_GF02['msg180']);
+            $editValidationFailed = true;
+            $display .= alertMessage($LANG_GF01['msg18'], $LANG_GF02['msg180'], '0');
         }
     }
 
-    $display = gf_createHTMLDocument($display);
-    COM_output($display);
-    exit;
+    // Validation errors are shown inline above the edit form. Permission
+    // failures still end the request because the user cannot continue editing.
+    if (!$editValidationFailed) {
+        $display = gf_createHTMLDocument($display);
+        COM_output($display);
+        exit;
+    }
 }
 
 // ADD TOPIC
@@ -692,13 +699,19 @@ if (($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($
             $username = COM_getDisplayName($uid);
         }
 
-        $subject = $edittopic['subject'];
-        if ($preview != 'Preview') {
-            $comment = str_ireplace('</textarea>','&lt;/textarea&gt;',$edittopic['comment']);
-            $postmode = $edittopic['postmode'];
+        if ($editValidationFailed) {
+            $subject = isset($_POST['subject']) ? COM_stripslashes($_POST['subject']) : '';
+            $comment = isset($_POST['comment']) ? COM_stripslashes($_POST['comment']) : '';
+            $comment = str_ireplace('</textarea>', '&lt;/textarea&gt;', $comment);
         } else {
-            $comment = str_ireplace('</textarea>','&lt;/textarea&gt;',$comment);
-            //$postmode = $_POST['postmode']; // leave as is
+            $subject = $edittopic['subject'];
+            if ($preview != 'Preview') {
+                $comment = str_ireplace('</textarea>','&lt;/textarea&gt;',$edittopic['comment']);
+                $postmode = $edittopic['postmode'];
+            } else {
+                $comment = str_ireplace('</textarea>','&lt;/textarea&gt;',$comment);
+                //$postmode = $_POST['postmode']; // leave as is
+            }
         }
         if (strstr($edittopic['comment'],'<pre class="forumCode">') === false) {
             $comment = htmlspecialchars($comment,ENT_QUOTES, $CONF_FORUM['charset']);
