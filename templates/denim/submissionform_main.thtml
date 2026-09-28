@@ -1,21 +1,20 @@
 {# begin {templatelocation} #}
 
 {user_name}
-{moods}
-{code}
-{smilies}
 <div class="uk-form-row">
 	<label class="uk-form-label" for="form-forum-subject">{LANG_SUBJECT}</label>
 	<div class="uk-form-controls">
 		<input id="form-forum-subject" type="text" placeholder="" class="uk-form-width-large" name="subject" value="{subject}" maxlength="255"{xhtml}>
-	</div>	
+	</div>
 </div>
-<div class="uk-form-row">
+{code}
+{smilies}
+<div class="uk-form-row forum-editor-row">
 	<div class="uk-form-controls">
 		<textarea name="comment" id="form-forum-text" rows="20" class="post" style="width:98%" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);">{post_message}</textarea>
-		<div class="forum-media-picker-wrap">{mediagallery_picker}</div>
-	</div>	
+	</div>
 </div>
+{moods}
 {options}
 <div class="uk-form-row uk-align-right">
 	<div class="uk-form-controls">
@@ -76,6 +75,7 @@
 			{hide_imgbutton_end} 
 			<button class="uk-button" type="button" accesskey="w" name="addbbcode16" onclick="bbstyle(16)" onmouseover="helpline('w')"><i class="uk-icon-link"></i></button>
 		</span>
+		<span class="forum-media-toolbar">{mediagallery_picker}</span>
 		<button class="uk-button" type="button" name="bbcode-help" data-uk-modal="{ target:'#modal-bbcode-help' }" onmouseover="helpline('h')"><i class="uk-icon-question"></i></button>
 		</div>
 		<div>
@@ -121,7 +121,7 @@
 <!-- END submissionform_code -->
 
 <!-- BEGIN submissionform_smilies -->
-<div class="uk-form-row">
+<div class="uk-form-row forum-smilies-row">
 	<div class="uk-form-controls">
 		{smilies}
 	</div>	
