@@ -466,6 +466,34 @@ function gf_checkHTML($str) {
 }
 
 
+/**
+ * Escape Geeklog autotags inside Forum [code] blocks.
+ *
+ * Autotags outside code are protected separately and expanded after BBCode
+ * parsing. Inside code they must stay literal, just like smilie symbols.
+ *
+ * @param string $str
+ * @return string
+ */
+function gf_escapeAutotagsInCodeBlocks($str)
+{
+    return preg_replace_callback(
+        '/(\\[code(?:=[^\\]]+)?\\])(.*?)(\\[\\/code\\])/is',
+        function ($matches) {
+            $body = preg_replace_callback(
+                '/\\[([A-Za-z][A-Za-z0-9_-]*):([^\\]]+)\\]/',
+                function ($tag) {
+                    return '&#91;' . $tag[1] . ':' . $tag[2] . '&#93;';
+                },
+                $matches[2]
+            );
+
+            return $matches[1] . $body . $matches[3];
+        },
+        $str
+    );
+}
+
 function gf_formatTextBlock($str,$postmode='html',$mode='') {
     global $CONF_FORUM;
 
@@ -545,6 +573,9 @@ function gf_formatTextBlock($str,$postmode='html',$mode='') {
     if ($CONF_FORUM['use_censor'] and $mode == 'preview') {
         $str = COM_checkWords($str);
     }
+
+    // Autotags shown as examples inside [code] must remain literal.
+    $str = gf_escapeAutotagsInCodeBlocks($str);
 
     // Replace autotags with random strings to prevent them from being parsed
     $markers = [];
