@@ -903,7 +903,7 @@ if ($forum == 0) {
                     $lastdate =strftime($CONF_FORUM['default_Datetime_format'],$B['date']);
                 }
 
-                $lastpostmsgDate  = '<span class="forumtxt">' . $LANG_GF01['ON']. '</span>' .$lastdate;
+                $lastpostmsgDate  = $lastdate;
                 if ($B['uid'] > 1) {
                     $lastposterName = COM_getDisplayName($B['uid']);
                     $by = '<a href="' .$_CONF['site_url']. '/users.php?mode=profile&amp;uid=' .$B['uid']. '">' .$lastposterName. '</a>';
