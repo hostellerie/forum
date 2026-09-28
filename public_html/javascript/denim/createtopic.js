@@ -116,8 +116,55 @@ function bbfontstyle(bbopen, bbclose) {
 }
 
 
+function bbListSelection(ordered) {
+    var txtarea = document.forumpost.comment;
+    var start = typeof txtarea.selectionStart === 'number' ? txtarea.selectionStart : 0;
+    var end = typeof txtarea.selectionEnd === 'number' ? txtarea.selectionEnd : 0;
+    var selected = txtarea.value.substring(start, end);
+    var openTag = ordered ? '[list=1]' : '[list]';
+    var closeTag = '[/list]';
+    var replacement;
+    var caretOffset = 0;
+
+    if (selected.length > 0) {
+        var lines = selected.replace(/\r\n?/g, '\n').split('\n');
+        var items = [];
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i].replace(/^\s+|\s+$/g, '');
+            if (line !== '') {
+                items.push('[*]' + line);
+            }
+        }
+
+        if (items.length === 0) {
+            items.push('[*]');
+        }
+
+        replacement = openTag + '\n' + items.join('\n') + '\n' + closeTag;
+        caretOffset = replacement.length;
+    } else {
+        replacement = openTag + '\n[*]\n' + closeTag;
+        caretOffset = openTag.length + 4;
+    }
+
+    txtarea.value = txtarea.value.substring(0, start) + replacement + txtarea.value.substring(end);
+    txtarea.focus();
+
+    if (txtarea.setSelectionRange) {
+        txtarea.setSelectionRange(start + caretOffset, start + caretOffset);
+    }
+
+    storeCaret(txtarea);
+}
+
 function bbstyle(bbnumber) {
     var txtarea = document.forumpost.comment;
+
+    // A list is line-based: turn every selected non-empty line into one [*] item.
+    if (bbnumber == 10) {
+        bbListSelection(false);
+        return;
+    }
     var button;
 
     txtarea.focus();
