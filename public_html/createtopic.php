@@ -496,11 +496,11 @@ $_SCRIPTS->setJavaScriptFile(
 
 if (in_array('mediagallery', $_PLUGINS, true) && function_exists('MG_getMediaPickerButton')) {
     $_SCRIPTS->setJavaScriptFile(
-        'mediagallery-media-picker-early',
+        'mediagallery-media-picker',
         '/mediagallery/js/media-picker.js'
     );
     $_SCRIPTS->setCSSFile(
-        'mediagallery-media-picker-early',
+        'mediagallery-media-picker',
         '/mediagallery/media-picker.css'
     );
 }
