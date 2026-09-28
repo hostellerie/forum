@@ -489,7 +489,10 @@ if ($method == 'edit') {
 }
 
 // Add JavaScript
-$_SCRIPTS->setJavaScriptFile('forum_creattopic', CTL_plugin_themeFindFile('forum', 'javascript', 'createtopic.js'));
+$_SCRIPTS->setJavaScriptFile(
+    'forum_creattopic',
+    forum_assetUrl(CTL_plugin_themeFindFile('forum', 'javascript', 'createtopic.js'))
+);
 
 // PREVIEW TOPIC
 if ($preview == 'Preview') {
