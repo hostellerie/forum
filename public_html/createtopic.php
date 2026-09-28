@@ -777,16 +777,43 @@ if (($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($
                      . '</label>';
 
         if ($dir = @opendir("{$CONF_FORUM['imgset_path']}/moods")) {
-            $moodFiles = array();
+            $availableMoods = array();
             while (($file = readdir($dir)) !== false) {
                 if ((strlen($file) > 4) && substr(strtolower(trim($file)), -4) === '.gif') {
-                    $moodFiles[] = str_replace('.gif', '', $file);
+                    $availableMoods[str_replace('.gif', '', $file)] = true;
                 }
             }
             closedir($dir);
-            sort($moodFiles, SORT_STRING);
+
+            // Keep the posting UI deliberately small. All historical mood
+            // values remain supported when rendering existing posts.
+            $moodFiles = array(
+                'happy',
+                'giggly',
+                'excited',
+                'thoughtful',
+                'curious',
+                'mellow',
+                'tired',
+                'sad',
+                'worried',
+                'angry',
+                'confused'
+            );
+
+            // When editing an older post, keep its historical mood selectable
+            // even if it is no longer part of the compact creation list.
+            if ($selectedMood !== ''
+                && isset($availableMoods[$selectedMood])
+                && !in_array($selectedMood, $moodFiles, true)
+            ) {
+                $moodFiles[] = $selectedMood;
+            }
 
             foreach ($moodFiles as $moodKey) {
+                if (!isset($availableMoods[$moodKey])) {
+                    continue;
+                }
                 $label = isset($LANG_GF_MOODS[$moodKey]) ? $LANG_GF_MOODS[$moodKey] : ucfirst(str_replace(array('_', '-'), ' ', $moodKey));
                 $moodoptions .= '<label class="forum-mood-choice">'
                              . '<input type="radio" name="mood" value="' . htmlspecialchars($moodKey, ENT_QUOTES, $CONF_FORUM['charset']) . '"'
