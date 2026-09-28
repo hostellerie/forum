@@ -1433,13 +1433,19 @@ function plugin_getheadercode_forum()
         );
 
         if (in_array('mediagallery', $_PLUGINS, true)) {
+            $mediaPickerJs = '/mediagallery/js/media-picker.js';
+            $mediaPickerCss = '/mediagallery/media-picker.css';
+            if (function_exists('MG_assetUrl180')) {
+                $mediaPickerJs = MG_assetUrl180($mediaPickerJs);
+                $mediaPickerCss = MG_assetUrl180($mediaPickerCss);
+            }
             $_SCRIPTS->setJavaScriptFile(
                 'mediagallery-media-picker',
-                $_CONF['site_url'] . '/mediagallery/js/media-picker.js'
+                $mediaPickerJs
             );
             $_SCRIPTS->setCSSFile(
                 'mediagallery-media-picker',
-                $_CONF['site_url'] . '/mediagallery/media-picker.css'
+                $mediaPickerCss
             );
         }
     }
