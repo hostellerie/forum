@@ -435,9 +435,6 @@ function gf_formatTextBlock($str,$postmode='html',$mode='') {
         $bbcode->addParser(array('block','inline','link','listitem'), 'gf_replacesmilie');      // calls replacesmilie on all text blocks
     }
     $bbcode->addParser(array('block','inline','link','listitem'), 'gf_fixtemplate');
-    if ( $mode != 'subject' ) {
-        $bbcode->addParser(array('block','inline','link','listitem'), 'PLG_replacetags');
-    }
 
     $bbcode->addParser ('list', 'bbcode_stripcontents');
     $bbcode->addCode ('b', 'simple_replace', null, array ('start_tag' => '<b>', 'end_tag' => '</b>'),
@@ -478,10 +475,77 @@ function gf_formatTextBlock($str,$postmode='html',$mode='') {
 
     $bbcode->setRootParagraphHandling (true);
 
+    if ($mode == 'preview') {
+        // Remove autotags the current user is not allowed to use before
+        // protecting the remaining tags from the Forum BBCode parser.
+        $str = PLG_replaceTags($str, '', true);
+    }
+
     if ($CONF_FORUM['use_censor'] and $mode == 'preview') {
         $str = COM_checkWords($str);
     }
-    $str = $bbcode->parse ($str);
+
+    /*
+     * Protect Geeklog autotags while StringParser handles Forum BBCode.
+     * In particular, MediaGallery [img:...] must not be interpreted as the
+     * Forum [img] BBCode. Other plugin autotags need the same protection.
+     *
+     * Keep this PHP 5.6 compatible: no random_bytes() or scalar type hints.
+     */
+    $markers = array();
+    $simpleTags = array(
+        '[p]', '[/p]',
+        '[b]', '[/b]',
+        '[i]', '[/i]',
+        '[u]', '[/u]',
+        '[s]', '[/s]',
+        '[img]', '[/img]',
+        '[quote]', '[/quote]',
+        '[list]', '[/list]',
+        '[*]',
+        '[url]', '[/url]',
+        '[/size]',
+        '[/color]',
+        '[code]', '[/code]',
+    );
+
+    if ($mode != 'subject' && preg_match_all('/\\[[^\\]]+?\\]/', $str, $matches, PREG_SET_ORDER)) {
+        $markerIndex = 0;
+        foreach ($matches as $match) {
+            $content = strtolower($match[0]);
+
+            if (in_array($content, $simpleTags, true)) {
+                continue;
+            }
+
+            if (strpos($content, '[img ') === 0
+                || strpos($content, '[url=') === 0
+                || strpos($content, '[size=') === 0
+                || strpos($content, '[color=') === 0
+                || strpos($content, '[list=') === 0
+                || strpos($content, '[code=') === 0
+            ) {
+                continue;
+            }
+
+            $replace = '___GLAUTOTAG_' . $markerIndex . '_' . md5($match[0] . $markerIndex) . '___';
+            $markers[] = array('search' => $match[0], 'replace' => $replace);
+            $str = str_replace($match[0], $replace, $str);
+            $markerIndex++;
+        }
+    }
+
+    $str = $bbcode->parse($str);
+
+    if (!empty($markers)) {
+        foreach ($markers as $marker) {
+            $str = str_replace($marker['replace'], $marker['search'], $str);
+        }
+    }
+
+    if ($mode != 'subject') {
+        $str = PLG_replaceTags($str);
+    }
 
     return $str;
 }
