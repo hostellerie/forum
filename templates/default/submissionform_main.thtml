@@ -2,23 +2,21 @@
 
 		<table width="100%" border="0" cellspacing="1" cellpadding="4" class="">
 			{user_name}
-			{moods}
-			{code}
             <tr>
                 <td class="pluginCellSubTitle">&nbsp;{LANG_SUBJECT}:</td>
                 <td class="pluginCellText pluginCellFill">
                     <input type="text" name="subject" value="{subject}" id="input1" tabindex="5" size="80"{xhtml}>
                 </td>
             </tr>
-            <tr>
-                <td class="pluginCellSubTitle" style="vertical-align:top;padding-top:10px;">
-                    {smilies}
-                </td>
+            {code}
+            {smilies}
+            <tr class="forum-editor-row">
+                <td class="pluginCellSubTitle">&nbsp;</td>
                 <td class="pluginCellText pluginCellFill" style="padding-left: 5px;">
                     <textarea name="comment" id="input2" rows="20" cols="45" tabindex="6" class="post" style="width:98%" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);">{post_message}</textarea>
-                    <div class="forum-media-picker-wrap">{mediagallery_picker}</div>
                 </td>
             </tr>
+            {moods}
             {captcha}
             {options}
             <tr>
@@ -77,6 +75,7 @@
                 <input type="button" class="button" accesskey="p" name="addbbcode14" value="Img" onclick="bbstyle(14)" onmouseover="helpline('p')"{xhtml}>
                 {hide_imgbutton_end} 
                 <input type="button" class="button" accesskey="w" name="addbbcode16" value="URL" style="text-decoration: underline;" onclick="bbstyle(16)" onmouseover="helpline('w')"{xhtml}>
+                <span class="forum-media-toolbar">{mediagallery_picker}</span>
                 <input type="button" class="button" name="help" value="Help?" style="text-decoration: underline;" onclick="poptastic('{site_url}/forum/bbcode.html');" onmouseover="helpline('h')"{xhtml}>
                 <br{xhtml}><br{xhtml}>
                 {LANG_fontcolor}:
@@ -113,7 +112,10 @@
 <!-- END submissionform_code -->
 
 <!-- BEGIN submissionform_smilies -->
-{smilies}
+<tr class="forum-smilies-row">
+    <td class="pluginCellSubTitle">&nbsp;</td>
+    <td class="pluginCellText pluginCellFill">{smilies}</td>
+</tr>
 <!-- END submissionform_smilies -->
 
 <!-- BEGIN submissionform_options -->
