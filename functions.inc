@@ -1883,6 +1883,10 @@ function plugin_getheadercode_forum()
     // head. This keeps the editor independent from the active theme.
     if ($requestPath === 'forum/createtopic.php') {
         $_SCRIPTS->setJavaScriptFile(
+            'forum_creattopic',
+            CTL_plugin_themeFindFile('forum', 'javascript', 'createtopic.js')
+        );
+        $_SCRIPTS->setJavaScriptFile(
             'forum_visual_editor',
             $_CONF['site_url'] . '/forum/javascript/forum-editor.js'
         );
