@@ -351,10 +351,9 @@ function forum_editor_normalizeVisualBlocks($doc, $root)
 
 function forum_editor_wrapTopLevelParagraphs($doc, $root)
 {
-    // Canonical storage uses real <p> elements for paragraphs. A single BR
-    // remains an intentional line break; two consecutive BRs separate
-    // paragraphs. Real block elements (lists, quotes, code, tables) remain
-    // siblings and are never wrapped in a paragraph.
+    // Canonical storage uses semantic <p> elements. Normal Enter from the
+    // visual editor is a paragraph boundary. Shift+Enter is marked explicitly
+    // in JavaScript and remains a <br>.
     $children = array();
     foreach ($root->childNodes as $child) {
         $children[] = $child;
@@ -365,53 +364,42 @@ function forum_editor_wrapTopLevelParagraphs($doc, $root)
     }
 
     $paragraph = null;
-    $breakRun = 0;
 
-    $flushParagraph = function () use ($root, &$paragraph, &$breakRun) {
+    $flushParagraph = function () use ($root, &$paragraph) {
         if ($paragraph !== null && $paragraph->hasChildNodes()) {
-            // Remove trailing BRs: they are structural separators, not content.
-            while ($paragraph->lastChild
-                && $paragraph->lastChild->nodeType === XML_ELEMENT_NODE
-                && strtolower($paragraph->lastChild->nodeName) === 'br'
-            ) {
-                $paragraph->removeChild($paragraph->lastChild);
-            }
-            if ($paragraph->hasChildNodes()) {
-                $root->appendChild($paragraph);
-            }
+            $root->appendChild($paragraph);
         }
         $paragraph = null;
-        $breakRun = 0;
     };
 
     foreach ($children as $child) {
-        if (forum_editor_nodeIsBlock($child)
-            && strtolower($child->nodeName) !== 'br'
-            && strtolower($child->nodeName) !== 'p'
-        ) {
-            $flushParagraph();
-            $root->appendChild($child);
-            continue;
-        }
+        if ($child->nodeType === XML_ELEMENT_NODE) {
+            $name = strtolower($child->nodeName);
 
-        if ($child->nodeType === XML_ELEMENT_NODE
-            && strtolower($child->nodeName) === 'p'
-        ) {
-            $flushParagraph();
-            $root->appendChild($child);
-            continue;
-        }
-
-        if ($child->nodeType === XML_ELEMENT_NODE
-            && strtolower($child->nodeName) === 'br'
-        ) {
-            $breakRun++;
-            if ($breakRun >= 2) {
+            if ($name === 'p') {
                 $flushParagraph();
-            } elseif ($paragraph !== null) {
-                $paragraph->appendChild($child);
+                $root->appendChild($child);
+                continue;
             }
-            continue;
+
+            if ($name === 'br') {
+                if ($child->hasAttribute('data-forum-soft-break')) {
+                    $child->removeAttribute('data-forum-soft-break');
+                    if ($paragraph === null) {
+                        $paragraph = $doc->createElement('p');
+                    }
+                    $paragraph->appendChild($child);
+                } else {
+                    $flushParagraph();
+                }
+                continue;
+            }
+
+            if (forum_editor_nodeIsBlock($child)) {
+                $flushParagraph();
+                $root->appendChild($child);
+                continue;
+            }
         }
 
         if ($child->nodeType === XML_TEXT_NODE && trim($child->nodeValue) === '') {
@@ -424,7 +412,6 @@ function forum_editor_wrapTopLevelParagraphs($doc, $root)
         if ($paragraph === null) {
             $paragraph = $doc->createElement('p');
         }
-        $breakRun = 0;
         $paragraph->appendChild($child);
     }
 
