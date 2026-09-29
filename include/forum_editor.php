@@ -59,6 +59,127 @@ function forum_editor_renderAutotag($token)
         . '">' . $rendered . '</span>';
 }
 
+function forum_editor_hasLegacyBBCode($source)
+{
+    return preg_match(
+        '/\\[(?:b|i|u|s|p|quote|list(?:=[^\\]]+)?|\\*|url(?:=[^\\]]+)?|img(?:\\s+[^\\]]+)?|code(?:=[^\\]]+)?)\\]/i',
+        $source
+    ) === 1;
+}
+
+function forum_editor_renderSmiliesInHtml($html)
+{
+    if ($html === '' || !class_exists('DOMDocument')) {
+        return $html;
+    }
+
+    $doc = new DOMDocument('1.0', 'UTF-8');
+    $previous = libxml_use_internal_errors(true);
+    $doc->loadHTML('<?xml encoding="UTF-8"><div id="forum-editor-smilie-root">' . $html . '</div>');
+    libxml_clear_errors();
+    libxml_use_internal_errors($previous);
+
+    $root = $doc->getElementById('forum-editor-smilie-root');
+    if (!$root) {
+        return $html;
+    }
+
+    $xpath = new DOMXPath($doc);
+    $textNodes = $xpath->query('.//text()', $root);
+    $nodes = array();
+    foreach ($textNodes as $textNode) {
+        $nodes[] = $textNode;
+    }
+
+    foreach ($nodes as $textNode) {
+        $parent = $textNode->parentNode;
+        if (!$parent) {
+            continue;
+        }
+
+        $parentName = strtolower($parent->nodeName);
+        if ($parentName === 'code' || $parentName === 'pre') {
+            continue;
+        }
+
+        $rendered = forum_xchsmilies($textNode->nodeValue);
+        if ($rendered === $textNode->nodeValue) {
+            continue;
+        }
+
+        $fragment = $doc->createDocumentFragment();
+        if (@$fragment->appendXML($rendered)) {
+            $parent->replaceChild($fragment, $textNode);
+        }
+    }
+
+    $output = '';
+    foreach ($root->childNodes as $child) {
+        $output .= $doc->saveHTML($child);
+    }
+
+    return $output;
+}
+
+function forum_editor_restoreSmilies($doc, $root)
+{
+    $symbols = array(
+        'biggrin' => ':D',
+        'smile' => ':)',
+        'frown' => ':(',
+        'eek' => '8O',
+        'confused' => ':?',
+        'cool' => 'B)',
+        'lol' => ':lol:',
+        'angry' => ':x',
+        'razz' => ':P',
+        'oops' => ':oops:',
+        'surprise' => ':o',
+        'cry' => ':cry:',
+        'evil' => ':evil:',
+        'twisted' => ':twisted:',
+        'rolleye' => ':roll:',
+        'wink' => ';)',
+        'exclaim' => ':!:',
+        'question' => ':question:',
+        'idea' => ':idea:',
+        'arrow' => ':arrow:',
+        'neutral' => ':|',
+        'green' => ':mrgreen:',
+        'sick' => ':sick:',
+        'tired' => ':tired:',
+        'monkey' => ':monkey:'
+    );
+
+    $xpath = new DOMXPath($doc);
+    $nodes = $xpath->query(
+        './/img[contains(concat(" ", normalize-space(@class), " "), " frm_sml ")]',
+        $root
+    );
+    $images = array();
+    foreach ($nodes as $node) {
+        $images[] = $node;
+    }
+
+    foreach ($images as $node) {
+        $classes = preg_split('/\\s+/', trim($node->getAttribute('class')));
+        $symbol = '';
+        foreach ($classes as $class) {
+            if (strpos($class, 'frm_sml_') === 0) {
+                $key = substr($class, strlen('frm_sml_'));
+                if (isset($symbols[$key])) {
+                    $symbol = $symbols[$key];
+                    break;
+                }
+            }
+        }
+
+        if ($symbol !== '' && $node->parentNode) {
+            $node->parentNode->replaceChild($doc->createTextNode($symbol), $node);
+        }
+    }
+}
+
 function forum_editor_renderSource($source, $postmode)
 {
     if (!class_exists('StringParser')) {
@@ -68,7 +189,17 @@ function forum_editor_renderSource($source, $postmode)
 
     $tokens = array();
     $prepared = forum_editor_extractAutotags($source, $tokens);
-    $html = gf_formatTextBlock($prepared, $postmode);
+
+    // HTML produced by the visual editor is already a complete editing
+    // representation. Re-parsing it through StringParser on every edit can
+    // grow line breaks. Only legacy HTML posts containing Forum BBCode need
+    // the historical parser once; after the next save they become canonical
+    // visual-editor HTML.
+    if (strtolower($postmode) === 'html' && !forum_editor_hasLegacyBBCode($prepared)) {
+        $html = forum_editor_renderSmiliesInHtml($prepared);
+    } else {
+        $html = gf_formatTextBlock($prepared, $postmode);
+    }
 
     if (!empty($tokens)) {
         foreach ($tokens as $marker => $token) {
@@ -171,13 +302,25 @@ function forum_editor_htmlToBBCode($html)
     return trim($source);
 }
 
+function forum_editor_nodeIsBlock($node)
+{
+    if (!$node || $node->nodeType !== XML_ELEMENT_NODE) {
+        return false;
+    }
+
+    return in_array(
+        strtolower($node->nodeName),
+        array('div', 'p', 'ul', 'ol', 'blockquote', 'pre', 'table', 'hr'),
+        true
+    );
+}
+
 function forum_editor_normalizeVisualBlocks($doc, $root)
 {
-    // Chromium commonly serializes Enter in contenteditable as:
-    //   text<div>next line</div><div>third line</div>
-    // A block therefore means "start a new visual line". Insert the separator
-    // BEFORE its contents; inserting it after the block merges the first two
-    // lines (text + first div) and creates a blank line later.
+    // Chromium uses top-level DIV/P nodes for Enter. Convert those line
+    // containers to a stable BR representation, but do not add BRs around
+    // real block elements such as lists. Empty DIV/P nodes represent exactly
+    // one explicit blank line.
     $blocks = array();
     foreach ($root->childNodes as $child) {
         if ($child->nodeType === XML_ELEMENT_NODE) {
@@ -189,6 +332,26 @@ function forum_editor_normalizeVisualBlocks($doc, $root)
     }
 
     foreach ($blocks as $block) {
+        $meaningful = false;
+        foreach ($block->childNodes as $child) {
+            if ($child->nodeType === XML_TEXT_NODE && trim($child->nodeValue) !== '') {
+                $meaningful = true;
+                break;
+            }
+            if ($child->nodeType === XML_ELEMENT_NODE
+                && strtolower($child->nodeName) !== 'br'
+            ) {
+                $meaningful = true;
+                break;
+            }
+        }
+
+        if (!$meaningful) {
+            $root->insertBefore($doc->createElement('br'), $block);
+            $root->removeChild($block);
+            continue;
+        }
+
         $previous = $block->previousSibling;
         while ($previous
             && $previous->nodeType === XML_TEXT_NODE
@@ -197,8 +360,8 @@ function forum_editor_normalizeVisualBlocks($doc, $root)
             $previous = $previous->previousSibling;
         }
 
-        // Do not add a second break if the previous node already ends the line.
         if ($previous
+            && !forum_editor_nodeIsBlock($previous)
             && !($previous->nodeType === XML_ELEMENT_NODE
                 && strtolower($previous->nodeName) === 'br')
         ) {
@@ -211,8 +374,8 @@ function forum_editor_normalizeVisualBlocks($doc, $root)
         $root->removeChild($block);
     }
 
-    // Collapse only accidental runs created by repeated round trips. Keep at
-    // most two BRs so an intentional blank line is preserved.
+    // Preserve at most two consecutive BRs: one line break plus one deliberate
+    // empty line. This makes repeated edit/save cycles idempotent.
     $run = 0;
     $children = array();
     foreach ($root->childNodes as $child) {
@@ -260,6 +423,7 @@ function forum_editor_htmlToHtml($html)
     }
 
     forum_editor_normalizeVisualBlocks($doc, $root);
+    forum_editor_restoreSmilies($doc, $root);
 
     $autotags = array();
     $xpath = new DOMXPath($doc);
@@ -272,15 +436,6 @@ function forum_editor_htmlToHtml($html)
         $node->parentNode->replaceChild($doc->createTextNode($marker), $node);
     }
 
-    // Keep Forum quote semantics even in HTML mode. The historical renderer
-    // expects [quote] so it can output the standard quotemain markup.
-    $quotes = $xpath->query('//blockquote');
-    for ($i = $quotes->length - 1; $i >= 0; $i--) {
-        $node = $quotes->item($i);
-        $marker = '___FORUM_EDITOR_QUOTE_' . $i . '___';
-        $autotags[$marker] = '[quote]' . trim($node->textContent) . '[/quote]';
-        $node->parentNode->replaceChild($doc->createTextNode($marker), $node);
-    }
 
     $output = '';
     foreach ($root->childNodes as $child) {
