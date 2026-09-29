@@ -271,7 +271,7 @@ function forum_editor_nodeToBBCode($node)
 
     switch ($name) {
         case 'br':
-            return "\n";
+            return '[br]';
         case 'p':
         case 'div':
             return '[p]' . trim($content) . '[/p]';
@@ -331,12 +331,20 @@ function forum_editor_htmlToBBCode($html)
         return trim(strip_tags($html));
     }
 
+    // Smilies are visual IMG sprites in the editor. Restore their Forum
+    // symbols before the generic IMG -> [img] conversion, otherwise editing a
+    // post stores pixel.gif and the smiley is lost.
+    forum_editor_restoreSmilies($doc, $root);
+
     $source = '';
     foreach ($root->childNodes as $child) {
         $source .= forum_editor_nodeToBBCode($child);
     }
 
-    $source = preg_replace("/\n{3,}/", "\n\n", $source);
+    // The visual-editor source is intentionally single-line.
+    // Structural newlines would be converted again by text-mode nl2br().
+    // Intentional soft line breaks are represented explicitly as [br].
+    $source = preg_replace('/(?:\r\n|\r|\n)+/', '', $source);
     return trim($source);
 }
 
