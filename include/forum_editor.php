@@ -317,89 +317,35 @@ function forum_editor_nodeIsBlock($node)
 
 function forum_editor_normalizeVisualBlocks($doc, $root)
 {
-    // Chromium uses top-level DIV/P nodes for Enter. Convert those line
-    // containers to a stable BR representation, but do not add BRs around
-    // real block elements such as lists. Empty DIV/P nodes represent exactly
-    // one explicit blank line.
-    $blocks = array();
-    foreach ($root->childNodes as $child) {
-        if ($child->nodeType === XML_ELEMENT_NODE) {
-            $name = strtolower($child->nodeName);
-            if ($name === 'div') {
-                $blocks[] = $child;
-            }
-        }
-    }
-
-    foreach ($blocks as $block) {
-        $meaningful = false;
-        foreach ($block->childNodes as $child) {
-            if ($child->nodeType === XML_TEXT_NODE && trim($child->nodeValue) !== '') {
-                $meaningful = true;
-                break;
-            }
-            if ($child->nodeType === XML_ELEMENT_NODE
-                && strtolower($child->nodeName) !== 'br'
-            ) {
-                $meaningful = true;
-                break;
-            }
-        }
-
-        if (!$meaningful) {
-            $root->insertBefore($doc->createElement('br'), $block);
-            $root->removeChild($block);
-            continue;
-        }
-
-        $previous = $block->previousSibling;
-        while ($previous
-            && $previous->nodeType === XML_TEXT_NODE
-            && trim($previous->nodeValue) === ''
-        ) {
-            $previous = $previous->previousSibling;
-        }
-
-        if ($previous
-            && !forum_editor_nodeIsBlock($previous)
-            && !($previous->nodeType === XML_ELEMENT_NODE
-                && strtolower($previous->nodeName) === 'br')
-        ) {
-            $root->insertBefore($doc->createElement('br'), $block);
-        }
-
-        while ($block->firstChild) {
-            $root->insertBefore($block->firstChild, $block);
-        }
-        $root->removeChild($block);
-    }
-
-    // Preserve at most two consecutive BRs: one line break plus one deliberate
-    // empty line. This makes repeated edit/save cycles idempotent.
-    $run = 0;
+    // Enter in contenteditable is a paragraph break. Chromium commonly emits
+    // top-level DIV elements for those paragraphs. Canonical Forum editor HTML
+    // stores them as semantic P elements so Eclipse and other themes can apply
+    // normal paragraph spacing. BR is reserved for an intentional line break
+    // (for example Shift+Enter).
     $children = array();
     foreach ($root->childNodes as $child) {
         $children[] = $child;
     }
 
     foreach ($children as $child) {
-        if ($child->nodeType === XML_ELEMENT_NODE && strtolower($child->nodeName) === 'br') {
-            $run++;
-            if ($run > 2) {
-                $root->removeChild($child);
-            }
-        } elseif ($child->nodeType === XML_TEXT_NODE && trim($child->nodeValue) === '') {
+        if ($child->nodeType !== XML_ELEMENT_NODE
+            || strtolower($child->nodeName) !== 'div'
+        ) {
             continue;
-        } else {
-            $run = 0;
         }
-    }
 
-    while ($root->lastChild
-        && $root->lastChild->nodeType === XML_ELEMENT_NODE
-        && strtolower($root->lastChild->nodeName) === 'br'
-    ) {
-        $root->removeChild($root->lastChild);
+        $paragraph = $doc->createElement('p');
+        while ($child->firstChild) {
+            $paragraph->appendChild($child->firstChild);
+        }
+
+        // Keep an empty paragraph editable/visible without turning it into a
+        // second structural separator during the next round trip.
+        if (!$paragraph->hasChildNodes()) {
+            $paragraph->appendChild($doc->createElement('br'));
+        }
+
+        $root->replaceChild($paragraph, $child);
     }
 }
 
