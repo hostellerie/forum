@@ -24,6 +24,12 @@
         var renderUrl = editor.getAttribute('data-render-url');
         var savedRange = null;
 
+        // Use semantic paragraphs for Enter. Shift+Enter remains a line break.
+        // This also makes the editor's live view match the stored/rendered post.
+        try {
+            document.execCommand('defaultParagraphSeparator', false, 'p');
+        } catch (ignore) {}
+
         function rememberSelection() {
             var selection = window.getSelection ? window.getSelection() : null;
             if (!selection || selection.rangeCount === 0) {
