@@ -12,11 +12,6 @@
     </tr>
     <tr>
             <td>
-                    {html_msg}&nbsp;{html_perm_image}
-            </td>
-    </tr>
-    <tr>
-            <td>
                     {censor_msg}&nbsp;{censor_perm_image}
             </td>
     </tr>
