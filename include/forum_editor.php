@@ -325,7 +325,7 @@ function forum_editor_normalizeVisualBlocks($doc, $root)
     foreach ($root->childNodes as $child) {
         if ($child->nodeType === XML_ELEMENT_NODE) {
             $name = strtolower($child->nodeName);
-            if ($name === 'div' || $name === 'p') {
+            if ($name === 'div') {
                 $blocks[] = $child;
             }
         }
@@ -403,6 +403,88 @@ function forum_editor_normalizeVisualBlocks($doc, $root)
     }
 }
 
+function forum_editor_wrapTopLevelParagraphs($doc, $root)
+{
+    // Canonical storage uses real <p> elements for paragraphs. A single BR
+    // remains an intentional line break; two consecutive BRs separate
+    // paragraphs. Real block elements (lists, quotes, code, tables) remain
+    // siblings and are never wrapped in a paragraph.
+    $children = array();
+    foreach ($root->childNodes as $child) {
+        $children[] = $child;
+    }
+
+    while ($root->firstChild) {
+        $root->removeChild($root->firstChild);
+    }
+
+    $paragraph = null;
+    $breakRun = 0;
+
+    $flushParagraph = function () use ($root, &$paragraph, &$breakRun) {
+        if ($paragraph !== null && $paragraph->hasChildNodes()) {
+            // Remove trailing BRs: they are structural separators, not content.
+            while ($paragraph->lastChild
+                && $paragraph->lastChild->nodeType === XML_ELEMENT_NODE
+                && strtolower($paragraph->lastChild->nodeName) === 'br'
+            ) {
+                $paragraph->removeChild($paragraph->lastChild);
+            }
+            if ($paragraph->hasChildNodes()) {
+                $root->appendChild($paragraph);
+            }
+        }
+        $paragraph = null;
+        $breakRun = 0;
+    };
+
+    foreach ($children as $child) {
+        if (forum_editor_nodeIsBlock($child)
+            && strtolower($child->nodeName) !== 'br'
+            && strtolower($child->nodeName) !== 'p'
+        ) {
+            $flushParagraph();
+            $root->appendChild($child);
+            continue;
+        }
+
+        if ($child->nodeType === XML_ELEMENT_NODE
+            && strtolower($child->nodeName) === 'p'
+        ) {
+            $flushParagraph();
+            $root->appendChild($child);
+            continue;
+        }
+
+        if ($child->nodeType === XML_ELEMENT_NODE
+            && strtolower($child->nodeName) === 'br'
+        ) {
+            $breakRun++;
+            if ($breakRun >= 2) {
+                $flushParagraph();
+            } elseif ($paragraph !== null) {
+                $paragraph->appendChild($child);
+            }
+            continue;
+        }
+
+        if ($child->nodeType === XML_TEXT_NODE && trim($child->nodeValue) === '') {
+            if ($paragraph !== null) {
+                $paragraph->appendChild($child);
+            }
+            continue;
+        }
+
+        if ($paragraph === null) {
+            $paragraph = $doc->createElement('p');
+        }
+        $breakRun = 0;
+        $paragraph->appendChild($child);
+    }
+
+    $flushParagraph();
+}
+
 function forum_editor_htmlToHtml($html)
 {
     if (!class_exists('DOMDocument')) {
@@ -423,6 +505,7 @@ function forum_editor_htmlToHtml($html)
     }
 
     forum_editor_normalizeVisualBlocks($doc, $root);
+    forum_editor_wrapTopLevelParagraphs($doc, $root);
     forum_editor_restoreSmilies($doc, $root);
 
     $autotags = array();
