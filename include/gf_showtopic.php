@@ -266,17 +266,23 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1)
     //$intervalTime = $mytimer->stopTimer();
     //COM_errorLog("Show Topic Display Time2: $intervalTime");
 
-    if ($mode != 'preview' && $uservalid && !COM_isAnonUser() && ($_USER['uid'] == $showtopic['uid'])) {
-        /* Check if user can still edit this post - within allowed edit timeframe */
-        $editAllowed = false;
-        if ($CONF_FORUM['allowed_editwindow'] > 0) {
-            $t1 = $showtopic['date'];
-            $t2 = $CONF_FORUM['allowed_editwindow'];
-            if ((time() - $t2) < $t1) {
+    if ($mode != 'preview' && $uservalid && !COM_isAnonUser()
+        && (($_USER['uid'] == $showtopic['uid'])
+            || forum_modPermission($showtopic['forum'], $_USER['uid'], 'mod_edit'))
+    ) {
+        /* Authors respect the normal edit window. Moderators can always use the
+         * direct Edit button when they already have mod_edit permission. */
+        $editAllowed = forum_modPermission($showtopic['forum'], $_USER['uid'], 'mod_edit');
+        if (!$editAllowed && $_USER['uid'] == $showtopic['uid']) {
+            if ($CONF_FORUM['allowed_editwindow'] > 0) {
+                $t1 = $showtopic['date'];
+                $t2 = $CONF_FORUM['allowed_editwindow'];
+                if ((time() - $t2) < $t1) {
+                    $editAllowed = true;
+                }
+            } else {
                 $editAllowed = true;
             }
-        } else {
-            $editAllowed = true;
         }
         if ($editAllowed) {
             $editlink = "{$_CONF['site_url']}/forum/createtopic.php?method=edit&amp;forum={$showtopic['forum']}&amp;id={$showtopic['id']}&amp;editid={$showtopic['id']}&amp;page=$page";
