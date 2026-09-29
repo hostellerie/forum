@@ -576,6 +576,7 @@ if ($submit == $LANG_GF01['PREVIEW']) {
     $previewitem['views']     = 0;
 
     $previewitem['comment'] = trim($comment);
+    $previewitem['forum_editor_visual'] = true;
 
     $preview_header = COM_newTemplate(CTL_plugin_templatePath('forum'));
     $preview_header->set_file (array ('preview_header'=>'submissionform_preview_header.thtml'));
