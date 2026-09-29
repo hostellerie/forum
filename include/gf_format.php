@@ -94,24 +94,38 @@ function gf_fixtemplate($text) {
     return $text;
 }
 
-function do_bbcode_url ($action, $attributes, $content, $params, $node_object) {
-    global $CONF_FORUM;
+function do_bbcode_url($action, $attributes, $content, $params, $node_object)
+{
+    global $_CONF, $CONF_FORUM;
 
     if ($action == 'validate') {
         return true;
     }
-    if (!isset ($attributes['default'])) {
-        if ( stristr($content,'http') ) {
-            return '<a href="'.$content.'" target="_blank" rel="nofollow">'.htmlspecialchars ($content,ENT_QUOTES, $CONF_FORUM['charset']).'</a>';
-        } else {
-            return '<a href="http://'.$content.'" target="_blank" rel="nofollow">'.htmlspecialchars ($content,ENT_QUOTES, $CONF_FORUM['charset']).'</a>';
-        }
+
+    $href = isset($attributes['default']) && $attributes['default'] !== ''
+        ? strip_tags($attributes['default'])
+        : $content;
+
+    if (!preg_match('#^[a-z][a-z0-9+.-]*://#i', $href)) {
+        $href = 'http://' . $href;
     }
-    if ( stristr($attributes['default'],'http') ) {
-        return '<a href="'.strip_tags($attributes['default']).'" target="_blank" rel="nofollow">'.$content.'</a>';
-    } else {
-        return '<a href="http://'.strip_tags($attributes['default']).'" target="_blank" rel="nofollow">'.$content.'</a>';
+
+    $siteHost = parse_url($_CONF['site_url'], PHP_URL_HOST);
+    $linkHost = parse_url($href, PHP_URL_HOST);
+    $isInternal = $siteHost && $linkHost
+        && strcasecmp($siteHost, $linkHost) === 0;
+
+    $label = isset($attributes['default']) && $attributes['default'] !== ''
+        ? $content
+        : htmlspecialchars($content, ENT_QUOTES, $CONF_FORUM['charset']);
+
+    if ($isInternal) {
+        return '<a href="' . htmlspecialchars($href, ENT_QUOTES, $CONF_FORUM['charset']) . '">'
+            . $label . '</a>';
     }
+
+    return '<a href="' . htmlspecialchars($href, ENT_QUOTES, $CONF_FORUM['charset'])
+        . '" target="_blank" rel="nofollow noopener noreferrer">' . $label . '</a>';
 }
 
 function do_bbcode_list ($action, $attributes, $content, $params, $node_object) {
