@@ -256,7 +256,21 @@ function showtopic($showtopic,$mode='',$onetwo=1,$page=1)
         }
     }
 
-    $showtopic['comment'] = gf_formatTextBlock($showtopic['comment'],$showtopic['postmode'],$mode);
+    if ($mode === 'preview'
+        && !empty($showtopic['forum_editor_visual'])
+        && function_exists('forum_editor_renderSource')
+    ) {
+        $showtopic['comment'] = forum_editor_renderSource(
+            $showtopic['comment'],
+            $showtopic['postmode']
+        );
+    } else {
+        $showtopic['comment'] = gf_formatTextBlock(
+            $showtopic['comment'],
+            $showtopic['postmode'],
+            $mode
+        );
+    }
     $showtopic['subject'] = gf_formatTextBlock($showtopic['subject'],'text',$mode);
 
     if (($CONF_FORUM['show_subject_length'] > 0) AND (strlen ($showtopic['subject']) > $CONF_FORUM['show_subject_length'])) {
