@@ -341,10 +341,23 @@ function forum_editor_htmlToBBCode($html)
         $source .= forum_editor_nodeToBBCode($child);
     }
 
-    // The visual-editor source is intentionally single-line.
+    // The visual-editor source is intentionally single-line outside code.
     // Structural newlines would be converted again by text-mode nl2br().
     // Intentional soft line breaks are represented explicitly as [br].
+    $codeBlocks = array();
+    $source = preg_replace_callback(
+        '/\[code\].*?\[\/code\]/is',
+        function ($matches) use (&$codeBlocks) {
+            $key = '___FORUM_EDITOR_SERIALIZED_CODE_' . count($codeBlocks) . '___';
+            $codeBlocks[$key] = $matches[0];
+            return $key;
+        },
+        $source
+    );
     $source = preg_replace('/(?:\r\n|\r|\n)+/', '', $source);
+    if (!empty($codeBlocks)) {
+        $source = strtr($source, $codeBlocks);
+    }
     return trim($source);
 }
 
