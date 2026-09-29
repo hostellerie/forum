@@ -441,6 +441,24 @@ function forum_editor_htmlToHtml($html)
     forum_editor_wrapTopLevelParagraphs($doc, $root);
     forum_editor_restoreSmilies($doc, $root);
 
+    // Store paragraphs using the Forum's own [p] BBCode instead of raw <p>.
+    // Raw paragraph tags are subject to Geeklog's HTML allow-list and can be
+    // stripped on one site but preserved on another. [p] is parsed by Forum
+    // after filtering, so paragraph semantics stay identical across sites.
+    $paragraphMarkers = array();
+    $xpath = new DOMXPath($doc);
+    $paragraphs = $xpath->query('./p', $root);
+    for ($i = $paragraphs->length - 1; $i >= 0; $i--) {
+        $node = $paragraphs->item($i);
+        $inner = '';
+        foreach ($node->childNodes as $child) {
+            $inner .= $doc->saveHTML($child);
+        }
+        $marker = '___FORUM_EDITOR_PARAGRAPH_' . $i . '___';
+        $paragraphMarkers[$marker] = '[p]' . $inner . '[/p]';
+        $node->parentNode->replaceChild($doc->createTextNode($marker), $node);
+    }
+
     $autotags = array();
     $xpath = new DOMXPath($doc);
     $nodes = $xpath->query('//*[@data-forum-autotag]');
@@ -460,6 +478,9 @@ function forum_editor_htmlToHtml($html)
 
     if (!empty($autotags)) {
         $output = strtr($output, $autotags);
+    }
+    if (!empty($paragraphMarkers)) {
+        $output = strtr($output, $paragraphMarkers);
     }
 
     return trim($output);
