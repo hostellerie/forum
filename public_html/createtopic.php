@@ -1040,22 +1040,6 @@ if (($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($
         }
     }
 
-    if ($postmode == 'html' || $postmode == 'HTML') {
-        $postmode_msg = $LANG_GF01['TEXTMODE'];
-    } else {
-         $postmode_msg = $LANG_GF01['HTMLMODE'];
-    }
-    if ($CONF_FORUM['allow_html'] || SEC_inGroup( 'Root' )) {
-        
-		// Mode Option
-		$submissionform_main->set_var ('LANG_OPTION', $postmode_msg);
-		$submissionform_main->set_var ('option_name', 'postmode_switch');
-		$submissionform_main->set_var ('option_checked', '');
-		$postmode_extra = '<input type="hidden" name="postmode" value="' . $postmode . '"' . XHTML . '>';
-		$submissionform_main->set_var ('option_extra', $postmode_extra);
-		$submissionform_main->parse ('option', 'submissionform_option', true);
-		$options_exist = true;
-    }
 
     if ($method == 'edit') {
         if ($CONF_FORUM['pre2.5_mode']) {
