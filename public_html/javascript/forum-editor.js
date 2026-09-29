@@ -163,6 +163,44 @@
                 });
         }
 
+        editor.addEventListener('keydown', function (event) {
+            if (event.key !== 'Enter') {
+                return;
+            }
+
+            rememberSelection();
+
+            if (event.shiftKey) {
+                event.preventDefault();
+                restoreSelection();
+
+                var selection = window.getSelection ? window.getSelection() : null;
+                var range = selection && selection.rangeCount ? selection.getRangeAt(0) : null;
+                if (!range) {
+                    return;
+                }
+
+                var br = document.createElement('br');
+                br.setAttribute('data-forum-soft-break', '1');
+                range.deleteContents();
+                range.insertNode(br);
+                range.setStartAfter(br);
+                range.collapse(true);
+                selection.removeAllRanges();
+                selection.addRange(range);
+                savedRange = range.cloneRange();
+                markDirty();
+                return;
+            }
+
+            // A normal Enter is a paragraph boundary. Browsers do not behave
+            // consistently for contenteditable, so force insertParagraph.
+            event.preventDefault();
+            restoreSelection();
+            document.execCommand('insertParagraph', false, null);
+            markDirty();
+        });
+
         editor.addEventListener('input', markDirty);
         editor.addEventListener('keyup', rememberSelection);
         editor.addEventListener('mouseup', rememberSelection);
