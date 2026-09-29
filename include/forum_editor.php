@@ -180,6 +180,41 @@ function forum_editor_restoreSmilies($doc, $root)
     }
 }
 
+function forum_editor_normalizeBlockBBCode($source)
+{
+    $codeBlocks = array();
+
+    $source = preg_replace_callback(
+        '/\[code(?:=[^\]]+)?\].*?\[\/code\]/is',
+        function ($matches) use (&$codeBlocks) {
+            $key = '___FORUM_EDITOR_BLOCK_CODE_' . count($codeBlocks) . '___';
+            $codeBlocks[$key] = $matches[0];
+            return $key;
+        },
+        $source
+    );
+
+    // Newlines between structural Forum tags are formatting artifacts, not
+    // user line breaks. Keeping them makes text-mode nl2br() emit extra BRs
+    // after paragraphs and inside lists on every edit/save round trip.
+    $source = preg_replace(
+        '/(?:\r\n|\r|\n)+(?=\[(?:p|\/p|list(?:=[^\]]+)?|\/list|\*|quote|\/quote)\])/i',
+        '',
+        $source
+    );
+    $source = preg_replace(
+        '/(?<=\[\/p\]|\[\/list\]|\[\/quote\])(?:\r\n|\r|\n)+/i',
+        '',
+        $source
+    );
+
+    if (!empty($codeBlocks)) {
+        $source = strtr($source, $codeBlocks);
+    }
+
+    return $source;
+}
+
 function forum_editor_renderSource($source, $postmode)
 {
     if (!class_exists('StringParser')) {
@@ -188,6 +223,9 @@ function forum_editor_renderSource($source, $postmode)
     }
 
     $tokens = array();
+    if (strtolower($postmode) === 'text') {
+        $source = forum_editor_normalizeBlockBBCode($source);
+    }
     $prepared = forum_editor_extractAutotags($source, $tokens);
 
     // HTML produced by the visual editor is already a complete editing
@@ -236,7 +274,7 @@ function forum_editor_nodeToBBCode($node)
             return "\n";
         case 'p':
         case 'div':
-            return '[p]' . trim($content) . '[/p]' . "\n";
+            return '[p]' . trim($content) . '[/p]';
         case 'strong':
         case 'b':
             return '[b]' . $content . '[/b]';
@@ -249,17 +287,17 @@ function forum_editor_nodeToBBCode($node)
         case 'del':
             return '[s]' . $content . '[/s]';
         case 'blockquote':
-            return '[quote]' . trim($content) . '[/quote]' . "\n\n";
+            return '[quote]' . trim($content) . '[/quote]';
         case 'pre':
-            return '[code]' . trim($node->textContent) . '[/code]' . "\n\n";
+            return '[code]' . trim($node->textContent) . '[/code]';
         case 'code':
             return '[code]' . $node->textContent . '[/code]';
         case 'ul':
-            return '[list]' . "\n" . trim($content) . "\n[/list]\n\n";
+            return '[list]' . trim($content) . '[/list]';
         case 'ol':
-            return '[list=1]' . "\n" . trim($content) . "\n[/list]\n\n";
+            return '[list=1]' . trim($content) . '[/list]';
         case 'li':
-            return '[*]' . trim($content) . "\n";
+            return '[*]' . trim($content);
         case 'a':
             $href = $node->getAttribute('href');
             if ($href === '') {
