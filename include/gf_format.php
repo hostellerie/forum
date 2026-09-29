@@ -954,17 +954,6 @@ function f_forumrules() {
         $postperm_msg = $LANG_GF01['POST_PERM_MSG1'];
         $post_perm_image = "status_yes";
     }
-    if ($CONF_FORUM['allow_html']) {
-        $html_perm_image = "status_yes";
-        if ($CONF_FORUM['use_glfilter']) {
-            $htmlmsg = $LANG_GF01['HTML_FILTER_MSG'];
-        } else {
-            $htmlmsg = $LANG_GF01['HTML_FULL_MSG'];
-        }
-    } else {
-        $htmlmsg = $LANG_GF01['HTML_MSG'];
-        $html_perm_image = "status_no";
-    }
     if ($CONF_FORUM['use_censor']) {
         $censor_perm_image = "status_yes";
     } else {
@@ -986,8 +975,6 @@ function f_forumrules() {
     $forum_rules->set_var ('postingperm_msg',$postperm_msg);
     $forum_rules->parse ('post_perm_image', $post_perm_image);
 
-    $forum_rules->set_var ('html_msg', $htmlmsg);
-    $forum_rules->parse ('html_perm_image', $html_perm_image);
     $forum_rules->set_var ('censor_msg', $LANG_GF01['CENSOR_PERM_MSG']);
     $forum_rules->parse ('censor_perm_image', $censor_perm_image);
 
