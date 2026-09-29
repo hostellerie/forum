@@ -510,4 +510,6 @@ function forum_editor_preparePost()
     $_POST['comment'] = forum_editor_htmlToBBCode($_POST['forum_editor_html']);
     $_POST['postmode'] = 'text';
     $_POST['postmode_switch'] = 0;
+    $_REQUEST['postmode'] = 'text';
+    $_REQUEST['postmode_switch'] = 0;
 }
