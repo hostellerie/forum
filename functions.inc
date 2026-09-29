@@ -141,11 +141,30 @@ $CONF_FORUM['asset_version'] = '2.9.1-20260928.2';
  */
 function forum_assetUrl($url)
 {
-    global $CONF_FORUM;
+    global $_CONF, $CONF_FORUM;
 
     $version = isset($CONF_FORUM['asset_version'])
         ? (string) $CONF_FORUM['asset_version']
         : '2.9.1';
+
+    // Add the actual file mtime when this is a local public asset. This keeps
+    // cache invalidation automatic while developing or maintaining the same
+    // Forum release, instead of relying on a manually bumped static revision.
+    $assetPath = parse_url($url, PHP_URL_PATH);
+    if (is_string($assetPath) && $assetPath !== '') {
+        $sitePath = parse_url($_CONF['site_url'], PHP_URL_PATH);
+        $sitePath = is_string($sitePath) ? rtrim($sitePath, '/') : '';
+
+        if ($sitePath !== '' && strpos($assetPath, $sitePath . '/') === 0) {
+            $assetPath = substr($assetPath, strlen($sitePath));
+        }
+
+        $file = rtrim($_CONF['path_html'], '/\\') . '/' . ltrim($assetPath, '/');
+        $mtime = @filemtime($file);
+        if ($mtime !== false) {
+            $version .= '-' . $mtime;
+        }
+    }
 
     return $url
         . (strpos($url, '?') === false ? '?' : '&')
