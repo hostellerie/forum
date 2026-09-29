@@ -9,6 +9,7 @@
 </div>
 {code}
 {smilies}
+<div class="forum-editor-format" aria-label="Post source format">{editor_mode_note}</div>
 <div class="uk-form-row forum-editor-row">
 	<div class="uk-form-controls forum-visual-editor-shell">
 		<div id="forum-visual-editor" class="forum-visual-editor" contenteditable="true" role="textbox" aria-multiline="true" data-render-url="{editor_render_url}">{editor_html}</div>
