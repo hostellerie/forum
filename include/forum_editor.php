@@ -236,7 +236,7 @@ function forum_editor_nodeToBBCode($node)
             return "\n";
         case 'p':
         case 'div':
-            return rtrim($content) . "\n\n";
+            return '[p]' . trim($content) . '[/p]' . "\n";
         case 'strong':
         case 'b':
             return '[b]' . $content . '[/b]';
@@ -493,16 +493,21 @@ function forum_editor_preparePost()
     }
 
     // If the browser did not populate the visual payload, keep the synchronized
-    // plain source field instead of replacing the comment with an empty string.
+    // source field instead of replacing the comment with an empty string.
     if (trim($_POST['forum_editor_html']) === '') {
         return;
     }
 
-    $postmode = isset($_POST['postmode']) ? strtolower($_POST['postmode']) : 'html';
-
-    if ($postmode === 'text') {
-        $_POST['comment'] = forum_editor_htmlToBBCode($_POST['forum_editor_html']);
-    } else {
-        $_POST['comment'] = forum_editor_htmlToHtml($_POST['forum_editor_html']);
-    }
+    /*
+     * The visual editor has one canonical storage format: Forum BBCode in text
+     * mode. This deliberately makes new/edited visual posts independent from
+     * the historical "Allow HTML Mode" and "Set HTML Mode as Default" options.
+     *
+     * Existing posts keep their stored postmode until they are actually edited.
+     * Once changed in the visual editor they are normalized to the canonical
+     * Forum source format.
+     */
+    $_POST['comment'] = forum_editor_htmlToBBCode($_POST['forum_editor_html']);
+    $_POST['postmode'] = 'text';
+    $_POST['postmode_switch'] = 0;
 }
