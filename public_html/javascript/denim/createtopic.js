@@ -28,9 +28,13 @@
         text = ' ' + text + ' ';
 
         if (editor) {
-            editor.focus();
-            document.execCommand('insertText', false, text);
-            editor.dispatchEvent(new Event('input', {bubbles: true}));
+            if (typeof window.forumVisualEditorInsertText === 'function') {
+                window.forumVisualEditorInsertText(text);
+            } else {
+                editor.focus();
+                document.execCommand('insertText', false, text);
+                editor.dispatchEvent(new Event('input', {bubbles: true}));
+            }
             return;
         }
 
