@@ -57,6 +57,34 @@
             rememberSelection();
         }
 
+        function insertTextAtSelection(text) {
+            var selection;
+            var range;
+            var node;
+
+            restoreSelection();
+            selection = window.getSelection ? window.getSelection() : null;
+
+            if (selection && selection.rangeCount) {
+                range = selection.getRangeAt(0);
+                range.deleteContents();
+                node = document.createTextNode(text);
+                range.insertNode(node);
+                range.setStartAfter(node);
+                range.collapse(true);
+                selection.removeAllRanges();
+                selection.addRange(range);
+                savedRange = range.cloneRange();
+            } else {
+                editor.appendChild(document.createTextNode(text));
+            }
+
+            markDirty();
+            editor.focus();
+        }
+
+        window.forumVisualEditorInsertText = insertTextAtSelection;
+
         function runCommand(command) {
             restoreSelection();
 
