@@ -1116,6 +1116,16 @@ if (($method == 'newtopic' || $method == 'postreply' || $method == 'edit') || ($
     $submissionform_main->set_var('editor_html', forum_editor_renderSource($editorSource, $postmode));
     $submissionform_main->set_var('editor_render_url', $_CONF['site_url'] . '/forum/editor-render.php');
 
+    $originalPostmode = $postmode;
+    if ($method == 'edit' && !empty($edittopic['postmode'])) {
+        $originalPostmode = strtolower($edittopic['postmode']);
+    }
+    $submissionform_main->set_var(
+        'editor_mode_note',
+        strtoupper($originalPostmode) === 'HTML'
+            ? 'HTML'
+            : 'FORUM'
+    );
     $submissionform_main->set_var ('postmode', $postmode);
     $submissionform_main->parse ('output', 'submissionform_main');
     $display .= $submissionform_main->finish($submissionform_main->get_var('output'));
