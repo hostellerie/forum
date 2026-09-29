@@ -10,6 +10,10 @@
             </tr>
             {code}
             {smilies}
+            <tr class="forum-editor-format-row">
+                <td class="pluginCellSubTitle">&nbsp;</td>
+                <td class="pluginCellText pluginCellFill"><span class="forum-editor-format" aria-label="Post source format">{editor_mode_note}</span></td>
+            </tr>
             <tr class="forum-editor-row">
                 <td class="pluginCellSubTitle">&nbsp;</td>
                 <td class="pluginCellText pluginCellFill" style="padding-left: 5px;">
