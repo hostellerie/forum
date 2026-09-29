@@ -309,19 +309,24 @@ function showtopic($showtopic, $mode='', $postcount=1, $onetwo=1, $page=1, $quer
         $topictemplate->set_var ('read_msg','');
     }
 
-    if ($mode != 'preview' && $uservalid && !COM_isAnonUser() && ($_USER['uid'] == $showtopic['uid']) && !$isUserBanned) {
-        /* Check if user can still edit this post - within allowed edit timeframe */
-        $editAllowed = false;
+    if ($mode != 'preview' && $uservalid && !COM_isAnonUser() && !$isUserBanned
+        && (($_USER['uid'] == $showtopic['uid'])
+            || forum_modPermission($showtopic['forum'], $_USER['uid'], 'mod_edit'))
+    ) {
+        /* Authors respect the normal edit window and lock/read-only state.
+         * Moderators can always use the direct Edit button when mod_edit is granted. */
+        $editAllowed = forum_modPermission($showtopic['forum'], $_USER['uid'], 'mod_edit');
 
-		// Edit window must exist and topic cannot be locked
-        if ($CONF_FORUM['allowed_editwindow'] > 0 && !$is_lockedtopic && !$is_readonly) {
-            $t1 = $showtopic['date'];
-            $t2 = $CONF_FORUM['allowed_editwindow'];
-            if ((time() - $t2) < $t1) {
+        if (!$editAllowed && $_USER['uid'] == $showtopic['uid']) {
+            if ($CONF_FORUM['allowed_editwindow'] > 0 && !$is_lockedtopic && !$is_readonly) {
+                $t1 = $showtopic['date'];
+                $t2 = $CONF_FORUM['allowed_editwindow'];
+                if ((time() - $t2) < $t1) {
+                    $editAllowed = true;
+                }
+            } elseif ($CONF_FORUM['allowed_editwindow'] == -1) {
                 $editAllowed = true;
             }
-        } elseif ($CONF_FORUM['allowed_editwindow'] == -1) {
-            $editAllowed = true;
         }
         if ($editAllowed) {
 			//$editlink = "{$_CONF['site_url']}/forum/createtopic.php?method=edit&amp;forum={$showtopic['forum']}&amp;id={$showtopic['id']}&amp;editid={$showtopic['id']}&amp;page=$page";
