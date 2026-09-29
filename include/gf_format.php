@@ -473,6 +473,8 @@ function gf_formatTextBlock($str,$postmode='html',$mode='') {
                       'inline', array ('listitem', 'block', 'inline', 'link'), array ());
     $bbcode->addCode ('p', 'simple_replace', null, array ('start_tag' => '<p>', 'end_tag' => '</p>'),
                       'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+    $bbcode->addCode ('br', 'simple_replace', null, array ('start_tag' => '<br' . XHTML . '>', 'end_tag' => ''),
+                      'inline', array ('listitem', 'block', 'inline', 'link'), array ());
     $bbcode->addCode ('s', 'simple_replace', null, array ('start_tag' => '<del>', 'end_tag' => '</del>'),
                       'inline', array ('listitem', 'block', 'inline', 'link'), array ());
     $bbcode->addCode ('size', 'usecontent?', 'do_bbcode_size', array ('usercontent_param' => 'default'),
@@ -526,6 +528,7 @@ function gf_formatTextBlock($str,$postmode='html',$mode='') {
     $markers = array();
     $simpleTags = array(
         '[p]', '[/p]',
+        '[br]',
         '[b]', '[/b]',
         '[i]', '[/i]',
         '[u]', '[/u]',
