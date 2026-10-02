@@ -46,7 +46,7 @@ $LANG_GF00 = array (
     'statsheading3' => 'אין דיונים לדווח עליהם',
     'useradminmenu' => 'הגדרות פורום',
     'access_denied' => 'הגישה לא אושרה',
-    'autotag_desc_forum' => '[forum: id alternate title] - Displays a link to a forum topic using the text \'here\' as the title. An alternate title may be specified but is not required.'
+    'autotag_desc_forum' => '[forum: id alternate title] - מציג קישור לנושא בפורום עם הטקסט „כאן” ככותרת. ניתן לציין כותרת חלופית, אך אין חובה.'
 );
 
 
@@ -402,12 +402,12 @@ $LANG_GF03 = array (
     'edit' => 'עריכת תגובה',
     'move' => 'הזזת דיון',
     'split' => 'פצלו את הדיון',
-    'banippost' => 'Ban IP from Posting',
-    'banippostremove' => 'Remove Ban for IP from Posting',
-    'banip' => 'Ban IP from Site',
-    'banipremove' => 'Remove Ban for IP from Site',
-    'banipmsg' => 'IP has been banned from site',
-    'banipremovemsg' => 'Ban has been removed for IP from Site',    
+    'banippost' => 'חסימת IP מפרסום',
+    'banippostremove' => 'הסרת חסימת פרסום ל-IP',
+    'banip' => 'חסימת IP מהאתר',
+    'banipremove' => 'הסרת חסימת IP מהאתר',
+    'banipmsg' => 'כתובת ה-IP נחסמה מהאתר',
+    'banipremovemsg' => 'חסימת ה-IP מהאתר הוסרה',    
     'movetopic' => 'הזיזו את הדיון',
     'movetopicmsg' => '<br',
     'splittopicmsg' => '<br',
@@ -419,14 +419,14 @@ $LANG_GF03 = array (
 );
 
 $LANG_GF04 = array (
-    'label_forum' => 'Forum Profile',
-    'label_location' => 'Location',
-    'label_aim' => 'AIM Handle',
-    'label_yim' => 'YIM Handle',
-    'label_icq' => 'ICQ Identity',
-    'label_msnm' => 'MS Messenger Name',
-    'label_interests' => 'Interests',
-    'label_occupation' => 'Occupation',
+    'label_forum' => 'פרופיל הפורום',
+    'label_location' => 'מיקום',
+    'label_aim' => 'שם AIM',
+    'label_yim' => 'שם YIM',
+    'label_icq' => 'מזהה ICQ',
+    'label_msnm' => 'שם MS Messenger',
+    'label_interests' => 'תחומי עניין',
+    'label_occupation' => 'עיסוק',
 );
 
 /* Settings for Additional User profile - Instant Messaging links */
@@ -478,22 +478,22 @@ $LANG_GF08 = array (
 
 /* Text for the buttons */
 $LANG_GF09 = array (
-    'edit' => 'Edit',
-    'email' => 'Email',
-    'home' => 'Home',
-    'lastpost' => 'Last Post',
+    'edit' => 'עריכה',
+    'email' => 'דוא״ל',
+    'home' => 'בית',
+    'lastpost' => 'הודעה אחרונה',
     'pm' => 'PM', // private message
-    'profile' => 'Profile',
-    'quote' => 'Quote',
-    'website' => 'Website',
-    'newtopic' => 'New Topic',
-    'replytopic' => 'Post Reply'
+    'profile' => 'פרופיל',
+    'quote' => 'ציטוט',
+    'website' => 'אתר',
+    'newtopic' => 'נושא חדש',
+    'replytopic' => 'פרסום תגובה'
 );
 
 /* Block Locations */
 $LANG_GF20 = array (
-    'blocks_showtopic_name' => 'Forum Show Topic',
-    'blocks_showtopic_desc' => 'Displays blocks right after every X number of topic posts.'
+    'blocks_showtopic_name' => 'הצגת נושא בפורום',
+    'blocks_showtopic_desc' => 'מציג בלוקים לאחר כל X הודעות בנושא.'
 );
 
 // Admin Stats page
@@ -514,31 +514,31 @@ $LANG_GF91 = array (
 
 // User Preference Page
 $LANG_GF92 = array (
-    'userpreferences' => 'User Preferences',
-    'setsavemsg' => 'Settings saved.',
-    'topicspp' => 'Topics Per Page',
-    'topicsppdscp' => 'Number of topics to display when viewing the forum index',
-    'postspp' => 'Posts Per Page',
-    'postsppdscp' => 'Number of posts to show per page',
-    'newpp' => 'New Posts Per Page',
-    'newppdscp' => 'Number of new posts to show on the new posts page',
-    'popularpp' => 'Popular Posts Per Page',
-    'popularppdscp' => 'Number of posts to show on the popular page',
-    'popularl' => 'Popular Limit',
-    'popularldscp' => 'Number of posts or views before calling a topic popular',
-    'searchpp' => 'Search Results Per Pages',
-    'searchppdscp' => 'Number of search results to display on the search page',
-    'memberspp' => 'Users Per Page',
-    'membersppdscp' => 'Number of Users to show on the Users report page',
-    'viewap' => 'View Anonymous Posts',
-    'viewapdscp' => 'Setting of No will filter out anonymous posts',
-    'alwaysn' => 'Always Notify',
-    'alwaysndscp' => 'Setting of Yes will enable auto notification for any topics you create or reply',
-    'notifyoo' => 'Notify Once Only', 
-    'notifyoodscp' => 'Notifications will only be sent once for forums and topics which have multiple new posts since your last visit.', 
-    'showiframe' => 'Show Topic Review',
-    'showiframedscp' => 'Show Topic Review frame at bottom when replying to a topic',
-    'gfsettings' => 'Forum Settings'
+    'userpreferences' => 'העדפות משתמש',
+    'setsavemsg' => 'ההגדרות נשמרו.',
+    'topicspp' => 'נושאים בעמוד',
+    'topicsppdscp' => 'מספר הנושאים להצגה באינדקס הפורום',
+    'postspp' => 'הודעות בעמוד',
+    'postsppdscp' => 'מספר ההודעות להצגה בכל עמוד',
+    'newpp' => 'הודעות חדשות בעמוד',
+    'newppdscp' => 'מספר ההודעות החדשות להצגה בעמוד ההודעות החדשות',
+    'popularpp' => 'הודעות פופולריות בעמוד',
+    'popularppdscp' => 'מספר ההודעות להצגה בעמוד הפופולרי',
+    'popularl' => 'סף פופולריות',
+    'popularldscp' => 'מספר ההודעות או הצפיות הדרוש כדי שנושא ייחשב פופולרי',
+    'searchpp' => 'תוצאות חיפוש בעמוד',
+    'searchppdscp' => 'מספר תוצאות החיפוש להצגה בעמוד החיפוש',
+    'memberspp' => 'משתמשים בעמוד',
+    'membersppdscp' => 'מספר המשתמשים להצגה בדוח המשתמשים',
+    'viewap' => 'הצגת הודעות אנונימיות',
+    'viewapdscp' => 'בחירה בלא תסנן הודעות אנונימיות',
+    'alwaysn' => 'תמיד להודיע',
+    'alwaysndscp' => 'בחירה בכן תפעיל הודעות אוטומטיות לנושאים שיצרת או הגבת בהם',
+    'notifyoo' => 'להודיע פעם אחת בלבד', 
+    'notifyoodscp' => 'תישלח הודעה אחת בלבד לפורומים ולנושאים שבהם יש כמה הודעות חדשות מאז הביקור האחרון.', 
+    'showiframe' => 'הצגת סקירת נושא',
+    'showiframedscp' => 'הצגת סקירת הנושא בתחתית בעת תגובה',
+    'gfsettings' => 'הגדרות הפורום'
 );
 
 // Board Admin
@@ -547,7 +547,7 @@ $LANG_GF93 = array (
     'addcat' => 'הוספת קטגוריית פורומים',
     'forum' => 'Forum',
     'addforum' => 'הוספת פורום',
-    'noforum' => 'No Forums found.',
+    'noforum' => 'לא נמצאו פורומים.',
 	'category' => 'קטגוריה:',
     'catorder' => 'סדר מיון הקטגוריה',
     'catadded' => 'הקטגוריה התווספה.',
@@ -556,41 +556,41 @@ $LANG_GF93 = array (
     'forumadded' => 'הפורום התווסף.',
     'forumaddError' => 'שגיאה בהוספת הפורום.',
     'forumdeleted' => 'הפורום נמחק',
-    'forummerged' => 'Forum Merged',
-    'forumnotmerged' => 'Forum cannot be merged since no other forums available to be merged with.',
+    'forummerged' => 'הפורום מוזג',
+    'forumnotmerged' => 'לא ניתן למזג את הפורום משום שאין פורום אחר זמין למיזוג.',
     'forumedited' => 'הפורום נערך',
     'forumordered' => 'סדר הפורומים עודכן',
     'back' => 'חזרה',
-    'addnote' => 'Note: You can edit these values.',
+    'addnote' => 'הערה: ניתן לערוך ערכים אלה.',
     'editforumnote' => 'עירכו את פרטי הפורום: <b>"%s"</b>',
-    'deleteforumnote' => 'Do you want to delete the forum <b>"%s"</b>? All topics posted under it will also be deleted.',
-    'mergeforumnote' => 'Merge the forum <b>"%s"</b> into:',
+    'deleteforumnote' => 'האם למחוק את הפורום <b>„%s”</b>? כל הנושאים שבו יימחקו גם הם.',
+    'mergeforumnote' => 'מיזוג הפורום <b>„%s”</b> אל:',
     'editcatnote' => 'עירכו את פרטי הקטגוריה: <b>"%s"</b>',
-    'deletecatnote' => 'Do you want to delete the category <b>"%s"</b>? All forums and topics posted under those forums will also be deleted.',
+    'deletecatnote' => 'האם למחוק את הקטגוריה <b>„%s”</b>? כל הפורומים והנושאים שבה יימחקו גם הם.',
     'undercat' => 'תחת הקטגוריה',
     'groupaccess' => 'גישה קבוצתית: ',
     'action' => 'פעולות',
     'forumdescription' => 'תיאור הפורום',
     'posts' => 'הודעות',
     'ordertitle' => 'סדר המיון',
-    'title' => 'Forum Configuration',
-    'description' => 'Description',
+    'title' => 'הגדרות הפורום',
+    'description' => 'תיאור',
     'ModEdit' => 'עריכה',
     'ModMove' => 'הזזה',
     'ModStick' => 'הדבקה',
     'ModBan' => 'החרמה',
     'addmoderator' => "הוספת רשומה",
     'delmoderator' => " Delete\nSelected",
-    'moderatorwarningtitle' => 'Warning: No Forums Defined',
+    'moderatorwarningtitle' => 'אזהרה: לא הוגדרו פורומים',
     'moderatorwarning' => '<b>אזהרה: לא הוגדרו פורומים</b><br',
-    'nomoderatorfound' => "No Moderators found.",
-    'modadded' => "Moderator(s) have been added.",
-	'modnotadded' => "No Moderators added. You need to pick one or more Forums, Functions, and pick either one or more Users, or a Group.",
-    'moddeleted' => "Moderator(s) have been deleted.",
-    'modedited' => "Moderator(s) have been edited.",
-    'private' => 'Private Forum',
+    'nomoderatorfound' => "לא נמצאו מנהלים.",
+    'modadded' => "המנהלים נוספו.",
+	'modnotadded' => "לא נוספו מנהלים. יש לבחור פורום אחד או יותר, פונקציות, ולאחר מכן משתמש אחד או יותר או קבוצה.",
+    'moddeleted' => "המנהלים נמחקו.",
+    'modedited' => "המנהלים נערכו.",
+    'private' => 'פורום פרטי',
     'filtertitle' => 'ביחרו אילו רשומות פיקוח לראות',
-	'LANG_addmodtitle' => 'New Moderator',
+	'LANG_addmodtitle' => 'מנהל חדש',
     'addmessage' => 'הוספת מפקחים חדשים',
     'allowedfunctions' => 'פונקציות מורשות',
     'userrecords' => 'רשומות משתמשים',
@@ -604,16 +604,16 @@ $LANG_GF93 = array (
     'hidepostsdscp' => 'עדכונים לא יופיעו בקוביות מידע של הודעות חדשות או בהזנות RSS',
     'mod_title' => 'מפקחי הפורומים',
     'allforums' => 'כל הפורומים',
-    'namerequired' => 'Name is required.',
-	'resyncedmsg' => 'ReSynch and Clean completed for selected category or forum.<br><ul><li>%s topic posts re-synced.</li><li>%s orphan topic records (those without a parent topic) found and fixed.</li><li>%s orphan records found and cleaned from all other Forum tables.</li></ul>'
+    'namerequired' => 'יש להזין שם.',
+	'resyncedmsg' => 'הסנכרון מחדש והניקוי של הקטגוריה או הפורום שנבחרו הושלמו.<br><ul><li>%s הודעות נושא סונכרנו מחדש.</li><li>%s רשומות נושא יתומות נמצאו ותוקנו.</li><li>%s רשומות יתומות נמצאו ונוקו מטבלאות הפורום האחרות.</li></ul>'
 );
 
 // Posts
 $LANG_GF95 = array (
     'header1' => 'הודעות בפורומים',
     'header2' => 'הודעות בפורום&nbsp;&raquo;&nbsp;%s',
-    'notyet' => 'Feature has not been implemented yet',
-    'delall' => 'Delete All',
+    'notyet' => 'התכונה עדיין לא יושמה',
+    'delall' => 'מחיקת הכול',
     'delallmsg' => 'Are you sure you want to delete all messages from: %s?',
     'underforum' => '<b>Under Forum: %s (ID #%s)',
     'moderate' => 'פיקוח',
@@ -623,158 +623,158 @@ $LANG_GF95 = array (
 // Banned IPs
 $LANG_GF96 = array (
     'ip' => 'IP',
-    'ipaddress' => 'IP Address',
-    'enterip' => 'Enter below an IP address to ban',
+    'ipaddress' => 'כתובת IP',
+    'enterip' => 'הזינו כתובת IP לחסימה',
     'gfipman' => 'ניהול ה-IP',
-    'ban' => 'Ban',
+    'ban' => 'חסימה',
     'noips' => '<p style="margin:0px; padding:5px;">שום כתובות IP לא הוחרמו עדיין!</p>',
     'unban' => 'להפסיק להחרים',
     'ipbanned' => 'IP Address Banned',
     'banipmsg' => 'Are you sure you want to ban the ip %s?',
     'specip' => 'אנא ציינו את כתובת ה-IP שברצונכם להחרים!',
     'ipunbanned' => 'כתובת ה-IP כבר לא מוחרמת.',
-    'ipnotvalid' => 'IP Address %s is not valid. Therefore it has not been added.',
-    'noip' => 'You did not provide an IP address!'
+    'ipnotvalid' => 'כתובת ה-IP %s אינה תקינה ולכן לא נוספה.',
+    'noip' => 'לא הוזנה כתובת IP!'
 );
 
 // Subscriptions
 $LANG_GF97 = array (
-    'gfsubscriptions' => 'Forum Subscriptions'
+    'gfsubscriptions' => 'מינויים לפורום'
 );
 
 // Smilies
 $LANG_GF_SMILIES = array(
     // These strings are used for the "alt" and
     // "title" attribute for the smilies images 
-    'biggrin' => 'Big Grin',
-    'smile' => 'Smile',
-    'frown' => 'Frown',
-    'eek' => 'Geek',
-    'confused' => 'Confused',
-    'cool' => 'Cool',
+    'biggrin' => 'חיוך גדול',
+    'smile' => 'חיוך',
+    'frown' => 'זעף',
+    'eek' => 'גיק',
+    'confused' => 'מבולבל',
+    'cool' => 'מגניב',
     'lol' => 'LOL',
-    'angry' => 'Angry',
-    'razz' => 'Razz',
-    'oops' => 'Oops!',
-    'surprise' => 'Surprised!',
-    'cry' => 'Cry',
-    'evil' => 'Evil',
-    'twisted' => 'Twisted',
-    'rolleye' => 'Rolling Eyes',
-    'wink' => 'Wink',
+    'angry' => 'כועס',
+    'razz' => 'לעג',
+    'oops' => 'אופס!',
+    'surprise' => 'מופתע!',
+    'cry' => 'בכי',
+    'evil' => 'מרושע',
+    'twisted' => 'מעוות',
+    'rolleye' => 'גלגול עיניים',
+    'wink' => 'קריצה',
     'exclaim' => 'Exclaimation',
-    'question' => 'Question',
-    'idea' => 'Idea',
-    'arrow' => 'Arrow',
-    'neutral' => 'Neutral',
-    'green' => 'Mr. Green',
-    'sick' => 'Sick',
-    'tired' => 'Tired',
-    'monkey' => 'Monkey'
+    'question' => 'שאלה',
+    'idea' => 'רעיון',
+    'arrow' => 'חץ',
+    'neutral' => 'ניטרלי',
+    'green' => 'מר גרין',
+    'sick' => 'חולה',
+    'tired' => 'עייף',
+    'monkey' => 'קוף'
 );
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['forum'] = array(
     'label' => 'Forum',
-    'title' => 'Forum Configuration'
+    'title' => 'הגדרות הפורום'
 );
 
 $LANG_confignames['forum'] = array(
-    'registration_required' => 'Login Required to View Posts?',
-    'registered_to_post' => 'Login Required to Post?',
-    'allow_notification' => 'Allow Notification?',
-    'show_topicreview' => 'Show Topic Review when Replying?',
-    'allow_user_dateformat' => 'Allow User defined Date Format?',
-    'use_pm_plugin' => 'Use Private Message Plugin?',
-    'show_topics_perpage' => 'Number of Topics to Show per Page',
-    'show_posts_perpage' => 'Number of Posts to Show per Page',
-    'show_messages_perpage' => 'Number of Message Lines per Page',
-    'show_searches_perpage' => 'Number of Search Results per Page',
-    'showblocks' => 'Block Columns to Show with Forum',
-    'usermenu' => 'Type of User Menu',
-    'likes_forum' => 'Forum Likes',
+    'registration_required' => 'נדרשת התחברות לצפייה בהודעות?',
+    'registered_to_post' => 'נדרשת התחברות לפרסום?',
+    'allow_notification' => 'לאפשר התראות?',
+    'show_topicreview' => 'להציג סקירת נושא בעת תגובה?',
+    'allow_user_dateformat' => 'לאפשר למשתמש להגדיר תבנית תאריך?',
+    'use_pm_plugin' => 'להשתמש בתוסף הודעות פרטיות?',
+    'show_topics_perpage' => 'מספר נושאים להצגה בעמוד',
+    'show_posts_perpage' => 'מספר הודעות להצגה בעמוד',
+    'show_messages_perpage' => 'מספר שורות הודעה בעמוד',
+    'show_searches_perpage' => 'מספר תוצאות חיפוש בעמוד',
+    'showblocks' => 'עמודות בלוקים להצגה עם הפורום',
+    'usermenu' => 'סוג תפריט המשתמש',
+    'likes_forum' => 'לייקים בפורום',
     'recaptcha' => 'reCAPTCHA',
     // ----------------------------------
-    'show_subject_length' => 'Max Length of Subject',
-    'min_username_length' => 'Min Length of Username',
-    'min_subject_length' => 'Min Length of Subject',
-    'min_comment_length' => 'Min Length of Post Content',
-    'views_tobe_popular' => 'Number of Views to have Popular',
-    'post_speedlimit' => 'Posting Speedlimit(sec)',
-    'allowed_editwindow' => 'Timeframe(sec) to Allow Edit Posts',
-    'allow_html' => 'Allow HTML Mode?',
-    'post_htmlmode' => 'Set HTML Mode as Default?',
-    'convert_break' => 'Convert Newlines to HTML &lt;BR&gt;?',
-    'use_censor' => 'Use Geeklog Censoring?',
-    'use_glfilter' => 'Use Geeklog Filtering?',
-    'use_geshi' => 'Use Geshi Code Formatting?',
-    'use_spamx_filter' => 'Use Spam-X Plugin?',
-    'show_moods' => 'Enable Moods?',
-    'allow_smilies' => 'Enable Smilies?',
-    'use_smilies_plugin' => 'Use Smilies Plugin?',
+    'show_subject_length' => 'אורך מרבי של נושא',
+    'min_username_length' => 'אורך מזערי של שם משתמש',
+    'min_subject_length' => 'אורך מזערי של נושא',
+    'min_comment_length' => 'אורך מזערי של תוכן הודעה',
+    'views_tobe_popular' => 'מספר צפיות הדרוש לפופולריות',
+    'post_speedlimit' => 'מגבלת קצב פרסום (שניות)',
+    'allowed_editwindow' => 'חלון זמן לעריכת הודעות (שניות)',
+    'allow_html' => 'לאפשר מצב HTML?',
+    'post_htmlmode' => 'להגדיר HTML כברירת מחדל?',
+    'convert_break' => 'להמיר שורות חדשות ל-HTML &lt;BR&gt;?',
+    'use_censor' => 'להשתמש בצנזור Geeklog?',
+    'use_glfilter' => 'להשתמש בסינון Geeklog?',
+    'use_geshi' => 'להשתמש בעיצוב קוד GeSHi?',
+    'use_spamx_filter' => 'להשתמש בתוסף Spam-X?',
+    'show_moods' => 'להפעיל מצבי רוח?',
+    'allow_smilies' => 'להפעיל סמיילים?',
+    'use_smilies_plugin' => 'להשתמש בתוסף סמיילים?',
     'avatar_width' => 'Width of Member Avatar',
     // ----------------------------------
-    'show_centerblock' => 'Enable Centerblock?',
-    'centerblock_homepage' => 'Enable Homepage Only?',
-    'centerblock_numposts' => 'Number of Posts to Show',
-    'cb_subject_size' => 'Max Length of Subject',
-    'centerblock_where' => 'Placement on Page',
+    'show_centerblock' => 'להפעיל בלוק מרכזי?',
+    'centerblock_homepage' => 'להפעיל רק בדף הבית?',
+    'centerblock_numposts' => 'מספר הודעות להצגה',
+    'cb_subject_size' => 'אורך מרבי של נושא',
+    'centerblock_where' => 'מיקום בדף',
     // ----------------------------------
-    'sideblock_numposts' => 'Number of Posts to Show',
-    'sb_subject_size' => 'Max Length of Subject',
-    'sb_latestpostonly' => 'Show Latest Post Only?',
-    'sideblock_enable' => 'Enabled',
-    'sideblock_isleft' => 'Display Block on Left',
-    'sideblock_order' => 'Block Order',
-    'sideblock_topic_option' => 'Topic Options',
-    'sideblock_topic' => 'Topic',
-    'sideblock_group_id' => 'Group',
-    'sideblock_permissions' => 'Permissions',    
+    'sideblock_numposts' => 'מספר הודעות להצגה',
+    'sb_subject_size' => 'אורך מרבי של נושא',
+    'sb_latestpostonly' => 'להציג רק את ההודעה האחרונה?',
+    'sideblock_enable' => 'מופעל',
+    'sideblock_isleft' => 'הצגת בלוק משמאל',
+    'sideblock_order' => 'סדר הבלוק',
+    'sideblock_topic_option' => 'אפשרויות נושא',
+    'sideblock_topic' => 'נושא',
+    'sideblock_group_id' => 'קבוצה',
+    'sideblock_permissions' => 'הרשאות',    
     // ----------------------------------
-    'level1' => 'Number of Posts of Level1',
-    'level2' => 'Number of Posts of Level2',
-    'level3' => 'Number of Posts of Level3',
-    'level4' => 'Number of Posts of Level4',
-    'level5' => 'Number of Posts of Level5',
-    'level1name' => 'Name of Level1',
-    'level2name' => 'Name of Level2',
-    'level3name' => 'Name of Level3',
-    'level4name' => 'Name of Level4',
-    'level5name' => 'Name of Level5', 
+    'level1' => 'מספר הודעות לרמה 1',
+    'level2' => 'מספר הודעות לרמה 2',
+    'level3' => 'מספר הודעות לרמה 3',
+    'level4' => 'מספר הודעות לרמה 4',
+    'level5' => 'מספר הודעות לרמה 5',
+    'level1name' => 'שם רמה 1',
+    'level2name' => 'שם רמה 2',
+    'level3name' => 'שם רמה 3',
+    'level4name' => 'שם רמה 4',
+    'level5name' => 'שם רמה 5', 
     // ----------------------------------
-    'menublock_enable' => 'Enabled',
-    'menublock_isleft' => 'Display Block on Left',
-    'menublock_order' => 'Block Order',
-    'menublock_topic_option' => 'Topic Options',
-    'menublock_topic' => 'Topic',
-    'menublock_group_id' => 'Group',
-    'menublock_permissions' => 'Permissions' 
+    'menublock_enable' => 'מופעל',
+    'menublock_isleft' => 'הצגת בלוק משמאל',
+    'menublock_order' => 'סדר הבלוק',
+    'menublock_topic_option' => 'אפשרויות נושא',
+    'menublock_topic' => 'נושא',
+    'menublock_group_id' => 'קבוצה',
+    'menublock_permissions' => 'הרשאות' 
 );
 
 $LANG_configsubgroups['forum'] = array(
-    'sg_main' => 'Main Settings'
+    'sg_main' => 'הגדרות ראשיות'
 );
 
 $LANG_tab['forum'] = array(
-    'tab_main' => 'General Forum Settings',
-    'tab_topicposting' => 'Topic Posting',
-    'tab_centerblock' => 'Centerblock',
+    'tab_main' => 'הגדרות כלליות של הפורום',
+    'tab_topicposting' => 'פרסום נושאים',
+    'tab_centerblock' => 'בלוק מרכזי',
     'tab_sideblock' => 'Sideblock',
-    'tab_rank' => 'Rank', 
-    'tab_menublock' => 'Menu Block'
+    'tab_rank' => 'דרגה', 
+    'tab_menublock' => 'בלוק תפריט'
 );
 
 $LANG_fs['forum'] = array(
-    'fs_main' => 'General Forum Settings',
-    'fs_topicposting' => 'Topic Posting',
-    'fs_centerblock' => 'Centerblock',
+    'fs_main' => 'הגדרות כלליות של הפורום',
+    'fs_topicposting' => 'פרסום נושאים',
+    'fs_centerblock' => 'בלוק מרכזי',
     'fs_sideblock' => 'Sideblock',
-    'fs_sideblock_settings' => 'Block Settings', 
-    'fs_sideblock_permissions' => 'Block Permissions',    
-    'fs_rank' => 'Rank', 
-    'fs_menublock' => 'Menu Block',
-    'fs_menublock_settings' => 'Block Settings', 
-    'fs_menublock_permissions' => 'Block Permissions'    
+    'fs_sideblock_settings' => 'הגדרות בלוק', 
+    'fs_sideblock_permissions' => 'הרשאות בלוק',    
+    'fs_rank' => 'דרגה', 
+    'fs_menublock' => 'בלוק תפריט',
+    'fs_menublock_settings' => 'הגדרות בלוק', 
+    'fs_menublock_permissions' => 'הרשאות בלוק'    
 );
 
 // Note: entries 0, 1, 12, and 41 are the same as in $LANG_configselects['Core']
@@ -782,8 +782,8 @@ $LANG_configselects['forum'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => TRUE, 'False' => FALSE),
     5 => array('Top Of Page' => 1, 'After Featured Story' => 2, 'Bottom Of Page' => 3),
-    6 => array('Left Blocks' => 'leftblocks', 'Right Blocks' => 'rightblocks', 'All Blocks' => 'allblocks', 'No Blocks' => 'noblocks'),
-    7 => array('Block Menu' => 'blockmenu', 'Navigation Bar' => 'navbar', 'None' => 'none'),
+    6 => array('בלוקים משמאל' => 'leftblocks', 'בלוקים מימין' => 'rightblocks', 'כל הבלוקים' => 'allblocks', 'ללא בלוקים' => 'noblocks'),
+    7 => array('תפריט בלוק' => 'blockmenu', 'סרגל ניווט' => 'navbar', 'ללא' => 'none'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
     13 => array('No access' => 0, 'Use' => 2),
     14 => array('No access' => 0, 'Read-Only' => 2),
