@@ -186,8 +186,8 @@ $LANG_GF01['MARKALLREAD']    = 'Mark All Read';
 $LANG_GF01['MSG_NO_CAT']     = 'No Categories or Forums Defined';
 $LANG_GF01['FORUMPOSTS']     = 'Forum Posts';
 $LANG_GF01['FORUMPOST']      = 'Forum Post';
-$LANG_GF01['MESSAGE']     	 = 'Message';
-$LANG_GF01['HERE']     	     = 'here';
+$LANG_GF01['MESSAGE']          = 'Message';
+$LANG_GF01['HERE']              = 'here';
 
 // Language for bbcode toolbar
 $LANG_GF01['CODE']           = 'Code';
@@ -240,24 +240,24 @@ $LANG_GF02['msg14']    = 'Sorry, You have been banned from making entries. If yo
 $LANG_GF02['msg18']    = 'Error! Not all required fields were completed or were too short in length.';
 $LANG_GF02['msg19']    = 'Your message has been posted.';
 $LANG_GF02['msg22']    = '- Forum Post Notification';
-				
+                
 
 //$LANG_GF02['msg23a']   = "A reply has been made to the thread '%s' by %s.\n\nThis topic was started by %s in the %s forum.\n\nYou may view the reply at:\n%s\n";
-$LANG_GF02['reply_to_thread_msg']   	= "A reply has been made to the thread '%s' by %s.";
-$LANG_GF02['topic_started_msg']     	= "This topic was started by %s in the %s forum.";
-$LANG_GF02['view_reply_at_msg']     	= "You may view the reply at:";
+$LANG_GF02['reply_to_thread_msg']       = "A reply has been made to the thread '%s' by %s.";
+$LANG_GF02['topic_started_msg']         = "This topic was started by %s in the %s forum.";
+$LANG_GF02['view_reply_at_msg']         = "You may view the reply at:";
 //$LANG_GF02['msg23b']   = "A new topic '%s' has been posted by %s in the '%s' forum on the %s website.\n\nYou may view it at:\n%s\n";
-$LANG_GF02['new_topic_msg']   			= "A new topic '%s' has been posted by %s in the '%s' forum on the %s website.";
-$LANG_GF02['view_topic_at_msg']     	= "You may view it at:";
+$LANG_GF02['new_topic_msg']               = "A new topic '%s' has been posted by %s in the '%s' forum on the %s website.";
+$LANG_GF02['view_topic_at_msg']         = "You may view it at:";
 //$LANG_GF02['msg23d']   = "An edit has been made to a post in the thread '%s' by %s.\n\nThis topic was started by %s in the %s forum.\n\nYou may view the edited post at:\n%s\n";
-$LANG_GF02['edit_to_post_msg']   	= "An edit has been made to a post in the thread '%s' by %s.";
-$LANG_GF02['view_edit_at_msg']     	= "You may view the edited post at:";
+$LANG_GF02['edit_to_post_msg']       = "An edit has been made to a post in the thread '%s' by %s.";
+$LANG_GF02['view_edit_at_msg']         = "You may view the edited post at:";
 //$LANG_GF02['msg26a']   = "\nYou are receiving this email because you have chosen to be notified when a reply has been made to this topic. To stop receiving notifications on this topic go to:\n%s\n";
-$LANG_GF02['stop_reply_notify_msg'] 	= "You are receiving this email because you have chosen to be notified when a reply has been made to this topic. To stop receiving notifications on this topic go to:";
+$LANG_GF02['stop_reply_notify_msg']     = "You are receiving this email because you have chosen to be notified when a reply has been made to this topic. To stop receiving notifications on this topic go to:";
 //$LANG_GF02['msg26b']   = "\nYou are receiving this email because you have chosen to be notified when a new topic has been posted to this forum. To stop receiving notifications for this forum go to:\n%s\n";
-$LANG_GF02['stop_new_notify_msg'] 	= "You are receiving this email because you have chosen to be notified when a new topic has been posted to this forum. To stop receiving notifications for this forum go to:";
+$LANG_GF02['stop_new_notify_msg']     = "You are receiving this email because you have chosen to be notified when a new topic has been posted to this forum. To stop receiving notifications for this forum go to:";
 //$LANG_GF02['msg25']    = "\nHave a great day! \n";
-$LANG_GF02['great_day_msg']     		= "Have a great day!";
+$LANG_GF02['great_day_msg']             = "Have a great day!";
 
 
 $LANG_GF02['msg33']    = 'Author: ';
@@ -409,8 +409,8 @@ $LANG_GF03 = array (
     'banipmsg' => 'サイトから禁止IPアドレスを設定しました。',
     'banipremovemsg' => '投稿から禁止IPアドレスを設定しました。',    
     'movetopic' => '移動&amp;削除',
-    'movetopicmsg' => '<br',
-    'splittopicmsg' => '<br',
+    'movetopicmsg' => '移動するトピック: "<b>%s</b>"',
+    'splittopicmsg' => '%s が %s に投稿した "<b>%s</b>" から新しいトピックを作成',
     'selectforum' => '新規掲示板選択:',
     'lockedpost' => '書き込みを追加',
     'splitheading' => 'スレッドオプション分割:',
@@ -454,7 +454,7 @@ $LANG_GF06 = array (
     4   => 'Moderator',
     5   => 'Migrate',
     6   => 'Posts',
-	7   => 'Subscriptions',
+    7   => 'Subscriptions',
     8   => 'Banned IPs'
 );
 
@@ -548,7 +548,7 @@ $LANG_GF93 = array (
     'forum' => '掲示板',
     'addforum' => '掲示板を追加',
     'noforum' => '掲示板はありません。',
-	'category' => 'カテゴリー',
+    'category' => 'カテゴリー',
     'catorder' => 'カテゴリーの順番',
     'catadded' => 'カテゴリーが追加されました。',
     'catdeleted' => 'カテゴリーが削除されました。',
@@ -585,12 +585,12 @@ $LANG_GF93 = array (
     'moderatorwarning' => 'モデレータを追加する前にカテゴリーを設定し、少なくとも1つの掲示板を追加してください。',
     'nomoderatorfound' => "モデレータが見つかりません。",
     'modadded' => "モデレータが追加されました。",
-	'modnotadded' => "モデレーターは追加されませんでした。1 つ以上のフォーラムと機能を選び、1 人以上のユーザーまたはグループを選択してください。",
+    'modnotadded' => "モデレーターは追加されませんでした。1 つ以上のフォーラムと機能を選び、1 人以上のユーザーまたはグループを選択してください。",
     'moddeleted' => "モデレータが削除されました。",
     'modedited' => "モデレータが更新されました。",
     'private' => 'プライベート掲示板',
     'filtertitle' => 'モデレータ情報表示',
-	'LANG_addmodtitle' => '新規モデレータ',
+    'LANG_addmodtitle' => '新規モデレータ',
     'addmessage' => '新しいモデレータを追加',
     'allowedfunctions' => '許可されている権限',
     'userrecords' => 'ユーザレコード',
@@ -605,7 +605,7 @@ $LANG_GF93 = array (
     'mod_title' => 'モデレータ',
     'allforums' => 'すべての掲示板',
     'namerequired' => '名前は必須です。',
-	'resyncedmsg' => '選択したカテゴリーまたはフォーラムの再同期とクリーンアップが完了しました。<br><ul><li>%s 件のトピック投稿を再同期しました。</li><li>%s 件の親トピックを持たない孤立トピックを検出して修正しました。</li><li>%s 件の孤立レコードを他のフォーラムテーブルから検出して削除しました。</li></ul>'
+    'resyncedmsg' => '選択したカテゴリーまたはフォーラムの再同期とクリーンアップが完了しました。<br><ul><li>%s 件のトピック投稿を再同期しました。</li><li>%s 件の親トピックを持たない孤立トピックを検出して修正しました。</li><li>%s 件の孤立レコードを他のフォーラムテーブルから検出して削除しました。</li></ul>'
 );
 
 // Posts
