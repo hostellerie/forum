@@ -478,22 +478,22 @@ $LANG_GF08 = array (
 
 /* Text for the buttons */
 $LANG_GF09 = array (
-    'edit' => 'Edit',
-    'email' => 'Email',
+    'edit' => 'Modifier',
+    'email' => 'Courriel',
     'home' => 'Accueil',
     'lastpost' => 'Dernier message',
     'pm' => 'PM', // private message
     'profile' => 'Profil',
     'quote' => 'Citer',
-    'website' => 'Website',
+    'website' => 'Site web',
     'newtopic' => 'Nouveau',
     'replytopic' => 'Repondre'
 );
 
 /* Block Locations */
 $LANG_GF20 = array (
-    'blocks_showtopic_name' => 'Forum Show Topic',
-    'blocks_showtopic_desc' => 'Displays blocks right after every X number of topic posts.'
+    'blocks_showtopic_name' => 'Afficher le sujet du forum',
+    'blocks_showtopic_desc' => 'Affiche les blocs après chaque série de X messages du sujet.'
 );
 
 // Admin Stats page
@@ -585,7 +585,7 @@ $LANG_GF93 = array (
     'moderatorwarning' => 'Configurez les categories du forum et ajoutez au moins 1 forum avant d\'essayer d\'ajouter des moderateurs',
     'nomoderatorfound' => "Aucun moderateurs trouves.",
     'modadded' => "Moderateur(s) ajoute(s).",
-	'modnotadded' => "No Moderators added. You need to pick one or more Forums, Functions, and pick either one or more Users, or a Group.",
+	'modnotadded' => "Aucun modérateur ajouté. Sélectionnez un ou plusieurs forums, des fonctions, puis un ou plusieurs utilisateurs ou un groupe.",
     'moddeleted' => "Moderateur(s) supprime(s).",
     'modedited' => "Moderateur(s) edite(s).",
     'private' => 'Forum prive',
@@ -604,8 +604,8 @@ $LANG_GF93 = array (
     'hidepostsdscp' => 'Les mises a jour ne seront pas montrees dans le bloc des nouvelles contributions ou dans le flux RSS',
     'mod_title' => 'Moderateurs du forum',
     'allforums' => 'Tous les forums',
-    'namerequired' => 'Name is required.',
-	'resyncedmsg' => 'ReSynch and Clean completed for selected category or forum.<br><ul><li>%s topic posts re-synced.</li><li>%s orphan topic records (those without a parent topic) found and fixed.</li><li>%s orphan records found and cleaned from all other Forum tables.</li></ul>'
+    'namerequired' => 'Le nom est obligatoire.',
+	'resyncedmsg' => 'La resynchronisation et le nettoyage de la catégorie ou du forum sélectionné sont terminés.<br><ul><li>%s messages de sujets resynchronisés.</li><li>%s enregistrements de sujets orphelins trouvés et corrigés.</li><li>%s enregistrements orphelins trouvés et supprimés des autres tables du forum.</li></ul>'
 );
 
 // Posts
@@ -639,38 +639,38 @@ $LANG_GF96 = array (
 
 // Subscriptions
 $LANG_GF97 = array (
-    'gfsubscriptions' => 'Forum Subscriptions'
+    'gfsubscriptions' => 'Abonnements au forum'
 );
 
 // Smilies
 $LANG_GF_SMILIES = array(
     // These strings are used for the "alt" and
     // "title" attribute for the smilies images 
-    'biggrin' => 'Big Grin',
-    'smile' => 'Smile',
-    'frown' => 'Frown',
+    'biggrin' => 'Grand sourire',
+    'smile' => 'Sourire',
+    'frown' => 'Froncement de sourcils',
     'eek' => 'Geek',
-    'confused' => 'Confused',
+    'confused' => 'Confus',
     'cool' => 'Cool',
     'lol' => 'LOL',
-    'angry' => 'Angry',
-    'razz' => 'Razz',
-    'oops' => 'Oops!',
-    'surprise' => 'Surprised!',
-    'cry' => 'Cry',
-    'evil' => 'Evil',
-    'twisted' => 'Twisted',
-    'rolleye' => 'Rolling Eyes',
-    'wink' => 'Wink',
+    'angry' => 'En colère',
+    'razz' => 'Moqueur',
+    'oops' => 'Oups !',
+    'surprise' => 'Surpris !',
+    'cry' => 'Pleurer',
+    'evil' => 'Mauvais',
+    'twisted' => 'Tordu',
+    'rolleye' => 'Lever les yeux au ciel',
+    'wink' => 'Clin d’œil',
     'exclaim' => 'Exclamation',
     'question' => 'Question',
-    'idea' => 'Idea',
-    'arrow' => 'Arrow',
-    'neutral' => 'Neutral',
-    'green' => 'Mr. Green',
-    'sick' => 'Sick',
-    'tired' => 'Tired',
-    'monkey' => 'Monkey'
+    'idea' => 'Idée',
+    'arrow' => 'Flèche',
+    'neutral' => 'Neutre',
+    'green' => 'M. Vert',
+    'sick' => 'Malade',
+    'tired' => 'Fatigué',
+    'monkey' => 'Singe'
 );
 
 // Localization of the Admin Configuration UI
@@ -692,7 +692,7 @@ $LANG_confignames['forum'] = array(
     'show_searches_perpage' => 'Nombre de resultats de la recherche par page',
     'showblocks' => 'Colonne des blocs a montrer dans le forum',
     'usermenu' => 'Type du menu utilisateur',
-    'likes_forum' => 'Forum Likes',
+    'likes_forum' => 'J’aime du forum',
     'recaptcha' => 'reCAPTCHA',
     // ----------------------------------
     'show_subject_length' => 'Longueur maximale du sujet',
@@ -782,8 +782,8 @@ $LANG_configselects['forum'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => TRUE, 'False' => FALSE),
     5 => array('Top Of Page' => 1, 'After Featured Story' => 2, 'Bottom Of Page' => 3),
-    6 => array('Left Blocks' => 'leftblocks', 'Right Blocks' => 'rightblocks', 'All Blocks' => 'allblocks', 'No Blocks' => 'noblocks'),
-    7 => array('Block Menu' => 'blockmenu', 'Navigation Bar' => 'navbar', 'None' => 'none'),
+    6 => array('Blocs de gauche' => 'leftblocks', 'Blocs de droite' => 'rightblocks', 'Tous les blocs' => 'allblocks', 'Aucun bloc' => 'noblocks'),
+    7 => array('Menu des blocs' => 'blockmenu', 'Barre de navigation' => 'navbar', 'Aucun' => 'none'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
     13 => array('No access' => 0, 'Use' => 2),
     14 => array('No access' => 0, 'Read-Only' => 2),
