@@ -46,7 +46,7 @@ $LANG_GF00 = array (
     'statsheading3' => 'No hay temas sobre los que informar',
     'useradminmenu' => 'Características del foro',
     'access_denied' => 'Acceso Denegado',
-    'autotag_desc_forum' => '[forum: id alternate title] - Displays a link to a forum topic using the text \\\'here\\\' as the title. An alternate title may be specified but is not required.'
+    'autotag_desc_forum' => '[forum: id alternate title] - Displays a link to a forum topic using the text \'here\' as the title. An alternate title may be specified but is not required.'
 );
 
 
@@ -478,7 +478,7 @@ $LANG_GF08 = array (
 
 /* Text for the buttons */
 $LANG_GF09 = array (
-    'edit' => 'Editar Post',
+    'edit' => 'Edit',
     'email' => 'Email',
     'home' => 'Home',
     'lastpost' => 'Last Post',
@@ -545,7 +545,7 @@ $LANG_GF92 = array (
 $LANG_GF93 = array (
     'gfboard' => 'Panel de administración de foros de discusión',
     'addcat' => 'Añadir categoría de foros',
-    'forum' => 'Foro:',
+    'forum' => 'Forum',
     'addforum' => 'Añadir un foro',
     'noforum' => 'No Forums found.',
 	'category' => 'Categoría:',
@@ -580,7 +580,7 @@ $LANG_GF93 = array (
     'ModStick' => 'Fijar',
     'ModBan' => 'Expulsar',
     'addmoderator' => "Añadir entrada",
-    'delmoderator' => " Borrar\\nElegido",
+    'delmoderator' => " Borrar\nElegido",
     'moderatorwarningtitle' => 'Warning: No Forums Defined',
     'moderatorwarning' => '<b>Aviso: No se han definido foros</b><br',
     'nomoderatorfound' => "No Moderators found.",
