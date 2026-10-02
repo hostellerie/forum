@@ -186,8 +186,8 @@ $LANG_GF01['MARKALLREAD']    = 'Mark All Read';
 $LANG_GF01['MSG_NO_CAT']     = 'No Categories or Forums Defined';
 $LANG_GF01['FORUMPOSTS']     = 'Forum Posts';
 $LANG_GF01['FORUMPOST']      = 'Forum Post';
-$LANG_GF01['MESSAGE']     	 = 'Message';
-$LANG_GF01['HERE']     	     = 'here';
+$LANG_GF01['MESSAGE']          = 'Message';
+$LANG_GF01['HERE']              = 'here';
 
 // Language for bbcode toolbar
 $LANG_GF01['CODE']           = 'Code';
@@ -240,24 +240,24 @@ $LANG_GF02['msg14']    = 'Sorry, You have been banned from making entries. If yo
 $LANG_GF02['msg18']    = 'Error! Not all required fields were completed or were too short in length.';
 $LANG_GF02['msg19']    = 'Your message has been posted.';
 $LANG_GF02['msg22']    = '- Forum Post Notification';
-				
+                
 
 //$LANG_GF02['msg23a']   = "A reply has been made to the thread '%s' by %s.\n\nThis topic was started by %s in the %s forum.\n\nYou may view the reply at:\n%s\n";
-$LANG_GF02['reply_to_thread_msg']   	= "A reply has been made to the thread '%s' by %s.";
-$LANG_GF02['topic_started_msg']     	= "This topic was started by %s in the %s forum.";
-$LANG_GF02['view_reply_at_msg']     	= "You may view the reply at:";
+$LANG_GF02['reply_to_thread_msg']       = "A reply has been made to the thread '%s' by %s.";
+$LANG_GF02['topic_started_msg']         = "This topic was started by %s in the %s forum.";
+$LANG_GF02['view_reply_at_msg']         = "You may view the reply at:";
 //$LANG_GF02['msg23b']   = "A new topic '%s' has been posted by %s in the '%s' forum on the %s website.\n\nYou may view it at:\n%s\n";
-$LANG_GF02['new_topic_msg']   			= "A new topic '%s' has been posted by %s in the '%s' forum on the %s website.";
-$LANG_GF02['view_topic_at_msg']     	= "You may view it at:";
+$LANG_GF02['new_topic_msg']               = "A new topic '%s' has been posted by %s in the '%s' forum on the %s website.";
+$LANG_GF02['view_topic_at_msg']         = "You may view it at:";
 //$LANG_GF02['msg23d']   = "An edit has been made to a post in the thread '%s' by %s.\n\nThis topic was started by %s in the %s forum.\n\nYou may view the edited post at:\n%s\n";
-$LANG_GF02['edit_to_post_msg']   	= "An edit has been made to a post in the thread '%s' by %s.";
-$LANG_GF02['view_edit_at_msg']     	= "You may view the edited post at:";
+$LANG_GF02['edit_to_post_msg']       = "An edit has been made to a post in the thread '%s' by %s.";
+$LANG_GF02['view_edit_at_msg']         = "You may view the edited post at:";
 //$LANG_GF02['msg26a']   = "\nYou are receiving this email because you have chosen to be notified when a reply has been made to this topic. To stop receiving notifications on this topic go to:\n%s\n";
-$LANG_GF02['stop_reply_notify_msg'] 	= "You are receiving this email because you have chosen to be notified when a reply has been made to this topic. To stop receiving notifications on this topic go to:";
+$LANG_GF02['stop_reply_notify_msg']     = "You are receiving this email because you have chosen to be notified when a reply has been made to this topic. To stop receiving notifications on this topic go to:";
 //$LANG_GF02['msg26b']   = "\nYou are receiving this email because you have chosen to be notified when a new topic has been posted to this forum. To stop receiving notifications for this forum go to:\n%s\n";
-$LANG_GF02['stop_new_notify_msg'] 	= "You are receiving this email because you have chosen to be notified when a new topic has been posted to this forum. To stop receiving notifications for this forum go to:";
+$LANG_GF02['stop_new_notify_msg']     = "You are receiving this email because you have chosen to be notified when a new topic has been posted to this forum. To stop receiving notifications for this forum go to:";
 //$LANG_GF02['msg25']    = "\nHave a great day! \n";
-$LANG_GF02['great_day_msg']     		= "Have a great day!";
+$LANG_GF02['great_day_msg']             = "Have a great day!";
 
 
 $LANG_GF02['msg33']    = 'Author: ';
@@ -406,11 +406,11 @@ $LANG_GF03 = array (
     'banippostremove' => 'Quitar bloqueo de publicación para la IP',
     'banip' => 'Confirmación de exclusión de IP',
     'banipremove' => 'Quitar bloqueo de la IP en el sitio',
-    'banipmsg' => 'Seguro que quieres excluir la dirección IP %s?',
+    'banipmsg' => 'La IP fue bloqueada en el sitio',
     'banipremovemsg' => 'Se ha quitado el bloqueo de la IP en el sitio',    
     'movetopic' => 'Mover tópico',
-    'movetopicmsg' => '<br',
-    'splittopicmsg' => '<br',
+    'movetopicmsg' => 'Tema que se va a mover: "<b>%s</b>"',
+    'splittopicmsg' => 'Crear un nuevo tema con este mensaje "<b>%s</b>" de %s del %s',
     'selectforum' => 'Elegir nuevo foro:',
     'lockedpost' => 'Añadir mensaje de respuesta',
     'splitheading' => 'Opción de dividir discusión:',
@@ -454,7 +454,7 @@ $LANG_GF06 = array (
     4   => 'Moderator',
     5   => 'Migrate',
     6   => 'Posts',
-	7   => 'Subscriptions',
+    7   => 'Subscriptions',
     8   => 'Banned IPs'
 );
 
@@ -548,7 +548,7 @@ $LANG_GF93 = array (
     'forum' => 'Forum',
     'addforum' => 'Añadir un foro',
     'noforum' => 'No se encontraron foros.',
-	'category' => 'Categoría:',
+    'category' => 'Categoría:',
     'catorder' => 'Orden de categorías',
     'catadded' => 'Categoría añadida.',
     'catdeleted' => 'Categoría borrada',
@@ -585,12 +585,12 @@ $LANG_GF93 = array (
     'moderatorwarning' => '<b>Aviso: No se han definido foros</b><br',
     'nomoderatorfound' => "No se encontraron moderadores.",
     'modadded' => "Se han añadido los moderadores.",
-	'modnotadded' => "No se añadió ningún moderador. Debe seleccionar uno o más foros, funciones y uno o más usuarios o un grupo.",
+    'modnotadded' => "No se añadió ningún moderador. Debe seleccionar uno o más foros, funciones y uno o más usuarios o un grupo.",
     'moddeleted' => "Se han eliminado los moderadores.",
     'modedited' => "Se han modificado los moderadores.",
     'private' => 'Foro privado',
     'filtertitle' => 'Elegir moderadores a ver',
-	'LANG_addmodtitle' => 'Nuevo moderador',
+    'LANG_addmodtitle' => 'Nuevo moderador',
     'addmessage' => 'Añadir nuevo moderador',
     'allowedfunctions' => 'Funciones permitidas',
     'userrecords' => 'Entradas de usuarios',
@@ -605,7 +605,7 @@ $LANG_GF93 = array (
     'mod_title' => 'Moderadores de foro',
     'allforums' => 'Todos los foros',
     'namerequired' => 'El nombre es obligatorio.',
-	'resyncedmsg' => 'La resincronización y limpieza de la categoría o foro seleccionado ha finalizado.<br><ul><li>%s mensajes de temas resincronizados.</li><li>%s registros de temas huérfanos encontrados y corregidos.</li><li>%s registros huérfanos encontrados y eliminados de las demás tablas del foro.</li></ul>'
+    'resyncedmsg' => 'La resincronización y limpieza de la categoría o foro seleccionado ha finalizado.<br><ul><li>%s mensajes de temas resincronizados.</li><li>%s registros de temas huérfanos encontrados y corregidos.</li><li>%s registros huérfanos encontrados y eliminados de las demás tablas del foro.</li></ul>'
 );
 
 // Posts
