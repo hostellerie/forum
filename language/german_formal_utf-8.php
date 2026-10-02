@@ -46,7 +46,7 @@ $LANG_GF00 = array (
     'statsheading3' => 'Keine Themen zum melden',
     'useradminmenu' => 'Forum-Einstellungen',
     'access_denied' => 'Zugriff verweigert',
-    'autotag_desc_forum' => '[forum: id alternate title] - Displays a link to a forum topic using the text \'here\' as the title. An alternate title may be specified but is not required.'
+    'autotag_desc_forum' => '[forum: id alternate title] – Zeigt einen Link zu einem Forumsthema mit dem Text „hier“ als Titel an. Ein alternativer Titel kann angegeben werden, ist aber nicht erforderlich.'
 );
 
 
@@ -402,12 +402,12 @@ $LANG_GF03 = array (
     'edit' => 'Beitrag bearbeiten',
     'move' => 'Thema verschieben',
     'split' => 'Thema aufteilen',
-    'banippost' => 'Ban IP from Posting',
-    'banippostremove' => 'Remove Ban for IP from Posting',
+    'banippost' => 'IP für Beiträge sperren',
+    'banippostremove' => 'Beitragssperre für IP aufheben',
     'banip' => 'IP-Sperren-Bestätigung',
-    'banipremove' => 'Remove Ban for IP from Site',
+    'banipremove' => 'IP-Sperre für die Website aufheben',
     'banipmsg' => 'Möchten Sie die IP %s wirklich sperren?',
-    'banipremovemsg' => 'Ban has been removed for IP from Site',    
+    'banipremovemsg' => 'Die IP-Sperre für die Website wurde aufgehoben',    
     'movetopic' => 'Thema verschieben',
     'movetopicmsg' => '<br/>Zu verschiebende Themen: "<b>%s</b>"',
     'splittopicmsg' => '<br/>Erstelle ein neues Thema mit diesem Beitrag: "<b>%s</b>"<br/><em>Von:</em>&nbsp;%s&nbsp <em>Am:</em>&nbsp;%s',
@@ -478,22 +478,22 @@ $LANG_GF08 = array (
 
 /* Text for the buttons */
 $LANG_GF09 = array (
-    'edit' => 'Edit',
-    'email' => 'Email',
-    'home' => 'Home',
-    'lastpost' => 'Last Post',
+    'edit' => 'Bearbeiten',
+    'email' => 'E-Mail',
+    'home' => 'Startseite',
+    'lastpost' => 'Letzter Beitrag',
     'pm' => 'PM', // private message
-    'profile' => 'Profile',
-    'quote' => 'Quote',
+    'profile' => 'Profil',
+    'quote' => 'Zitat',
     'website' => 'Webseite',
-    'newtopic' => 'New Topic',
-    'replytopic' => 'Post Reply'
+    'newtopic' => 'Neues Thema',
+    'replytopic' => 'Antwort verfassen'
 );
 
 /* Block Locations */
 $LANG_GF20 = array (
-    'blocks_showtopic_name' => 'Forum Show Topic',
-    'blocks_showtopic_desc' => 'Displays blocks right after every X number of topic posts.'
+    'blocks_showtopic_name' => 'Forumsthema anzeigen',
+    'blocks_showtopic_desc' => 'Zeigt Blöcke nach jeweils X Beiträgen eines Themas an.'
 );
 
 // Admin Stats page
@@ -514,28 +514,28 @@ $LANG_GF91 = array (
 
 // User Preference Page
 $LANG_GF92 = array (
-    'userpreferences' => 'User Preferences',
+    'userpreferences' => 'Benutzereinstellungen',
     'setsavemsg' => 'Einstellungen gespeichert.',
     'topicspp' => 'Themen pro Seite',
     'topicsppdscp' => 'Anzahl Themen auf der Forenindex-Seite',
     'postspp' => 'Beiträge pro Seite',
     'postsppdscp' => 'Anzahl Beiträge pro Seite im Thema',
-    'newpp' => 'New Posts Per Page',
-    'newppdscp' => 'Number of new posts to show on the new posts page',
-    'popularpp' => 'Popular Posts Per Page',
-    'popularppdscp' => 'Number of posts to show on the popular page',
-    'popularl' => 'Popular Limit',
-    'popularldscp' => 'Number of posts or views before calling a topic popular',
-    'searchpp' => 'Search Results Per Pages',
-    'searchppdscp' => 'Number of search results to display on the search page',
-    'memberspp' => 'Users Per Page',
-    'membersppdscp' => 'Number of Users to show on the Users report page',
-    'viewap' => 'View Anonymous Posts',
-    'viewapdscp' => 'Setting of No will filter out anonymous posts',
-    'alwaysn' => 'Always Notify',
-    'alwaysndscp' => 'Setting of Yes will enable auto notification for any topics you create or reply',
-    'notifyoo' => 'Notify Once Only', 
-    'notifyoodscp' => 'Notifications will only be sent once for forums and topics which have multiple new posts since your last visit.', 
+    'newpp' => 'Neue Beiträge pro Seite',
+    'newppdscp' => 'Anzahl neuer Beiträge auf der Seite „Neue Beiträge“',
+    'popularpp' => 'Beliebte Beiträge pro Seite',
+    'popularppdscp' => 'Anzahl der Beiträge auf der Seite „Beliebt“',
+    'popularl' => 'Beliebtheitsgrenze',
+    'popularldscp' => 'Anzahl von Beiträgen oder Aufrufen, ab der ein Thema als beliebt gilt',
+    'searchpp' => 'Suchergebnisse pro Seite',
+    'searchppdscp' => 'Anzahl der Suchergebnisse auf der Suchseite',
+    'memberspp' => 'Benutzer pro Seite',
+    'membersppdscp' => 'Anzahl der Benutzer auf der Benutzerübersicht',
+    'viewap' => 'Anonyme Beiträge anzeigen',
+    'viewapdscp' => 'Bei „Nein“ werden anonyme Beiträge ausgeblendet',
+    'alwaysn' => 'Immer benachrichtigen',
+    'alwaysndscp' => 'Bei „Ja“ werden automatische Benachrichtigungen für erstellte oder beantwortete Themen aktiviert',
+    'notifyoo' => 'Nur einmal benachrichtigen', 
+    'notifyoodscp' => 'Für Foren und Themen mit mehreren neuen Beiträgen seit Ihrem letzten Besuch wird nur eine Benachrichtigung gesendet.', 
     'showiframe' => 'Themenübersicht',
     'showiframedscp' => 'Beim Beantworten die bisherige Diskussion in einem IFRAME einblenden',
     'gfsettings' => 'Forum-Einstellungen'
@@ -547,7 +547,7 @@ $LANG_GF93 = array (
     'addcat' => 'Forum-Kategorie hinzufügen',
     'forum' => 'Forum',
     'addforum' => 'Forum hinzufügen',
-    'noforum' => 'No Forums found.',
+    'noforum' => 'Keine Foren gefunden.',
 	'category' => 'Kategorie',
     'catorder' => 'Kategorie-Sortierung',
     'catadded' => 'Kategorie hinzugefügt',
@@ -556,17 +556,17 @@ $LANG_GF93 = array (
     'forumadded' => 'Forum hinzugefügt.',
     'forumaddError' => 'Fehler beim Hinzufügen des Forums.',
     'forumdeleted' => 'Forum gelöscht',
-    'forummerged' => 'Forum Merged',
-    'forumnotmerged' => 'Forum cannot be merged since no other forums available to be merged with.',
+    'forummerged' => 'Forum zusammengeführt',
+    'forumnotmerged' => 'Das Forum kann nicht zusammengeführt werden, da kein anderes Forum verfügbar ist.',
     'forumedited' => 'Forum bearbeitet',
     'forumordered' => 'Forum-Sortierung bearbeitet',
     'back' => 'Zurück',
     'addnote' => 'Hinweis: Sie können diese Werte nicht bearbeiten.',
     'editforumnote' => 'Bearbeiten Sie Forum-Details für: <b>"%s"</b>',
-    'deleteforumnote' => 'Do you want to delete the forum <b>"%s"</b>? All topics posted under it will also be deleted.',
-    'mergeforumnote' => 'Merge the forum <b>"%s"</b> into:',
+    'deleteforumnote' => 'Möchten Sie das Forum <b>„%s“</b> löschen? Alle darin veröffentlichten Themen werden ebenfalls gelöscht.',
+    'mergeforumnote' => 'Forum <b>„%s“</b> zusammenführen mit:',
     'editcatnote' => 'Bearbeiten Sie Kategorie-Details für: <b>"%s"</b>',
-    'deletecatnote' => 'Do you want to delete the category <b>"%s"</b>? All forums and topics posted under those forums will also be deleted.',
+    'deletecatnote' => 'Möchten Sie die Kategorie <b>„%s“</b> löschen? Alle Foren und Themen darin werden ebenfalls gelöscht.',
     'undercat' => 'unter Kategorie',
     'groupaccess' => 'Gruppenzugriff: ',
     'action' => 'Aktionen',
@@ -581,16 +581,16 @@ $LANG_GF93 = array (
     'ModBan' => 'Sperren',
     'addmoderator' => "Eintrag hinzufügen",
     'delmoderator' => " Lösche\nausgewählte",
-    'moderatorwarningtitle' => 'Warning: No Forums Defined',
+    'moderatorwarningtitle' => 'Warnung: Keine Foren definiert',
     'moderatorwarning' => '<b>Warnung: Keine Foren definiert</b><br/><br/>Erstellen Sie eine Forum-Kategorien und fügen mindestens ein Forum hinzu,<br/>bevor Sie versuchen, einen Moderator hinzuzufügen',
-    'nomoderatorfound' => "No Moderators found.",
-    'modadded' => "Moderator(s) have been added.",
-	'modnotadded' => "No Moderators added. You need to pick one or more Forums, Functions, and pick either one or more Users, or a Group.",
-    'moddeleted' => "Moderator(s) have been deleted.",
-    'modedited' => "Moderator(s) have been edited.",
+    'nomoderatorfound' => "Keine Moderatoren gefunden.",
+    'modadded' => "Moderator(en) wurden hinzugefügt.",
+	'modnotadded' => "Keine Moderatoren hinzugefügt. Wählen Sie ein oder mehrere Foren und Funktionen sowie einen oder mehrere Benutzer oder eine Gruppe aus.",
+    'moddeleted' => "Moderator(en) wurden gelöscht.",
+    'modedited' => "Moderator(en) wurden bearbeitet.",
     'private' => 'Privates Forum',
     'filtertitle' => 'Wählen Sie Moderator-Einträge zum Anzeigen',
-	'LANG_addmodtitle' => 'New Moderator',
+	'LANG_addmodtitle' => 'Neuer Moderator',
     'addmessage' => 'Neuen Moderator hinzufügen',
     'allowedfunctions' => 'Erlaubte Aktionen',
     'userrecords' => 'Benutzereinträge',
@@ -604,8 +604,8 @@ $LANG_GF93 = array (
     'hidepostsdscp' => 'Updates werden in Neue-Beiträge-Blöcken und RSS-Feeds nicht angezeigt',
     'mod_title' => 'Forum-Moderatoren',
     'allforums' => 'Alle Foren',
-    'namerequired' => 'Name is required.',
-	'resyncedmsg' => 'ReSynch and Clean completed for selected category or forum.<br><ul><li>%s topic posts re-synced.</li><li>%s orphan topic records (those without a parent topic) found and fixed.</li><li>%s orphan records found and cleaned from all other Forum tables.</li></ul>'
+    'namerequired' => 'Name ist erforderlich.',
+	'resyncedmsg' => 'Resynchronisierung und Bereinigung der ausgewählten Kategorie bzw. des Forums abgeschlossen.<br><ul><li>%s Themenbeiträge resynchronisiert.</li><li>%s verwaiste Themeneinträge gefunden und korrigiert.</li><li>%s verwaiste Datensätze in anderen Forumstabellen gefunden und bereinigt.</li></ul>'
 );
 
 // Posts
@@ -623,8 +623,8 @@ $LANG_GF95 = array (
 // Banned IPs
 $LANG_GF96 = array (
     'ip' => 'IP',
-    'ipaddress' => 'IP Address',
-    'enterip' => 'Enter below an IP address to ban',
+    'ipaddress' => 'IP-Adresse',
+    'enterip' => 'Geben Sie unten eine zu sperrende IP-Adresse ein',
     'gfipman' => 'IP-Verwaltung',
     'ban' => 'IP sperren',
     'noips' => '<p style="margin:0px; padding:5px;">Es wurden keine IPs gesperrt!</p>',
@@ -633,44 +633,44 @@ $LANG_GF96 = array (
     'banipmsg' => 'Bist Du sicher, dass Du die IP %s bannen willst?',
     'specip' => 'Bitte spezifizieren Sie die zu sperrende IP-Adresse!',
     'ipunbanned' => 'IP-Addresse entsperrt.',
-    'ipnotvalid' => 'IP Address %s is not valid. Therefore it has not been added.',
-    'noip' => 'You did not provide an IP address!'
+    'ipnotvalid' => 'Die IP-Adresse %s ist ungültig und wurde daher nicht hinzugefügt.',
+    'noip' => 'Sie haben keine IP-Adresse angegeben!'
 );
 
 // Subscriptions
 $LANG_GF97 = array (
-    'gfsubscriptions' => 'Forum Subscriptions'
+    'gfsubscriptions' => 'Forum-Abonnements'
 );
 
 // Smilies
 $LANG_GF_SMILIES = array(
     // These strings are used for the "alt" and
     // "title" attribute for the smilies images 
-    'biggrin' => 'Big Grin',
-    'smile' => 'Smile',
-    'frown' => 'Frown',
+    'biggrin' => 'Breites Grinsen',
+    'smile' => 'Lächeln',
+    'frown' => 'Stirnrunzeln',
     'eek' => 'Geek',
-    'confused' => 'Confused',
+    'confused' => 'Verwirrt',
     'cool' => 'Cool',
     'lol' => 'LOL',
-    'angry' => 'Angry',
-    'razz' => 'Razz',
-    'oops' => 'Oops!',
-    'surprise' => 'Surprised!',
-    'cry' => 'Cry',
-    'evil' => 'Evil',
-    'twisted' => 'Twisted',
-    'rolleye' => 'Rolling Eyes',
-    'wink' => 'Wink',
+    'angry' => 'Wütend',
+    'razz' => 'Necken',
+    'oops' => 'Hoppla!',
+    'surprise' => 'Überrascht!',
+    'cry' => 'Weinen',
+    'evil' => 'Böse',
+    'twisted' => 'Verdreht',
+    'rolleye' => 'Augenrollen',
+    'wink' => 'Zwinkern',
     'exclaim' => 'Exclaimation',
-    'question' => 'Question',
-    'idea' => 'Idea',
-    'arrow' => 'Arrow',
+    'question' => 'Frage',
+    'idea' => 'Idee',
+    'arrow' => 'Pfeil',
     'neutral' => 'Neutral',
     'green' => 'Mr. Green',
-    'sick' => 'Sick',
-    'tired' => 'Tired',
-    'monkey' => 'Monkey'
+    'sick' => 'Krank',
+    'tired' => 'Müde',
+    'monkey' => 'Affe'
 );
 
 // Localization of the Admin Configuration UI
@@ -692,7 +692,7 @@ $LANG_confignames['forum'] = array(
     'show_searches_perpage' => 'Angezeigte Suchergebnisse',
     'showblocks' => 'Blöcke anzeigen',
     'usermenu' => 'Benutzermenü-Typ',
-    'likes_forum' => 'Forum Likes',
+    'likes_forum' => 'Forum-Likes',
     'recaptcha' => 'reCAPTCHA',
     // ----------------------------------
     'show_subject_length' => 'Max. Länge für den Betreff des Themas',
@@ -723,13 +723,13 @@ $LANG_confignames['forum'] = array(
     'sideblock_numposts' => 'Anzahl der Beiträge, die im Letzte-Beiträge-Block angezeigt werden',
     'sb_subject_size' => 'Anzahl der erlaubten Zeichen im angezeigten Betreff',
     'sb_latestpostonly' => 'Nur die letzten Beiträge je Thema anzeigen',
-    'sideblock_enable' => 'Enabled',
-    'sideblock_isleft' => 'Display Block on Left',
-    'sideblock_order' => 'Block Order',
-    'sideblock_topic_option' => 'Topic Options',
-    'sideblock_topic' => 'Topic',
-    'sideblock_group_id' => 'Group',
-    'sideblock_permissions' => 'Permissions',    
+    'sideblock_enable' => 'Aktiviert',
+    'sideblock_isleft' => 'Block links anzeigen',
+    'sideblock_order' => 'Blockreihenfolge',
+    'sideblock_topic_option' => 'Themenoptionen',
+    'sideblock_topic' => 'Thema',
+    'sideblock_group_id' => 'Gruppe',
+    'sideblock_permissions' => 'Berechtigungen',    
     // ----------------------------------
     'level1' => 'Rang 1 - benötigte Beiträge',
     'level2' => 'Rang 2 - benötigte Beiträge',
@@ -742,13 +742,13 @@ $LANG_confignames['forum'] = array(
     'level4name' => 'Rang 4 - Name',
     'level5name' => 'Rang 5 - Name', 
     // ----------------------------------
-    'menublock_enable' => 'Enabled',
-    'menublock_isleft' => 'Display Block on Left',
-    'menublock_order' => 'Block Order',
-    'menublock_topic_option' => 'Topic Options',
-    'menublock_topic' => 'Topic',
-    'menublock_group_id' => 'Group',
-    'menublock_permissions' => 'Permissions' 
+    'menublock_enable' => 'Aktiviert',
+    'menublock_isleft' => 'Block links anzeigen',
+    'menublock_order' => 'Blockreihenfolge',
+    'menublock_topic_option' => 'Themenoptionen',
+    'menublock_topic' => 'Thema',
+    'menublock_group_id' => 'Gruppe',
+    'menublock_permissions' => 'Berechtigungen' 
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -756,25 +756,25 @@ $LANG_configsubgroups['forum'] = array(
 );
 
 $LANG_tab['forum'] = array(
-    'tab_main' => 'General Forum Settings',
-    'tab_topicposting' => 'Topic Posting',
+    'tab_main' => 'Allgemeine Forumseinstellungen',
+    'tab_topicposting' => 'Themenbeiträge',
     'tab_centerblock' => 'Centerblock',
     'tab_sideblock' => 'Sideblock',
-    'tab_rank' => 'Rank', 
-    'tab_menublock' => 'Menu Block'
+    'tab_rank' => 'Rang', 
+    'tab_menublock' => 'Menüblock'
 );
 
 $LANG_fs['forum'] = array(
-    'fs_main' => 'General Forum Settings',
-    'fs_topicposting' => 'Topic Posting',
+    'fs_main' => 'Allgemeine Forumseinstellungen',
+    'fs_topicposting' => 'Themenbeiträge',
     'fs_centerblock' => 'Centerblock',
     'fs_sideblock' => 'Sideblock',
-    'fs_sideblock_settings' => 'Block Settings', 
-    'fs_sideblock_permissions' => 'Block Permissions',    
-    'fs_rank' => 'Rank', 
-    'fs_menublock' => 'Menu Block',
-    'fs_menublock_settings' => 'Block Settings', 
-    'fs_menublock_permissions' => 'Block Permissions'    
+    'fs_sideblock_settings' => 'Blockeinstellungen', 
+    'fs_sideblock_permissions' => 'Blockberechtigungen',    
+    'fs_rank' => 'Rang', 
+    'fs_menublock' => 'Menüblock',
+    'fs_menublock_settings' => 'Blockeinstellungen', 
+    'fs_menublock_permissions' => 'Blockberechtigungen'    
 );
 
 // Note: entries 0, 1, 12, and 41 are the same as in $LANG_configselects['Core']
@@ -782,8 +782,8 @@ $LANG_configselects['forum'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => TRUE, 'False' => FALSE),
     5 => array('Top Of Page' => 1, 'After Featured Story' => 2, 'Bottom Of Page' => 3),
-    6 => array('Left Blocks' => 'leftblocks', 'Right Blocks' => 'rightblocks', 'All Blocks' => 'allblocks', 'No Blocks' => 'noblocks'),
-    7 => array('Block Menu' => 'blockmenu', 'Navigation Bar' => 'navbar', 'None' => 'none'),
+    6 => array('Linke Blöcke' => 'leftblocks', 'Rechte Blöcke' => 'rightblocks', 'Alle Blöcke' => 'allblocks', 'Keine Blöcke' => 'noblocks'),
+    7 => array('Blockmenü' => 'blockmenu', 'Navigationsleiste' => 'navbar', 'Keine' => 'none'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
     13 => array('No access' => 0, 'Use' => 2),
     14 => array('No access' => 0, 'Read-Only' => 2),
