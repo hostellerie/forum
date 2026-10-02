@@ -186,8 +186,8 @@ $LANG_GF01['MARKALLREAD']    = 'Mark All Read';
 $LANG_GF01['MSG_NO_CAT']     = 'No Categories or Forums Defined';
 $LANG_GF01['FORUMPOSTS']     = 'Forum Posts';
 $LANG_GF01['FORUMPOST']      = 'Forum Post';
-$LANG_GF01['MESSAGE']     	 = 'Message';
-$LANG_GF01['HERE']     	     = 'here';
+$LANG_GF01['MESSAGE']          = 'Message';
+$LANG_GF01['HERE']              = 'here';
 
 // Language for bbcode toolbar
 $LANG_GF01['CODE']           = 'Code';
@@ -240,24 +240,24 @@ $LANG_GF02['msg14']    = 'Sorry, You have been banned from making entries. If yo
 $LANG_GF02['msg18']    = 'Error! Not all required fields were completed or were too short in length.';
 $LANG_GF02['msg19']    = 'Your message has been posted.';
 $LANG_GF02['msg22']    = '- Forum Post Notification';
-				
+                
 
 //$LANG_GF02['msg23a']   = "A reply has been made to the thread '%s' by %s.\n\nThis topic was started by %s in the %s forum.\n\nYou may view the reply at:\n%s\n";
-$LANG_GF02['reply_to_thread_msg']   	= "A reply has been made to the thread '%s' by %s.";
-$LANG_GF02['topic_started_msg']     	= "This topic was started by %s in the %s forum.";
-$LANG_GF02['view_reply_at_msg']     	= "You may view the reply at:";
+$LANG_GF02['reply_to_thread_msg']       = "A reply has been made to the thread '%s' by %s.";
+$LANG_GF02['topic_started_msg']         = "This topic was started by %s in the %s forum.";
+$LANG_GF02['view_reply_at_msg']         = "You may view the reply at:";
 //$LANG_GF02['msg23b']   = "A new topic '%s' has been posted by %s in the '%s' forum on the %s website.\n\nYou may view it at:\n%s\n";
-$LANG_GF02['new_topic_msg']   			= "A new topic '%s' has been posted by %s in the '%s' forum on the %s website.";
-$LANG_GF02['view_topic_at_msg']     	= "You may view it at:";
+$LANG_GF02['new_topic_msg']               = "A new topic '%s' has been posted by %s in the '%s' forum on the %s website.";
+$LANG_GF02['view_topic_at_msg']         = "You may view it at:";
 //$LANG_GF02['msg23d']   = "An edit has been made to a post in the thread '%s' by %s.\n\nThis topic was started by %s in the %s forum.\n\nYou may view the edited post at:\n%s\n";
-$LANG_GF02['edit_to_post_msg']   	= "An edit has been made to a post in the thread '%s' by %s.";
-$LANG_GF02['view_edit_at_msg']     	= "You may view the edited post at:";
+$LANG_GF02['edit_to_post_msg']       = "An edit has been made to a post in the thread '%s' by %s.";
+$LANG_GF02['view_edit_at_msg']         = "You may view the edited post at:";
 //$LANG_GF02['msg26a']   = "\nYou are receiving this email because you have chosen to be notified when a reply has been made to this topic. To stop receiving notifications on this topic go to:\n%s\n";
-$LANG_GF02['stop_reply_notify_msg'] 	= "You are receiving this email because you have chosen to be notified when a reply has been made to this topic. To stop receiving notifications on this topic go to:";
+$LANG_GF02['stop_reply_notify_msg']     = "You are receiving this email because you have chosen to be notified when a reply has been made to this topic. To stop receiving notifications on this topic go to:";
 //$LANG_GF02['msg26b']   = "\nYou are receiving this email because you have chosen to be notified when a new topic has been posted to this forum. To stop receiving notifications for this forum go to:\n%s\n";
-$LANG_GF02['stop_new_notify_msg'] 	= "You are receiving this email because you have chosen to be notified when a new topic has been posted to this forum. To stop receiving notifications for this forum go to:";
+$LANG_GF02['stop_new_notify_msg']     = "You are receiving this email because you have chosen to be notified when a new topic has been posted to this forum. To stop receiving notifications for this forum go to:";
 //$LANG_GF02['msg25']    = "\nHave a great day! \n";
-$LANG_GF02['great_day_msg']     		= "Have a great day!";
+$LANG_GF02['great_day_msg']             = "Have a great day!";
 
 
 $LANG_GF02['msg33']    = 'Author: ';
@@ -406,7 +406,7 @@ $LANG_GF03 = array (
     'banippostremove' => 'Debannir l\'IP des publications',
     'banip' => 'Ban IP Confirmation',
     'banipremove' => 'Debannir l\'IP du site',
-    'banipmsg' => 'Etes-vous sûr de vouloir interdire l`ip %s?',
+    'banipmsg' => 'L’adresse IP a été bannie du site',
     'banipremovemsg' => 'Bannissement supprime du iste pour l\'IP',    
     'movetopic' => 'Déplacer le Sujet',
     'movetopicmsg' => '<br/>Sujet à être déplacé: "<b>%s</b>"',
@@ -454,7 +454,7 @@ $LANG_GF06 = array (
     4   => 'Moderator',
     5   => 'Migrate',
     6   => 'Posts',
-	7   => 'Subscriptions',
+    7   => 'Subscriptions',
     8   => 'Banned IPs'
 );
 
@@ -548,7 +548,7 @@ $LANG_GF93 = array (
     'forum' => 'Forum',
     'addforum' => 'Ajouter un Forum',
     'noforum' => 'Aucuns Forums trouves.',
-	'category' => 'Catégorie',
+    'category' => 'Catégorie',
     'catorder' => 'Catégorie Classement',
     'catadded' => 'Catégorie Ajouté.',
     'catdeleted' => 'Catégorie Supprimés',
@@ -585,12 +585,12 @@ $LANG_GF93 = array (
     'moderatorwarning' => '<b>Attention: Pas de forums définis </b> <br/> installation Forum Catégories et ajouter au moins 1 forum <br/> avant de tenter d`ajouter Modertators',
     'nomoderatorfound' => "Aucun moderateurs trouves.",
     'modadded' => "Moderateur(s) ajoute(s).",
-	'modnotadded' => "Aucun modérateur ajouté. Sélectionnez un ou plusieurs forums, des fonctions, puis un ou plusieurs utilisateurs ou un groupe.",
+    'modnotadded' => "Aucun modérateur ajouté. Sélectionnez un ou plusieurs forums, des fonctions, puis un ou plusieurs utilisateurs ou un groupe.",
     'moddeleted' => "Moderateur(s) supprime(s).",
     'modedited' => "Moderateur(s) edite(s).",
     'private' => 'Forum privé',
     'filtertitle' => 'Sélectionnez les dossiers Modérateur pour voir',
-	'LANG_addmodtitle' => 'Nouveau Moderateur',
+    'LANG_addmodtitle' => 'Nouveau Moderateur',
     'addmessage' => 'Ajouter un nouveau Modérateur',
     'allowedfunctions' => 'Fonctions Autorisés',
     'userrecords' => 'Documents de l`Utilisateur',
@@ -605,7 +605,7 @@ $LANG_GF93 = array (
     'mod_title' => 'Les Modérateurs de Forum',
     'allforums' => 'Tous les Forums',
     'namerequired' => 'Le nom est obligatoire.',
-	'resyncedmsg' => 'La resynchronisation et le nettoyage de la catégorie ou du forum sélectionné sont terminés.<br><ul><li>%s messages de sujets resynchronisés.</li><li>%s enregistrements de sujets orphelins trouvés et corrigés.</li><li>%s enregistrements orphelins trouvés et supprimés des autres tables du forum.</li></ul>'
+    'resyncedmsg' => 'La resynchronisation et le nettoyage de la catégorie ou du forum sélectionné sont terminés.<br><ul><li>%s messages de sujets resynchronisés.</li><li>%s enregistrements de sujets orphelins trouvés et corrigés.</li><li>%s enregistrements orphelins trouvés et supprimés des autres tables du forum.</li></ul>'
 );
 
 // Posts
@@ -633,7 +633,7 @@ $LANG_GF96 = array (
     'banipmsg' => 'Etes-vous sure de vouloir bannir l\'adresse ip %s?',
     'specip' => 'S`il vous plaît spécifier une adresse IP à interdire!',
     'ipunbanned' => 'Adresse IP n\'est plus bannie.',
-    'ipnotvalid' => 'L\'adresse IP n\'est pas valide. Elle n\'a pas ete ajoutee.',
+    'ipnotvalid' => 'L’adresse IP %s n’est pas valide. Elle n’a donc pas été ajoutée.',
     'noip' => 'Vous n\'avez pas fourni une adresse IP !'
 );
 
