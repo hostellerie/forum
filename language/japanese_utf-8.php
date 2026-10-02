@@ -492,8 +492,8 @@ $LANG_GF09 = array (
 
 /* Block Locations */
 $LANG_GF20 = array (
-    'blocks_showtopic_name' => 'Forum Show Topic',
-    'blocks_showtopic_desc' => 'Displays blocks right after every X number of topic posts.'
+    'blocks_showtopic_name' => 'フォーラムのトピック表示',
+    'blocks_showtopic_desc' => 'トピックの投稿が X 件ごとにブロックを表示します。'
 );
 
 // Admin Stats page
@@ -585,7 +585,7 @@ $LANG_GF93 = array (
     'moderatorwarning' => 'モデレータを追加する前にカテゴリーを設定し、少なくとも1つの掲示板を追加してください。',
     'nomoderatorfound' => "モデレータが見つかりません。",
     'modadded' => "モデレータが追加されました。",
-	'modnotadded' => "No Moderators added. You need to pick one or more Forums, Functions, and pick either one or more Users, or a Group.",
+	'modnotadded' => "モデレーターは追加されませんでした。1 つ以上のフォーラムと機能を選び、1 人以上のユーザーまたはグループを選択してください。",
     'moddeleted' => "モデレータが削除されました。",
     'modedited' => "モデレータが更新されました。",
     'private' => 'プライベート掲示板',
@@ -604,8 +604,8 @@ $LANG_GF93 = array (
     'hidepostsdscp' => '新規投稿ブロックとRSSフィードから投稿を隠す',
     'mod_title' => 'モデレータ',
     'allforums' => 'すべての掲示板',
-    'namerequired' => 'Name is required.',
-	'resyncedmsg' => 'ReSynch and Clean completed for selected category or forum.<br><ul><li>%s topic posts re-synced.</li><li>%s orphan topic records (those without a parent topic) found and fixed.</li><li>%s orphan records found and cleaned from all other Forum tables.</li></ul>'
+    'namerequired' => '名前は必須です。',
+	'resyncedmsg' => '選択したカテゴリーまたはフォーラムの再同期とクリーンアップが完了しました。<br><ul><li>%s 件のトピック投稿を再同期しました。</li><li>%s 件の親トピックを持たない孤立トピックを検出して修正しました。</li><li>%s 件の孤立レコードを他のフォーラムテーブルから検出して削除しました。</li></ul>'
 );
 
 // Posts
@@ -639,38 +639,38 @@ $LANG_GF96 = array (
 
 // Subscriptions
 $LANG_GF97 = array (
-    'gfsubscriptions' => 'Forum Subscriptions'
+    'gfsubscriptions' => 'フォーラム購読'
 );
 
 // Smilies
 $LANG_GF_SMILIES = array(
     // These strings are used for the "alt" and
     // "title" attribute for the smilies images 
-    'biggrin' => 'Big Grin',
-    'smile' => 'Smile',
-    'frown' => 'Frown',
-    'eek' => 'Geek',
-    'confused' => 'Confused',
-    'cool' => 'Cool',
+    'biggrin' => '大笑い',
+    'smile' => '笑顔',
+    'frown' => 'しかめ面',
+    'eek' => 'ギーク',
+    'confused' => '困惑',
+    'cool' => 'クール',
     'lol' => 'LOL',
-    'angry' => 'Angry',
-    'razz' => 'Razz',
-    'oops' => 'Oops!',
-    'surprise' => 'Surprised!',
-    'cry' => 'Cry',
-    'evil' => 'Evil',
-    'twisted' => 'Twisted',
-    'rolleye' => 'Rolling Eyes',
-    'wink' => 'Wink',
+    'angry' => '怒り',
+    'razz' => 'からかい',
+    'oops' => 'おっと！',
+    'surprise' => 'びっくり！',
+    'cry' => '泣く',
+    'evil' => '悪',
+    'twisted' => 'ひねくれ',
+    'rolleye' => '呆れ顔',
+    'wink' => 'ウィンク',
     'exclaim' => 'Exclaimation',
-    'question' => 'Question',
-    'idea' => 'Idea',
-    'arrow' => 'Arrow',
-    'neutral' => 'Neutral',
-    'green' => 'Mr. Green',
-    'sick' => 'Sick',
-    'tired' => 'Tired',
-    'monkey' => 'Monkey'
+    'question' => '質問',
+    'idea' => 'アイデア',
+    'arrow' => '矢印',
+    'neutral' => '普通',
+    'green' => 'グリーン',
+    'sick' => '病気',
+    'tired' => '疲れ',
+    'monkey' => 'サル'
 );
 
 // Localization of the Admin Configuration UI
@@ -692,7 +692,7 @@ $LANG_confignames['forum'] = array(
     'show_searches_perpage' => '検索結果の1ページあたり表示数',
     'showblocks' => '掲示板で表示するブロックカラム',
     'usermenu' => 'ユーザーメニューの種類',
-    'likes_forum' => 'Forum Likes',
+    'likes_forum' => 'フォーラムのいいね',
     'recaptcha' => 'reCAPTCHA',
     // ----------------------------------
     'show_subject_length' => '件名の最大文字数',
@@ -782,8 +782,8 @@ $LANG_configselects['forum'] = array(
     0 => array('True' => 1, 'False' => 0),
     1 => array('True' => TRUE, 'False' => FALSE),
     5 => array('Top Of Page' => 1, 'After Featured Story' => 2, 'Bottom Of Page' => 3),
-    6 => array('Left Blocks' => 'leftblocks', 'Right Blocks' => 'rightblocks', 'All Blocks' => 'allblocks', 'No Blocks' => 'noblocks'),
-    7 => array('Block Menu' => 'blockmenu', 'Navigation Bar' => 'navbar', 'None' => 'none'),
+    6 => array('左ブロック' => 'leftblocks', '右ブロック' => 'rightblocks', 'すべてのブロック' => 'allblocks', 'ブロックなし' => 'noblocks'),
+    7 => array('ブロックメニュー' => 'blockmenu', 'ナビゲーションバー' => 'navbar', 'なし' => 'none'),
     12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
     13 => array('No access' => 0, 'Use' => 2),
     14 => array('No access' => 0, 'Read-Only' => 2),
