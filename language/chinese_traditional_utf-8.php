@@ -186,8 +186,8 @@ $LANG_GF01['MARKALLREAD']    = 'Mark All Read';
 $LANG_GF01['MSG_NO_CAT']     = 'No Categories or Forums Defined';
 $LANG_GF01['FORUMPOSTS']     = 'Forum Posts';
 $LANG_GF01['FORUMPOST']      = 'Forum Post';
-$LANG_GF01['MESSAGE']     	 = 'Message';
-$LANG_GF01['HERE']     	     = 'here';
+$LANG_GF01['MESSAGE']          = 'Message';
+$LANG_GF01['HERE']              = 'here';
 
 // Language for bbcode toolbar
 $LANG_GF01['CODE']           = 'Code';
@@ -240,24 +240,24 @@ $LANG_GF02['msg14']    = 'Sorry, You have been banned from making entries. If yo
 $LANG_GF02['msg18']    = 'Error! Not all required fields were completed or were too short in length.';
 $LANG_GF02['msg19']    = 'Your message has been posted.';
 $LANG_GF02['msg22']    = '- Forum Post Notification';
-				
+                
 
 //$LANG_GF02['msg23a']   = "A reply has been made to the thread '%s' by %s.\n\nThis topic was started by %s in the %s forum.\n\nYou may view the reply at:\n%s\n";
-$LANG_GF02['reply_to_thread_msg']   	= "A reply has been made to the thread '%s' by %s.";
-$LANG_GF02['topic_started_msg']     	= "This topic was started by %s in the %s forum.";
-$LANG_GF02['view_reply_at_msg']     	= "You may view the reply at:";
+$LANG_GF02['reply_to_thread_msg']       = "A reply has been made to the thread '%s' by %s.";
+$LANG_GF02['topic_started_msg']         = "This topic was started by %s in the %s forum.";
+$LANG_GF02['view_reply_at_msg']         = "You may view the reply at:";
 //$LANG_GF02['msg23b']   = "A new topic '%s' has been posted by %s in the '%s' forum on the %s website.\n\nYou may view it at:\n%s\n";
-$LANG_GF02['new_topic_msg']   			= "A new topic '%s' has been posted by %s in the '%s' forum on the %s website.";
-$LANG_GF02['view_topic_at_msg']     	= "You may view it at:";
+$LANG_GF02['new_topic_msg']               = "A new topic '%s' has been posted by %s in the '%s' forum on the %s website.";
+$LANG_GF02['view_topic_at_msg']         = "You may view it at:";
 //$LANG_GF02['msg23d']   = "An edit has been made to a post in the thread '%s' by %s.\n\nThis topic was started by %s in the %s forum.\n\nYou may view the edited post at:\n%s\n";
-$LANG_GF02['edit_to_post_msg']   	= "An edit has been made to a post in the thread '%s' by %s.";
-$LANG_GF02['view_edit_at_msg']     	= "You may view the edited post at:";
+$LANG_GF02['edit_to_post_msg']       = "An edit has been made to a post in the thread '%s' by %s.";
+$LANG_GF02['view_edit_at_msg']         = "You may view the edited post at:";
 //$LANG_GF02['msg26a']   = "\nYou are receiving this email because you have chosen to be notified when a reply has been made to this topic. To stop receiving notifications on this topic go to:\n%s\n";
-$LANG_GF02['stop_reply_notify_msg'] 	= "You are receiving this email because you have chosen to be notified when a reply has been made to this topic. To stop receiving notifications on this topic go to:";
+$LANG_GF02['stop_reply_notify_msg']     = "You are receiving this email because you have chosen to be notified when a reply has been made to this topic. To stop receiving notifications on this topic go to:";
 //$LANG_GF02['msg26b']   = "\nYou are receiving this email because you have chosen to be notified when a new topic has been posted to this forum. To stop receiving notifications for this forum go to:\n%s\n";
-$LANG_GF02['stop_new_notify_msg'] 	= "You are receiving this email because you have chosen to be notified when a new topic has been posted to this forum. To stop receiving notifications for this forum go to:";
+$LANG_GF02['stop_new_notify_msg']     = "You are receiving this email because you have chosen to be notified when a new topic has been posted to this forum. To stop receiving notifications for this forum go to:";
 //$LANG_GF02['msg25']    = "\nHave a great day! \n";
-$LANG_GF02['great_day_msg']     		= "Have a great day!";
+$LANG_GF02['great_day_msg']             = "Have a great day!";
 
 
 $LANG_GF02['msg33']    = 'Author: ';
@@ -454,7 +454,7 @@ $LANG_GF06 = array (
     4   => 'Moderator',
     5   => 'Migrate',
     6   => 'Posts',
-	7   => 'Subscriptions',
+    7   => 'Subscriptions',
     8   => 'Banned IPs'
 );
 
@@ -548,7 +548,7 @@ $LANG_GF93 = array (
     'forum' => '論壇',
     'addforum' => '新增論壇',
     'noforum' => '未找到論壇。',
-	'category' => '分類',
+    'category' => '分類',
     'catorder' => '分類順序',
     'catadded' => '分類已新增。',
     'catdeleted' => '分類已刪除',
@@ -585,12 +585,12 @@ $LANG_GF93 = array (
     'moderatorwarning' => '新增版主前，请先設定論壇分類並至少新增一個論壇',
     'nomoderatorfound' => "未找到版主。",
     'modadded' => "版主已新增。",
-	'modnotadded' => "未新增版主。您需要選擇一個或多個論壇、功能，並選擇一個或多個使用者或一個群組。",
+    'modnotadded' => "未新增版主。您需要選擇一個或多個論壇、功能，並選擇一個或多個使用者或一個群組。",
     'moddeleted' => "版主已刪除。",
     'modedited' => "版主已編輯。",
     'private' => '私人論壇',
     'filtertitle' => '選擇要檢視的版主記錄',
-	'LANG_addmodtitle' => '新版主',
+    'LANG_addmodtitle' => '新版主',
     'addmessage' => '新增新版主',
     'allowedfunctions' => '允許的功能',
     'userrecords' => '使用者記錄',
@@ -605,7 +605,7 @@ $LANG_GF93 = array (
     'mod_title' => '論壇版主',
     'allforums' => '所有論壇',
     'namerequired' => '必须填寫名稱。',
-	'resyncedmsg' => '已完成所選分類或論壇的重新同步和清理。<br><ul><li>已重新同步 %s 個主題貼文。</li><li>找到並修覆 %s 個孤立主題記錄（沒有父主題）。</li><li>從其他論壇資料表中找到並清理 %s 個孤立記錄。</li></ul>'
+    'resyncedmsg' => '已完成所選分類或論壇的重新同步和清理。<br><ul><li>已重新同步 %s 個主題貼文。</li><li>找到並修覆 %s 個孤立主題記錄（沒有父主題）。</li><li>從其他論壇資料表中找到並清理 %s 個孤立記錄。</li></ul>'
 );
 
 // Posts
