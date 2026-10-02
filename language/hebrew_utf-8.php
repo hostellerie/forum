@@ -46,7 +46,7 @@ $LANG_GF00 = array (
     'statsheading3' => 'אין דיונים לדווח עליהם',
     'useradminmenu' => 'הגדרות פורום',
     'access_denied' => 'הגישה לא אושרה',
-    'autotag_desc_forum' => '[forum: id alternate title] - Displays a link to a forum topic using the text \\\'here\\\' as the title. An alternate title may be specified but is not required.'
+    'autotag_desc_forum' => '[forum: id alternate title] - Displays a link to a forum topic using the text \'here\' as the title. An alternate title may be specified but is not required.'
 );
 
 
@@ -580,7 +580,7 @@ $LANG_GF93 = array (
     'ModStick' => 'הדבקה',
     'ModBan' => 'החרמה',
     'addmoderator' => "הוספת רשומה",
-    'delmoderator' => " Delete\\nSelected",
+    'delmoderator' => " Delete\nSelected",
     'moderatorwarningtitle' => 'Warning: No Forums Defined',
     'moderatorwarning' => '<b>אזהרה: לא הוגדרו פורומים</b><br',
     'nomoderatorfound' => "No Moderators found.",
