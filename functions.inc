@@ -1257,7 +1257,7 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
     if ((int) $uid > 0) {
         $userGroups = SEC_getUserGroups((int) $uid);
     } else {
-        $userGroups = isset($_GROUPS) && is_array($_GROUPS) ? array_keys($_GROUPS) : array();
+        $userGroups = isset($_GROUPS) && is_array($_GROUPS) ? $_GROUPS : array();
     }
 
     $groupIds = array();
