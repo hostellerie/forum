@@ -1185,76 +1185,161 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
 {
     global $_CONF, $_TABLES, $_GROUPS, $CONF_FORUM;
 
+    $retval = array();
+    $options = is_array($options) ? $options : array();
 
-	$retval = [];
-
-    // parse $what to see what we need to pull from the database
-    $properties = explode(',', $what);
-    $fields = array();
-    foreach ($properties as $p) {
-        switch ($p) {
-        case 'date-modified':
-            $fields[] = 'ft.date';
-            break;
-        case 'description':
-        case 'excerpt':
-            $fields[] = 'ft.comment';
-            break;
-        case 'id':
-            $fields[] = 'ft.id';
-            break;
-        case 'title':
-            $fields[] = 'ft.subject';
-            break;
-		case 'likes':
-			// Likes forum setting is a global variable and not an item per item setting
-			$fields[] = $CONF_FORUM['likes_forum'] . ' AS likes';
-			$groupby_fields[] = 'likes';
-			break;				
-        case 'url':
-            // needed for $id == '*', but also in case we're only requesting
-            // the URL (so that $fields isn't empty)
-            $fields[] = 'ft.id';
-            break;
-        default:
-            // nothing to do
-            break;
+    $properties = array();
+    foreach (explode(',', (string) $what) as $property) {
+        $property = strtolower(trim($property));
+        if ($property !== '' && !in_array($property, $properties, true)) {
+            $properties[] = $property;
         }
     }
 
-    $fields = array_unique($fields);
+    $fields = array();
+    foreach ($properties as $property) {
+        switch ($property) {
+            case 'date-created':
+                $fields[] = 'ft.date AS date_created';
+                break;
 
-	// Check if any fields found we can return
-    if (count($fields) == 0) {
+            case 'date-modified':
+                $fields[] = "CASE WHEN ft.lastupdated IS NULL OR ft.lastupdated='' OR ft.lastupdated='0' "
+                    . "THEN ft.date ELSE ft.lastupdated END AS date_modified";
+                break;
+
+            case 'description':
+            case 'excerpt':
+                $fields[] = 'ft.comment';
+                break;
+
+            case 'id':
+                $fields[] = 'ft.id';
+                break;
+
+            case 'title':
+                $fields[] = 'ft.subject';
+                break;
+
+            case 'likes':
+                if (isset($CONF_FORUM['likes_forum'])) {
+                    $fields[] = (int) $CONF_FORUM['likes_forum'] . ' AS likes';
+                }
+                break;
+
+            case 'url':
+                $fields[] = 'ft.id';
+                break;
+
+            case 'uid':
+            case 'author':
+                $fields[] = 'ft.uid';
+                break;
+
+            case 'type':
+            case 'subtype':
+                $fields[] = 'ft.id';
+                break;
+        }
+    }
+
+    $fields = array_values(array_unique($fields));
+    if (empty($fields)) {
         return $retval;
     }
 
-	// Check is anonymous users can access and if not, regular user can access
-	if ($CONF_FORUM['registration_required'] && !SEC_hasRights('forum.user', 'AND', $uid)) {
+    if (!empty($CONF_FORUM['registration_required'])
+        && !SEC_hasRights('forum.user', 'AND', (int) $uid)
+    ) {
         return $retval;
     }
 
-    // prepare SQL request
-    if ($id == '*') {
-        $where = '';
+    if ((int) $uid > 0) {
+        $userGroups = SEC_getUserGroups((int) $uid);
     } else {
-        $where = " AND ft.id = $id";
+        $userGroups = isset($_GROUPS) && is_array($_GROUPS) ? array_keys($_GROUPS) : array();
     }
 
-	// Figure out permissions
-	if ($uid > 0) {
-		$userGroups = SEC_getUserGroups($uid);
+    $groupIds = array();
+    foreach ((array) $userGroups as $key => $value) {
+        $candidate = is_numeric($value) ? (int) $value : (is_numeric($key) ? (int) $key : 0);
+        if ($candidate > 0) {
+            $groupIds[] = $candidate;
+        }
+    }
+    $groupIds[] = 2; // All Users
+    $groupIds = array_values(array_unique($groupIds));
 
-	} else {
-		$userGroups = $_GROUPS;
-	}
-	$where .= " AND (ff.grp_id IN (" . implode(",", $userGroups) . "))";
+    $where = array(
+        'ft.forum = ff.forum_id',
+        'ff.grp_id IN (' . implode(',', $groupIds) . ')'
+    );
 
-    $sql = "SELECT " . implode(',', $fields)
-            . " FROM {$_TABLES['forum_topic']} ft, {$_TABLES['forum_forums']} ff"
-			. " WHERE ft.forum = ff.forum_id $where";
+    $collection = ((string) $id === '*');
+    if (!$collection) {
+        $itemId = (int) $id;
+        if ($itemId <= 0) {
+            return $retval;
+        }
+        $where[] = 'ft.id = ' . $itemId;
+    }
 
-    if ($id != '*') {
+    if ($collection && isset($options['since']) && $options['since'] !== '' && $options['since'] !== null) {
+        $since = $options['since'];
+        if (!is_numeric($since)) {
+            $since = strtotime((string) $since);
+        }
+        $since = ($since === false) ? 0 : (int) $since;
+        if ($since > 0) {
+            $where[] = "(CASE WHEN ft.lastupdated IS NULL OR ft.lastupdated='' OR ft.lastupdated='0' "
+                . "THEN ft.date ELSE ft.lastupdated END) >= '" . $since . "'";
+        }
+    }
+
+    $sql = 'SELECT ' . implode(',', $fields)
+        . " FROM {$_TABLES['forum_topic']} ft "
+        . "INNER JOIN {$_TABLES['forum_forums']} ff ON ft.forum = ff.forum_id "
+        . 'WHERE ' . implode(' AND ', $where);
+
+    if ($collection) {
+        $order = isset($options['order'])
+            ? strtolower(trim((string) $options['order']))
+            : 'modified-desc';
+
+        switch ($order) {
+            case 'modified-asc':
+                $sql .= " ORDER BY (CASE WHEN ft.lastupdated IS NULL OR ft.lastupdated='' OR ft.lastupdated='0' "
+                    . "THEN ft.date ELSE ft.lastupdated END) ASC, ft.id ASC";
+                break;
+
+            case 'created-desc':
+                $sql .= ' ORDER BY ft.date DESC, ft.id DESC';
+                break;
+
+            case 'created-asc':
+                $sql .= ' ORDER BY ft.date ASC, ft.id ASC';
+                break;
+
+            case 'hits-desc':
+            case 'views-desc':
+                $sql .= ' ORDER BY ft.views DESC, ft.date DESC, ft.id DESC';
+                break;
+
+            case 'modified-desc':
+            default:
+                $sql .= " ORDER BY (CASE WHEN ft.lastupdated IS NULL OR ft.lastupdated='' OR ft.lastupdated='0' "
+                    . "THEN ft.date ELSE ft.lastupdated END) DESC, ft.id DESC";
+                break;
+        }
+
+        $limit = isset($options['limit']) ? (int) $options['limit'] : 20;
+        if ($limit < 1) {
+            $limit = 20;
+        } elseif ($limit > 500) {
+            $limit = 500;
+        }
+        $sql .= ' LIMIT ' . $limit;
+    } else {
         $sql .= ' LIMIT 1';
     }
 
@@ -1263,65 +1348,96 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
 
     for ($i = 0; $i < $numRows; $i++) {
         $A = DB_fetchArray($result);
-
         $props = array();
-        foreach ($properties as $p) {
-            switch ($p) {
-            case 'date-modified':
-                $props['date-modified'] = $A['date'];
-                break;
-            case 'description':
-            case 'excerpt':
-                $props[$p] = stripslashes($A['comment']);
-                break;
-            case 'id':
-                $props['id'] = $A['id'];
-                break;
-            case 'title':
-                $props['title'] = stripslashes($A['subject']);
-                break;
-			case 'likes':
-				$props['likes'] = $A['likes'];
-				break;					
-            case 'url':
-				// Decode as could be used in redirect etc...
-                if (empty($A['id'])) {
-					$props['url'] = html_entity_decode(forum_buildForumPostURL($id));
-                } else {
-					$props['url'] = html_entity_decode(forum_buildForumPostURL($A['id']));
-                }
-                break;
-            default:
-                // return empty string for unknown properties
-                $props[$p] = '';
-                break;
+
+        foreach ($properties as $property) {
+            switch ($property) {
+                case 'date-created':
+                    $props['date-created'] = isset($A['date_created']) ? $A['date_created'] : '';
+                    break;
+
+                case 'date-modified':
+                    $props['date-modified'] = isset($A['date_modified']) ? $A['date_modified'] : '';
+                    break;
+
+                case 'description':
+                case 'excerpt':
+                    $props[$property] = isset($A['comment']) ? stripslashes($A['comment']) : '';
+                    break;
+
+                case 'id':
+                    $props['id'] = isset($A['id']) ? (int) $A['id'] : 0;
+                    break;
+
+                case 'title':
+                    $props['title'] = isset($A['subject']) ? stripslashes($A['subject']) : '';
+                    break;
+
+                case 'likes':
+                    $props['likes'] = isset($A['likes']) ? (int) $A['likes'] : 0;
+                    break;
+
+                case 'url':
+                    $postId = isset($A['id']) ? (int) $A['id'] : (int) $id;
+                    $props['url'] = html_entity_decode(forum_buildForumPostURL($postId));
+                    break;
+
+                case 'uid':
+                    $props['uid'] = isset($A['uid']) ? (int) $A['uid'] : 0;
+                    break;
+
+                case 'author':
+                    $props['author'] = isset($A['uid']) && (int) $A['uid'] > 0
+                        ? COM_getDisplayName((int) $A['uid'])
+                        : '';
+                    break;
+
+                case 'type':
+                    $props['type'] = 'forum';
+                    break;
+
+                case 'subtype':
+                    $props['subtype'] = 'post';
+                    break;
+
+                default:
+                    $props[$property] = '';
+                    break;
             }
         }
 
-        $mapped = array();
-        foreach ($props as $key => $value) {
-            if ($id == '*') {
-                if ($value != '') {
+        if ($collection) {
+            $mapped = array();
+            foreach ($props as $key => $value) {
+                if ($value !== '') {
                     $mapped[$key] = $value;
                 }
-            } else {
-                $mapped[] = $value;
             }
-        }
-
-        if ($id == '*') {
             $retval[] = $mapped;
         } else {
-            $retval = $mapped;
+            $mapped = array_values($props);
+            $retval = count($mapped) === 1 ? $mapped[0] : $mapped;
             break;
         }
     }
 
-    if (($id != '*') && (count($retval) == 1)) {
-        $retval = $retval[0];
-    }
-
     return $retval;
+}
+
+/**
+ * Advertise the Forum content interoperability contract.
+ */
+function plugin_getcapabilities_forum()
+{
+    return array(
+        'schema' => 1,
+        'roles' => array('content'),
+        'capabilities' => array(
+            'content.read',
+            'content.collection',
+            'content.url.resolve'
+        )
+    );
 }
 
 /**
