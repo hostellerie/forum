@@ -131,7 +131,7 @@ $CONF_FORUM['installed_version'] = floatval(DB_getItem($_TABLES['plugins'], 'pi_
  * Keep this independent from the plugin version so CSS/JS changes made while
  * maintaining the same Forum release still invalidate browser caches.
  */
-$CONF_FORUM['asset_version'] = '2.9.1a-20261124';
+$CONF_FORUM['asset_version'] = '2.9.1-20261124.1';
 
 /**
  * Append the Forum asset revision to a local CSS/JS URL.
@@ -832,11 +832,6 @@ function plugin_upgrade_forum() {
 
                 $current_version = "2.9.1";
                 
-                break;
-
-            case "2.9.1" :
-                // Compatibility-only update; no Forum schema changes.
-                $current_version = "2.9.1a";
                 break;
 
             default:
