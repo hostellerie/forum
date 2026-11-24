@@ -1,10 +1,18 @@
-# Geeklog Forum plugin - version 2.9.1
+# Geeklog Forum plugin - version 2.9.1a
 
 * Current Maintainers: [Geeklog Community Members](https://github.com/orgs/Geeklog-Plugins/people)
 * Original Author: Blaine Lang
 * Release Date: November 2, 2015
 
-**Requires minimum Geeklog version 2.1.1 and MySQL 4.1+**
+**Requires Geeklog 2.2.2 or later and MySQL 4.1+.**
+
+Maintenance branch targeting PHP 5.6.40 with Geeklog 2.2.2. PHP 5.6 is end-of-life; migrate to a supported PHP release when possible. Runtime validation is required before deployment.
+
+### 2.9.1a maintenance update
+
+- Use the Geeklog `user_attributes` table for the member list and topic author information, including online status.
+- Drop support for Geeklog versions below 2.2.2.
+- Preserve existing Forum data; no Forum database schema changes are required for the update from 2.9.1.
 
 * Features
 * Changelog

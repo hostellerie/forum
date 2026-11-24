@@ -263,7 +263,7 @@ if ($op == 'newposts' AND !COM_isAnonUser()) {
     		$grouplist $inforum";	
     
 	/* Un-comment if you want users to see new posts since last login only */
-    //$lastlogin = DB_getItem($_TABLES['userinfo'],'lastlogin',"uid='" . $_USER['uid'] ."'");
+    //$lastlogin = DB_getItem($_TABLES['user_attributes'],'lastlogin',"uid='" . $_USER['uid'] ."'");
     //$sql .= "AND lastupdated > {$lastlogin} ";
     $sql .= " ORDER BY $sortOrder, id DESC LIMIT $offset, $show";
 

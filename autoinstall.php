@@ -53,8 +53,8 @@ function plugin_autoinstall_forum($pi_name)
     $info = array(
         'pi_name'         => $pi_name,
         'pi_display_name' => $pi_display_name,
-        'pi_version'      => '2.9.1',
-        'pi_gl_version'   => '2.1.1',
+        'pi_version'      => '2.9.1a',
+        'pi_gl_version'   => '2.2.2',
         'pi_homepage'     => 'http://code.google.com/p/geeklog/'
     );
 
@@ -183,6 +183,10 @@ function plugin_postinstall_forum($pi_name)
 function plugin_compatible_with_this_version_forum($pi_name)
 {
     global $_CONF, $_DB_dbms;
+
+    if (version_compare(VERSION, '2.2.2', '<')) {
+        return false;
+    }
 
     // check if we support the DBMS the site is running on
     $dbFile = $_CONF['path'] . 'plugins/' . $pi_name . '/sql/'

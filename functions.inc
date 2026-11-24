@@ -131,7 +131,7 @@ $CONF_FORUM['installed_version'] = floatval(DB_getItem($_TABLES['plugins'], 'pi_
  * Keep this independent from the plugin version so CSS/JS changes made while
  * maintaining the same Forum release still invalidate browser caches.
  */
-$CONF_FORUM['asset_version'] = '2.9.1-20260928.2';
+$CONF_FORUM['asset_version'] = '2.9.1a-20261124';
 
 /**
  * Append the Forum asset revision to a local CSS/JS URL.
@@ -834,13 +834,18 @@ function plugin_upgrade_forum() {
                 
                 break;
 
+            case "2.9.1" :
+                // Compatibility-only update; no Forum schema changes.
+                $current_version = "2.9.1a";
+                break;
+
             default:
                 $done = true;
                 break;
         }
     }
 
-    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '$code_version', pi_gl_version = '$installed_version' WHERE pi_name = 'forum'");
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '$code_version', pi_gl_version = '2.2.2' WHERE pi_name = 'forum'");
     
     // Check if update completed and return a message number to be shown
     if (DB_getItem($_TABLES['plugins'],'pi_version',"pi_name = 'forum'") == $code_version) {
@@ -1548,7 +1553,7 @@ function plugin_getheadercode_forum()
 {
     global $_SCRIPTS, $_CONF, $_PLUGINS, $FORUM_CSS, $CONF_FORUM;
 
-    // This branch targets Geeklog 2.1.1. Keep the legacy Forum resources,
+    // Keep the legacy Forum resources for this PHP 5.6 maintenance branch,
     // but do not load them globally on unrelated pages.
     $requestUri = isset($_SERVER['REQUEST_URI']) ? (string) $_SERVER['REQUEST_URI'] : '';
     $requestPath = parse_url($requestUri, PHP_URL_PATH);
@@ -1570,7 +1575,7 @@ function plugin_getheadercode_forum()
     }
 
     // Posting assets must be registered from the plugin header hook. On
-    // Geeklog 2.1.1 this hook runs while the document head is still being
+    // Geeklog this hook runs while the document head is still being
     // assembled; registering them later from createtopic.php is too late for
     // themes such as Eclipse.
     if ($requestPath === 'forum/createtopic.php') {
@@ -1605,7 +1610,7 @@ function plugin_getheadercode_forum()
         }
     }
 
-    // Geeklog 2.1.1 Forum still uses the legacy smilies stylesheet on Forum
+    // This Forum branch still uses the legacy smilies stylesheet on Forum
     // pages. Do not inject it merely because a Forum block is displayed.
     if (($isForumPage || $isForumAdminPage) && !empty($CONF_FORUM['css_smilies_url'])) {
         return '<link rel="stylesheet" type="text/css" href="' .

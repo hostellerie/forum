@@ -215,7 +215,7 @@ if ($op == "lastposts") {
     if ($chkactivity) {
         $memberlistsql = DB_query("SELECT user.uid FROM {$_TABLES['users']} user, {$_TABLES['forum_topic']} topic WHERE user.uid <> 1 AND user.uid=topic.uid GROUP BY uid");
     } else {
-        $memberlistsql = DB_query("SELECT user.uid FROM {$_TABLES['users']} user, {$_TABLES['userprefs']} userprefs WHERE user.uid > 1 AND user.uid=userprefs.uid");
+        $memberlistsql = DB_query("SELECT user.uid FROM {$_TABLES['users']} user, {$_TABLES['user_attributes']} userprefs WHERE user.uid > 1 AND user.uid=userprefs.uid");
     }
 
     $membercount = DB_numRows($memberlistsql);
@@ -223,28 +223,14 @@ if ($op == "lastposts") {
     $offset = ($page - 1) * $show;
     $base_url = "{$_CONF['site_url']}/forum/memberlist.php?show={$show}&amp;order={$order}&amp;sort=$sort";
     $base_url .= "&amp;chkactivity=$chkactivity";
-    /*
-    if ($chkactivity) {
-        $sql = "SELECT user.uid,user.uid,user.username,user.regdate,user.email,user.homepage, COUNT(*) AS posts, userprefs.emailfromuser ";
-        $sql .= " FROM {$_TABLES['users']} user, {$_TABLES['userprefs']} userprefs, {$_TABLES['forum_topic']} topic WHERE";
-        $sql .= " user.uid <> 1 AND user.uid=topic.uid AND user.uid=userprefs.uid ";
-        $sql .= "GROUP BY uid"; // ORDER BY $orderby $direction LIMIT $offset,$show ";
-    } else {
-        // Option to order by posts - only valid if option for 'forum activity' checked
-        $orderby = ($orderby == 'posts') ? 'username' : $orderby;
-        $sql = "SELECT user.uid,user.uid,user.username,user.regdate,user.email,user.homepage, userprefs.emailfromuser ";
-        $sql .= " FROM {$_TABLES['users']} user, {$_TABLES['userprefs']} userprefs WHERE user.uid > 1 ";
-        $sql .= "AND user.uid=userprefs.uid";
-    }
-    */
     $sql = "SELECT u.uid, u.uid, u.username, u.regdate, u.email, u.homepage, COUNT(*) AS posts, up.emailfromuser ";
     if ($chkactivity) {
-        $sql .= "FROM {$_TABLES['users']} u, {$_TABLES['userprefs']} up, {$_TABLES['forum_topic']} ft 
+        $sql .= "FROM {$_TABLES['users']} u, {$_TABLES['user_attributes']} up, {$_TABLES['forum_topic']} ft 
         		WHERE u.uid <> 1 AND u.uid = ft.uid AND u.uid=up.uid ";
     } else {
         $sql .= "FROM {$_TABLES['users']} u  
         		LEFT JOIN {$_TABLES['forum_topic']} ft ON u.uid = ft.uid, 
-        		{$_TABLES['userprefs']} up
+        		{$_TABLES['user_attributes']} up
         		WHERE u.uid > 1 AND u.uid = up.uid ";
     }    
     $sql .= "GROUP BY u.uid 

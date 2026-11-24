@@ -451,7 +451,7 @@ while ($topicRec = DB_fetchArray($result)) {
  * that the full public topic identified by forum:<id> is being displayed.
  * Active plugins may contribute server-rendered contextual fragments through
  * plugin_itemdisplay_PLUGIN(). PLG_itemDisplay() is available in Geeklog
- * 2.1.1 through 2.2.2.
+ * 2.2.2.
  *
  * Preview and onlytopic/embedded output intentionally do not expose this
  * extension point.
